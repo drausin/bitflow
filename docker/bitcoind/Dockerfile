@@ -22,15 +22,13 @@ RUN apt-get update && \
     apt-get install -y bitcoind && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+VOLUME [${HOME}]
+
 RUN mkdir -p ${HOME}
 RUN useradd -s /bin/bash -d ${HOME} bitcoin
 RUN chown bitcoin:bitcoin -R ${HOME}
 
-USER bitcoin
-
-VOLUME [${HOME}]
-
-WORKDIR ${HOME}
+#USER bitcoin
 
 EXPOSE ${CONN_PORT} ${RPC_PORT}
 
