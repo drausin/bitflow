@@ -12,21 +12,23 @@ usage() {
 
 [[ $# == 1 || $# == 2 ]] || usage
 
+# set some things we use in a few places below
 ROOT_DIR="$(dirname "$0")"
-BTC_IMAGE=${BTC_IMAGE:-daedalus2718/bitcoind}
+BITCOIND_IMAGE=daedalus2718/bitcoind
 BITCOIN_HOME=/data/bitcoin
 BITCOIN_CONF="${BITCOIN_HOME}/bitcoin.conf"
+BITCOIND_USER=bitcoin
+CURRENT_LOCAL_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
 
-# load the RPC connection environment variables RPCUSER and RPCPASSWORD
-source "${ROOT_DIR}/conf/rpc-creds.sh"
+# load the RPC creds
+source "${ROOT_DIR}/conf/rpc.properties"
 
 # always pull remote images to avoid caching issues
-#if [ -z "${BTC_IMAGE##*/*}" ]; then
-#    docker pull "${BTC_IMAGE}"
-#fi 
+if [ -z "${BITCOIND_IMAGE##*/*}" ]; then
+   docker pull "${BITCOIND_IMAGE}"
+fi 
 
 # create local configuration file from template with pruned or full node params
-CURRENT_LOCAL_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
 case $1 in
     pruned)
         cat "${ROOT_DIR}/conf/pruned-node.conf" "${ROOT_DIR}/conf/common.conf" > "${CURRENT_LOCAL_CONF}" ;;
@@ -46,7 +48,7 @@ if [[ $# == 2 ]]; then
             docker rm bitcoind-data 2>/dev/null || true
 
             # initialize new data container
-            docker run --name=bitcoind-data -v "${BITCOIN_HOME}" "${BTC_IMAGE}" /bin/true
+            docker run --name=bitcoind-data -v "${BITCOIN_HOME}" "${BITCOIND_IMAGE}" /bin/true
             ;;
 
         *) usage ;;
@@ -60,12 +62,12 @@ docker rm bitcoind-node 2>/dev/null || true
 
 # copy over local bitcoin.conf and make bitcoin user own it
 docker cp "${CURRENT_LOCAL_CONF}" bitcoind-data:"${BITCOIN_CONF}"
-docker run --volumes-from=bitcoind-data --rm "${BTC_IMAGE}" chown bitcoin:bitcoin /data/bitcoin/bitcoin.conf
+docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" chown "${BITCOIND_USER}:${BITCOIND_USER}" "${BITCOIN_CONF}"
 
 # run the Docker container
-docker run --name=bitcoind-node --volumes-from=bitcoind-data -u bitcoin \
+docker run --name=bitcoind-node --volumes-from=bitcoind-data -u "${BITCOIND_USER}" \
     -p 8333:8333 \
     -p 127.0.0.1:8332:8332 \
     -e BITCOIND_RPCUSER="${RPCUSER}" \
     -e BITCOIND_RPCPASSWORD="${RPCPASSWORD}" \
-    "${BTC_IMAGE}"
+    "${BITCOIND_IMAGE}"
