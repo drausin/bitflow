@@ -1,1 +1,3 @@
 conf/current-bitcoin.conf
+conf/*.properties
+*.properties
