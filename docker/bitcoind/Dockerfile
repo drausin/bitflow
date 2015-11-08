@@ -28,8 +28,6 @@ RUN mkdir -p ${HOME}
 RUN useradd -s /bin/bash -d ${HOME} bitcoin
 RUN chown bitcoin:bitcoin -R ${HOME}
 
-#USER bitcoin
-
 EXPOSE ${CONN_PORT} ${RPC_PORT}
 
 CMD bitcoind -conf=${BITCOIN_CONF} -rpcuser=${BITCOIND_RPCUSER} -rpcpassword=${BITCOIND_RPCPASSWORD}
