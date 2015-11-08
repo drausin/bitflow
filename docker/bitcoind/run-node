@@ -2,73 +2,68 @@
 
 set -eu
 set -o pipefail
-set -x # for temporary debugging
+#set -x # for temporary debugging
 
 usage() {
-    echo "Usage: $0 (pruned|full)" >&2
+    echo "Usage: $0 (pruned|full) [-n|--new-data-container]" >&2
     echo >&2
     exit 1
 }
 
-[[ $# == 1 ]] || usage
+[[ $# == 1 || $# == 2 ]] || usage
 
 ROOT_DIR="$(dirname "$0")"
 BTC_IMAGE=${BTC_IMAGE:-daedalus2718/bitcoind}
 BITCOIN_HOME=/data/bitcoin
 BITCOIN_CONF="${BITCOIN_HOME}/bitcoin.conf"
 
-# create local configuration file from template with pruned or full node params
-PRUNED_NODE_CONF="${ROOT_DIR}/conf/pruned-node.conf"
-FULL_NODE_CONF="${ROOT_DIR}/conf/full-node.conf"
-case $1 in
-    pruned)
-        LOCAL_CONF="${PRUNED_NODE_CONF}"
-        # don't keep a full transactions index & prune to just keep latest 600 MB of block data
-        sed -e 's/<txindex>/0/g' \
-            -e 's/<prune>/600/g' \
-            "${ROOT_DIR}/conf/template.conf" > "${LOCAL_CONF}"              
-        ;;
-
-    full)
-        LOCAL_CONF="${FULL_NODE_CONF}"
-        # keep a full transactions index & don't prune any block data
-        sed -e 's/<txindex>/1/g' \  
-            -e 's/<prune>/0/g'  \    
-            "${ROOT_DIR}/conf/template.conf" > "${LOCAL_CONF}"
-        ;;
-
-    *) usage ;;
-esac
-
-# check for any remaining templated variables
-if [[ $(grep -E '<\w+>' "${LOCAL_CONF}" | wc -l | awk '{print $1}') -gt 0 ]]; then
-    echo "not all of the templated variables in ${LOCAL_CONF} are populated" 
-    exit 2
-fi
-
 # load the RPC connection environment variables RPCUSER and RPCPASSWORD
 source "${ROOT_DIR}/conf/rpc-creds.sh"
-
-# always clean-up, but fail successfully
-docker kill bitcoind-data bitcoind-node 2>/dev/null || true
-docker rm bitcoind-data 2>/dev/null || true
-docker rm bitcoind-node 2>/dev/null || true
-stop docker-bitcoind 2>/dev/null || true
 
 # always pull remote images to avoid caching issues
 #if [ -z "${BTC_IMAGE##*/*}" ]; then
 #    docker pull "${BTC_IMAGE}"
 #fi 
 
-# initialize the data container
-docker run --name=bitcoind-data -v "${BITCOIN_HOME}" "${BTC_IMAGE}" /bin/true
+# create local configuration file from template with pruned or full node params
+CURRENT_LOCAL_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
+case $1 in
+    pruned)
+        cat "${ROOT_DIR}/conf/pruned-node.conf" "${ROOT_DIR}/conf/common.conf" > "${CURRENT_LOCAL_CONF}" ;;
 
-# copy over local bitcoin.conf and update ownership
-docker cp "${LOCAL_CONF}" bitcoind-data:"${BITCOIN_CONF}"
+    full)
+        cat "${ROOT_DIR}/conf/full-node.conf" "${ROOT_DIR}/conf/common.conf" > "${CURRENT_LOCAL_CONF}" ;;
+
+    *) usage ;;
+esac
+
+if [[ $# == 2 ]]; then
+    case $2 in
+        -n|--new-data-container)
+
+            # kill and remove any existing containers
+            docker kill bitcoind-data 2>/dev/null || true
+            docker rm bitcoind-data 2>/dev/null || true
+
+            # initialize new data container
+            docker run --name=bitcoind-data -v "${BITCOIN_HOME}" "${BTC_IMAGE}" /bin/true
+            ;;
+
+        *) usage ;;
+    esac
+fi
+
+# clean up existing node container
+docker kill bitcoind-node 2>/dev/null || true
+docker rm bitcoind-node 2>/dev/null || true
+#stop docker-bitcoind 2>/dev/null || true # for upstart script (not defined yet)
+
+# copy over local bitcoin.conf and make bitcoin user own it
+docker cp "${CURRENT_LOCAL_CONF}" bitcoind-data:"${BITCOIN_CONF}"
 docker run --volumes-from=bitcoind-data --rm "${BTC_IMAGE}" chown bitcoin:bitcoin /data/bitcoin/bitcoin.conf
 
 # run the Docker container
-docker run --name=bitcoind-node --volumes-from=bitcoind-data -u bitcoin -d \
+docker run --name=bitcoind-node --volumes-from=bitcoind-data -u bitcoin \
     -p 8333:8333 \
     -p 127.0.0.1:8332:8332 \
     -e BITCOIND_RPCUSER="${RPCUSER}" \
