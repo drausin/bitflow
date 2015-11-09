@@ -5,7 +5,7 @@ set -o pipefail
 #set -x # for temporary debugging
 
 usage() {
-    echo "Usage: $0 (pruned|full) [-n|--new-data-container]" >&2
+    echo "Usage: $0 (pruned|full)" >&2
     echo >&2
     exit 1
 }
@@ -13,12 +13,15 @@ usage() {
 [[ $# == 1 || $# == 2 ]] || usage
 
 # set some things we use in a few places below
-ROOT_DIR="$(dirname "$0")"
+pushd `dirname $0` > /dev/null
+ROOT_DIR=`pwd -P`
+popd > /dev/null
 BITCOIND_IMAGE=daedalus2718/bitcoind
-BITCOIN_HOME=/data/bitcoin
-BITCOIN_CONF="${BITCOIN_HOME}/bitcoin.conf"
+CONTAINER_BITCOIN_HOME=/data/bitcoin
+CONTAINER_BITCOIN_CONF="${CONTAINER_BITCOIN_HOME}/bitcoin.conf"
 BITCOIND_USER=bitcoin
-CURRENT_LOCAL_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
+LOCAL_BITCOIN_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
+LOCAL_DATA_VOLUME_DIR=/data/bitcoin
 
 # load the RPC creds
 source "${ROOT_DIR}/conf/rpc.properties"
@@ -31,41 +34,35 @@ fi
 # create local configuration file from template with pruned or full node params
 case $1 in
     pruned)
-        cat "${ROOT_DIR}/conf/pruned-node.conf" "${ROOT_DIR}/conf/common.conf" > "${CURRENT_LOCAL_CONF}" ;;
+        cat "${ROOT_DIR}/conf/pruned-node.conf" \
+            "${ROOT_DIR}/conf/common.conf" > "${LOCAL_BITCOIN_CONF}" ;;
 
     full)
-        cat "${ROOT_DIR}/conf/full-node.conf" "${ROOT_DIR}/conf/common.conf" > "${CURRENT_LOCAL_CONF}" ;;
+        cat "${ROOT_DIR}/conf/full-node.conf" \
+            "${ROOT_DIR}/conf/common.conf" > "${LOCAL_BITCOIN_CONF}" ;;
 
     *) usage ;;
 esac
 
-if [[ $# == 2 ]]; then
-    case $2 in
-        -n|--new-data-container)
-
-            # kill and remove any existing containers
-            docker kill bitcoind-data 2>/dev/null || true
-            docker rm bitcoind-data 2>/dev/null || true
-
-            # initialize new data container
-            docker run --name=bitcoind-data -v "${BITCOIN_HOME}" "${BITCOIND_IMAGE}" /bin/true
-            ;;
-
-        *) usage ;;
-    esac
-fi
-
-# clean up existing node container
-docker kill bitcoind-node 2>/dev/null || true
-docker rm bitcoind-node 2>/dev/null || true
+# kill and remove any existing containers
+docker kill bitcoind-data bitcoind-node 2>/dev/null || true
+docker rm bitcoind-data bitcoind-node 2>/dev/null || true
 #stop docker-bitcoind 2>/dev/null || true # for upstart script (not defined yet)
 
-# copy over local bitcoin.conf and make bitcoin user own it
-docker cp "${CURRENT_LOCAL_CONF}" bitcoind-data:"${BITCOIN_CONF}"
-docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" chown "${BITCOIND_USER}:${BITCOIND_USER}" "${BITCOIN_CONF}"
+# run data container
+# N.B., whatever data exists in LOCAL_DATA_VOLUME_DIR will be mounted into CONTAINER_BITCOIN_HOME
+docker run --name=bitcoind-data 
+    -v "${LOCAL_DATA_VOLUME_DIR}:${CONTAINER_BITCOIN_HOME}" "${BITCOIND_IMAGE}" \
+    chown "${BITCOIND_USER}:${BITCOIND_USER}" -R "${CONTAINER_BITCOIN_HOME}"
+
+# copy over local bitcoin.conf and make bitcoin user own it (this is kind of a hack b/c can't figure
+# out how to mount config file via -v with proper bitcoin user ownership)
+docker cp "${LOCAL_BITCOIN_CONF}" bitcoind-data:"${CONTAINER_BITCOIN_CONF}"
+docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" \
+    chown "${BITCOIND_USER}:${BITCOIND_USER}" "${CONTAINER_BITCOIN_CONF}"
 
 # run the Docker container
-docker run --name=bitcoind-node --volumes-from=bitcoind-data -u "${BITCOIND_USER}" \
+docker run --name=bitcoind-node --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" \
     -p 8333:8333 \
     -p 127.0.0.1:8332:8332 \
     -e BITCOIND_RPCUSER="${RPCUSER}" \
