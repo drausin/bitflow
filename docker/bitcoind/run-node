@@ -13,6 +13,7 @@ usage() {
 [[ $# == 1 || $# == 2 ]] || usage
 
 # set some things we use in a few places below
+set -x
 pushd `dirname $0` > /dev/null
 ROOT_DIR=`pwd -P`
 popd > /dev/null
@@ -22,6 +23,7 @@ CONTAINER_BITCOIN_CONF="${CONTAINER_BITCOIN_HOME}/bitcoin.conf"
 BITCOIND_USER=bitcoin
 LOCAL_BITCOIN_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
 LOCAL_DATA_VOLUME_DIR=/data/bitcoin
+set +x
 
 # load the RPC creds
 source "${ROOT_DIR}/conf/rpc.properties"
@@ -44,6 +46,12 @@ case $1 in
     *) usage ;;
 esac
 
+# get the ports from the conf file
+set -x
+PORT=$(grep '^port=' "${LOCAL_BITCOIN_CONF}" | sed -E 's/port=([0-9]+)/\1/g')
+RPCPORT=$(grep '^rpcport=' "${LOCAL_BITCOIN_CONF}" | sed -E 's/rpcport=([0-9]+)/\1/g')
+set +x
+
 # kill and remove any existing containers
 docker kill bitcoind-data bitcoind-node 2>/dev/null || true
 docker rm bitcoind-data bitcoind-node 2>/dev/null || true
@@ -51,7 +59,7 @@ docker rm bitcoind-data bitcoind-node 2>/dev/null || true
 
 # run data container
 # N.B., whatever data exists in LOCAL_DATA_VOLUME_DIR will be mounted into CONTAINER_BITCOIN_HOME
-docker run --name=bitcoind-data 
+docker run --name=bitcoind-data \
     -v "${LOCAL_DATA_VOLUME_DIR}:${CONTAINER_BITCOIN_HOME}" "${BITCOIND_IMAGE}" \
     chown "${BITCOIND_USER}:${BITCOIND_USER}" -R "${CONTAINER_BITCOIN_HOME}"
 
@@ -63,8 +71,8 @@ docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" \
 
 # run the Docker container
 docker run --name=bitcoind-node --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" \
-    -p 8333:8333 \
-    -p 127.0.0.1:8332:8332 \
+    -p "${PORT}:${PORT}" \
+    -p 127.0.0.1:${RPCPORT}:${RPCPORT} \
     -e BITCOIND_RPCUSER="${RPCUSER}" \
     -e BITCOIND_RPCPASSWORD="${RPCPASSWORD}" \
     "${BITCOIND_IMAGE}"
