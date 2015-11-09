@@ -3,9 +3,10 @@
 FROM ubuntu:14.04
 MAINTAINER Drausin Wulsin <daedalus2718@gmail.com>
 
-# directories
+# configuration
 ENV HOME /data/bitcoin
 ENV BITCOIN_CONF ${HOME}/bitcoin.conf
+ENV BITCOIN_USER bitcoin
 
 # (mainnet) ports
 ENV CONN_PORT 8333
@@ -25,8 +26,8 @@ RUN apt-get update && \
 VOLUME [${HOME}]
 
 RUN mkdir -p ${HOME}
-RUN useradd -s /bin/bash -d ${HOME} bitcoin
-RUN chown bitcoin:bitcoin -R ${HOME}
+RUN useradd -s /bin/bash -d ${HOME} ${BITCOIN_USER}
+RUN chown ${BITCOIN_USER}:${BITCOIN_USER} -R ${HOME}
 
 EXPOSE ${CONN_PORT} ${RPC_PORT}
 
