@@ -13,20 +13,13 @@ usage() {
 [[ $# == 1 || $# == 2 ]] || usage
 
 # set some things we use in a few places below
-set -x
 pushd `dirname $0` > /dev/null
-ROOT_DIR=`pwd -P`
-popd > /dev/null
-BITCOIND_IMAGE=daedalus2718/bitcoind
-CONTAINER_BITCOIN_HOME=/data/bitcoin
-CONTAINER_BITCOIN_CONF="${CONTAINER_BITCOIN_HOME}/bitcoin.conf"
-BITCOIND_USER=bitcoin
-LOCAL_BITCOIN_CONF="${ROOT_DIR}/conf/current-bitcoin.conf"
-LOCAL_DATA_VOLUME_DIR=/data/bitcoin
-set +x
+    cd ..
+    ROOT_DIR=`pwd -P`
+    popd > /dev/null
 
-# load the RPC creds
-source "${ROOT_DIR}/conf/rpc.properties"
+# load the properties
+source "${ROOT_DIR}/conf/bitcoind.properties"
 
 # always pull remote images to avoid caching issues
 if [ -z "${BITCOIND_IMAGE##*/*}" ]; then
@@ -36,12 +29,12 @@ fi
 # create local configuration file from template with pruned or full node params
 case $1 in
     pruned)
-        cat "${ROOT_DIR}/conf/pruned-node.conf" \
-            "${ROOT_DIR}/conf/common.conf" > "${LOCAL_BITCOIN_CONF}" ;;
+        cat "${LOCAL_PRUNED_NODE_CONF}" \
+            "${LOCAL_COMMON_CONF}" > "${LOCAL_BITCOIN_CONF}" ;;
 
     full)
-        cat "${ROOT_DIR}/conf/full-node.conf" \
-            "${ROOT_DIR}/conf/common.conf" > "${LOCAL_BITCOIN_CONF}" ;;
+        cat "${LOCAL_FULL_NODE_CONF}" \
+            "${LOCAL_COMMON_CONF}" > "${LOCAL_BITCOIN_CONF}" ;;
 
     *) usage ;;
 esac

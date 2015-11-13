@@ -6,15 +6,15 @@
 
 .PHONY: decrypt_properties encrypt_properties build
 
-RPC_PROPERTIES=conf/rpc.properties
+SECURE_PROPERTIES=bitcoind.secure.properties
 BITCOIND_IMAGE=daedalus2718/bitcoind
 
 encrypt_properties:
-	openssl cast5-cbc -e -in ${RPC_PROPERTIES} -out ${RPC_PROPERTIES}.cast5 -pass env:BITCOIN_FLOW_PASSWORD
+	openssl cast5-cbc -e -in ${SECURE_PROPERTIES} -out ${SECURE_PROPERTIES}.cast5 -pass env:BITCOIN_FLOW_PASSWORD
 
 decrypt_properties:
-	openssl cast5-cbc -d -in ${RPC_PROPERTIES}.cast5 -out ${RPC_PROPERTIES} -pass env:BITCOIN_FLOW_PASSWORD
-	chmod 600 ${RPC_PROPERTIES}
+	openssl cast5-cbc -d -in ${SECURE_PROPERTIES}.cast5 -out ${SECURE_PROPERTIES} -pass env:BITCOIN_FLOW_PASSWORD
+	chmod 600 ${SECURE_PROPERTIES}
 
 build_image:
 	docker build -t ${BITCOIND_IMAGE} .
