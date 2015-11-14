@@ -1,0 +1,75 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+#set -x # for temporary debugging
+
+usage() {
+    echo "Usage: $0 (pruned|full)" >&2
+    echo >&2
+    exit 1
+}
+
+[[ $# == 1 || $# == 2 ]] || usage
+
+# set some things we use in a few places below
+pushd `dirname $0` > /dev/null
+cd ..
+ROOT_DIR=`pwd -P`
+popd > /dev/null
+
+# load the properties
+source "${ROOT_DIR}/conf/bitcoind.properties"
+source "${ROOT_DIR}/conf/bitcoind.secure.properties"
+
+# always pull remote images to avoid caching issues
+#docker pull "${BITCOIND_IMAGE}"
+
+# create local configuration file from template with pruned or full node params
+case $1 in
+    pruned)
+        cat "${LOCAL_PRUNED_NODE_CONF}" \
+            "${LOCAL_COMMON_CONF}" > "${LOCAL_BITCOIN_CONF}" ;;
+
+    full)
+        cat "${LOCAL_FULL_NODE_CONF}" \
+            "${LOCAL_COMMON_CONF}" > "${LOCAL_BITCOIN_CONF}" ;;
+
+    *) usage ;;
+esac
+
+# get the ports from the conf file
+PORT=$(grep '^port=' "${LOCAL_BITCOIN_CONF}" | sed -E 's/port=([0-9]+)/\1/g')
+RPCPORT=$(grep '^rpcport=' "${LOCAL_BITCOIN_CONF}" | sed -E 's/rpcport=([0-9]+)/\1/g')
+
+# kill and remove any existing containers
+echo "killing and removing existing bitcoin-data & bitcoin-node containers..."
+docker kill bitcoind-data bitcoind-node 2>/dev/null || true
+docker rm bitcoind-data bitcoind-node 2>/dev/null || true
+#stop docker-bitcoind 2>/dev/null || true # for upstart script (not defined yet)
+
+# run data container
+# N.B., whatever data exists in LOCAL_DATA_VOLUME_DIR will be mounted into CONTAINER_BITCOIN_HOME
+echo "creating bitcoin-data container..."
+docker run --name=bitcoind-data \
+    -v "${LOCAL_DATA_VOLUME_DIR}:${CONTAINER_BITCOIN_HOME}" "${BITCOIND_IMAGE}" \
+    chown "${BITCOIND_USER}:${BITCOIND_USER}" -R "${CONTAINER_BITCOIN_HOME}"
+
+# copy over local bitcoin.conf and make bitcoin user own it (this is kind of a hack b/c can't figure
+# out how to mount config file via -v with proper bitcoin user ownership)
+docker cp "${LOCAL_BITCOIN_CONF}" bitcoind-data:"${CONTAINER_BITCOIN_CONF}"
+docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" \
+    chown "${BITCOIND_USER}:${BITCOIND_USER}" "${CONTAINER_BITCOIN_CONF}"
+
+# create the logs archive directory
+docker run --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" "${BITCOIND_IMAGE}" \
+    mkdir -p "${CONTAINER_BITCOIN_HOME}/logs"
+
+# run the Docker container
+echo "running bitcoin-node container..."
+docker run --name=bitcoind-node --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" \
+    -p "${PORT}:${PORT}" \
+    -p 127.0.0.1:${RPCPORT}:${RPCPORT} \
+    -e BITCOIND_RPCUSER="${RPCUSER}" \
+    -e BITCOIND_RPCPASSWORD="${RPCPASSWORD}" \
+    "${BITCOIND_IMAGE}"
