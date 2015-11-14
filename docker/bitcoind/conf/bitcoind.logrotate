@@ -1,0 +1,12 @@
+/data/bitcoin/*.log {
+    daily
+    missingok
+    copytruncate
+    size 25M
+    rotate 7
+    compress
+    notifempty
+    nocreate
+    dateext
+    olddir logs
+}

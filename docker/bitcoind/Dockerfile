@@ -3,8 +3,9 @@
 FROM ubuntu:14.04
 MAINTAINER Drausin Wulsin <daedalus2718@gmail.com>
 
-# configuration
-ENV HOME /data/bitcoin
+# if this changes from /data/bitcoin, will need to update conf/bitcoind.logrotate as well
+ENV HOME /data/bitcoin 
+
 ENV BITCOIN_CONF ${HOME}/bitcoin.conf
 ENV BITCOIN_USER bitcoin
 
@@ -26,8 +27,11 @@ RUN apt-get update && \
 VOLUME [${HOME}]
 
 RUN mkdir -p ${HOME}
+RUN mkdir -p ${HOME}/logs
 RUN useradd -s /bin/bash -d ${HOME} ${BITCOIN_USER}
 RUN chown ${BITCOIN_USER}:${BITCOIN_USER} -R ${HOME}
+
+ADD conf/bitcoind.logrotate /etc/logrotate.d/bitcoind
 
 EXPOSE ${CONN_PORT} ${RPC_PORT}
 
