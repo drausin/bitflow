@@ -4,9 +4,9 @@
 # 
 # this script requires that the BITCOIN_FLOW_PASSWORD environment variable be set
 
-.PHONY: decrypt_properties encrypt_properties build
+.PHONY: decrypt_properties encrypt_properties build clean
 
-SECURE_PROPERTIES=bitcoind.secure.properties
+SECURE_PROPERTIES=conf/bitcoind.secure.properties
 BITCOIND_IMAGE=daedalus2718/bitcoind
 
 encrypt_properties:
@@ -22,3 +22,7 @@ build_image:
 publish_image:
 	echo "if this doesn't work you may need to first log in via docker login"
 	docker push ${BITCOIND_IMAGE}
+
+clean:
+	rm -f ${SECURE_PROPERTIES}
+	rm -f conf/current-*.conf
