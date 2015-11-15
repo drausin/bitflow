@@ -4,7 +4,7 @@ We run the bitcoin nodes in Docker containers.
 
 ## Setup
 
-When running on a Mac, ensure your current session has the requisite docker machine environment variables (assuming you're using a VM named `default`)
+When running on a Mac, ensure your current VM is running via `docker-machine ls` and that your session has the requisite docker machine environment variables (assuming you're using a VM named `default`)
 
         eval "$(docker-machine env default)"
 
@@ -44,7 +44,7 @@ or a full node
 
 To stop a node, use the `bitcoin-cli` instead of just killing the process, since killing can result in corrupted blockchain files. First ensure you have the properties loaded (assuming you're in the `bitcoind` root directory)
 
-        ROOT_DIR=$(pwd -P) && source conf/bitcoind.properties
+        source conf/bitcoind.properties
 
 Stop the node via
 

@@ -12,7 +12,7 @@ usage() {
 
 [[ $# == 1 || $# == 2 ]] || usage
 
-# set some things we use in a few places below
+# set full path of the bitcoid root directory
 pushd `dirname $0` > /dev/null
 cd ..
 ROOT_DIR=`pwd -P`
