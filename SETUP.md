@@ -87,6 +87,33 @@ We use Docker containers for isolation (see [this post](http://www.ybrikman.com/
         For more examples and ideas, visit:
          https://docs.docker.com/userguide/
 
-8. If you are new to Docker, follow steps [two](https://docs.docker.com/mac/step_two/), [three](https://docs.docker.com/mac/step_three/), and [four](https://docs.docker.com/mac/step_four/) to play around with some example images.
+8. If you are new to Docker, follow steps [two](https://docs.docker.com/mac/step_two/), [three](https://docs.docker.com/mac/step_three/), and [four](https://docs.docker.com/mac/step_four/) to play around with some example images. [This page](https://docs.docker.com/userguide/dockerimages/) is a good high-level summary of Docker images.
+
+# Python
+
+We use python3 (currently 3.5.0). 
+
+1. (if necessary) Download and run the python3 installer from [here](https://www.python.org/downloads/).
+2. Upgrade virtualenv per [this](http://stackoverflow.com/questions/23842713/using-python-3-in-virtualenv) SO post.
+        
+        sudo pip install --upgrade virtualenv
+
+3. Create a virtual environment for our `bitcoin-flow` project.
+
+        mkvirtualenv --no-site-packages -p /usr/local/bin/python3 bitcoin-flow
+
+4. Install the AWS CLI (while in the `bitcoin-flow` virtualenv).
+
+        pip install awscli
+
+5. Configure the AWS CLI. You should have the AWS Access Key ID and Secret Access Key stored somewhere secure. We use region `us-east-1` and output format 'json'.
+
+        aws configure
+
+6. Add tab completion to the virtualenv preactivate hook.
+
+        echo "complete -C '$(which aws_completer)' aws" >> /Users/dwulsin/.virtualenvs/bitcoin-flow/bin/preactivate
+
+
 
 
