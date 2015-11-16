@@ -20,7 +20,6 @@ popd > /dev/null
 
 # load the properties
 source "${ROOT_DIR}/conf/bitcoind.properties"
-source "${ROOT_DIR}/conf/bitcoind.secure.properties"
 
 # always pull remote images to avoid caching issues
 #docker pull "${BITCOIND_IMAGE}"
