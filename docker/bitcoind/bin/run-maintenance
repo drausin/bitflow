@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+#set -x # for temporary debugging
+
+# set full path of the bitcoid root directory
+pushd `dirname $0` > /dev/null
+cd ..
+ROOT_DIR=`pwd -P`
+popd > /dev/null
+
+# load the properties
+source "${ROOT_DIR}/conf/bitcoind.properties"
+
+# stop bitcoind node if necessary
+if docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" test -e "${CONTAINER_BITCOIN_HOME}/bitcoind.pid"; then
+    docker exec bitcoind-node bitcoin-cli -rpcuser=${RPCUSER} -rpcpassword=${RPCPASSWORD} stop
+fi
+
+# rotate logs
+docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" logrotate -fv /etc/logrotate.d/bitcoind
+
+# backup
+${ROOT_DIR}/bin/backup
