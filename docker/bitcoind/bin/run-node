@@ -13,9 +13,9 @@ usage() {
 [[ $# == 1 || $# == 2 ]] || usage
 
 # set full path of the bitcoid root directory
-pushd `dirname $0` > /dev/null
+pushd $(dirname $0) > /dev/null
 cd ..
-ROOT_DIR=`pwd -P`
+ROOT_DIR=$(pwd -P)
 popd > /dev/null
 
 # load the properties
@@ -68,7 +68,7 @@ docker run --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" "${BITCOIND_I
 echo "running bitcoin-node container..."
 docker run --name=bitcoind-node --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" \
     -p "${PORT}:${PORT}" \
-    -p 127.0.0.1:${RPCPORT}:${RPCPORT} \
+    -p 127.0.0.1:"${RPCPORT}:${RPCPORT}" \
     -e BITCOIND_RPCUSER="${RPCUSER}" \
     -e BITCOIND_RPCPASSWORD="${RPCPASSWORD}" \
     "${BITCOIND_IMAGE}"
