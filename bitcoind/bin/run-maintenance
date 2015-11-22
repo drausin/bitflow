@@ -5,9 +5,9 @@ set -o pipefail
 #set -x # for temporary debugging
 
 # set full path of the bitcoid root directory
-pushd `dirname $0` > /dev/null
+pushd $(dirname $0) > /dev/null
 cd ..
-ROOT_DIR=`pwd -P`
+ROOT_DIR=$(pwd -P)
 popd > /dev/null
 
 # stop via upstart
