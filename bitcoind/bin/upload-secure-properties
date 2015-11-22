@@ -1,0 +1,19 @@
+set -eu
+set -o pipefail
+#set -x # for temporary debugging
+
+# set full path of the bitcoid root directory
+pushd $(dirname $0) > /dev/null
+cd ..
+ROOT_DIR=$(pwd -P)
+popd > /dev/null
+
+# load the properties
+source "${ROOT_DIR}/conf/bitcoind.properties"
+
+# decrypt the secure properties
+make decrypt_properties
+
+# copy to S3
+# N.B., will need aws CLI installed, usually in a virtual-env
+aws s3 cp "${ROOT_DIR}/conf/bitcoind.secure.properties" "${S3_SECURE_CONF_FILEPATH}"
