@@ -1,24 +1,27 @@
 #!/bin/bash
 
-# create the local dir where the repo goes
-mkdir -p /opt/bitcoin-flow/
-cd /opt/bitcoin-flow/
+set -eu
+set -o pipefail
+#set -x # for temporary debugging
 
-# grab repo
-git clone git@github.com:drausin/bitcoin-flow.git
+# where the repo goes
+# N.B., if this changes, we need to update it in upstart.init
+LOCAL_REPO_DIR=/opt/bitcoin-flow/repos/bitcoin-flow
+mkdir -p "${LOCAL_REPO_DIR}"
 
-# get secure conf from S3
-if aws s3 test -e "${S3_CONF_FILEPATH}"; then
-    aws s3 cp "${S3_CONF_FILEPATH}" "${ROOT_DIR}/conf/bitcoind.secure.properties"
-else
-    echo "secure configuration file not found in ${S3_CONF_FILEPATH}"
-    exit 2
-fi
+# clone the repo
+git clone git@github.com:drausin/bitcoin-flow.git "${LOCAL_REPO_DIR}"
 
-# sync blockchain from S3 to local data volumne
-${ROOT_DIR}/bin/restore
+# define the bitcoind root dir
+ROOT_DIR="${LOCAL_REPO_DIR}/bitcoind"
 
-# start the full node
-${ROOT_DIR}/bin/run-node full
+# ensure ROOT_DIR exists
+[[ -d "${ROOT_DIR}" ]]
 
+# grab the configuration we need
+source "${ROOT_DIR}/conf/bitcoind.properties"
+aws s3 cp "${S3_SECURE_CONF_FILEPATH}" "${ROOT_DIR}/conf/bitcoind.secure.properties"
 
+# start the full node via upstart
+cp "${ROOT_DIR}/conf/upstart.init" > /etc/init/bitcoind.init
+start bitcoind
