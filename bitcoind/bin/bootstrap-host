@@ -22,6 +22,9 @@ ROOT_DIR="${LOCAL_REPO_DIR}/bitcoind"
 source "${ROOT_DIR}/conf/bitcoind.properties"
 aws s3 cp "${S3_SECURE_CONF_FILEPATH}" "${ROOT_DIR}/conf/bitcoind.secure.properties"
 
+# sync latest saved blockchain state
+"${ROOT_DIR}bin/restore-data"
+
 # start the full node via upstart
 cp "${ROOT_DIR}/conf/upstart.init" > /etc/init/bitcoind.init
 start bitcoind

@@ -20,6 +20,10 @@ popd > /dev/null
 
 # load the properties
 source "${ROOT_DIR}/conf/bitcoind.properties"
+source "${ROOT_DIR}/conf/bitcoind.secure.properties"
+
+# trap the SIGTERM to shut down gracefully
+trap "${ROOT_DIR}/bin/stop-node" SIGTERM
 
 # always pull remote images to avoid caching issues
 #docker pull "${BITCOIND_IMAGE}"

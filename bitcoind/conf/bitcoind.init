@@ -2,9 +2,7 @@
 description "Docker container for full bitcoind node"
 start on filesystem and started docker
 stop on runlevel [!2345]
-pre-start script
-  exec /opt/bitcoin-flow/repos/bitcoin-flow/bitcoind/bin/restore-data
-end script
-script
-  exec /opt/bitcoin-flow/repos/bitcoin-flow/bitcoind/bin/run-node full
-end script
+
+exec /opt/bitcoin-flow/repos/bitcoin-flow/bitcoind/bin/run-node full
+
+pre-stop exec /opt/bitcoin-flow/repos/bitcoin-flow/bitcoind/bin/stop-node
