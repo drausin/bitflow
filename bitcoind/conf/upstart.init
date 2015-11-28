@@ -1,7 +1,7 @@
 # copy to /etc/init/bin/bitcoind.init
 description "Docker container for full bitcoind node"
-start on filesystem and started docker
-stop on runlevel [!2345]
+start on (runlevel [345] AND filesystem and started network and started docker)
+stop on runlevel [!345]
 
 exec /opt/bitcoin-flow/repos/bitcoin-flow/bitcoind/bin/run-node full
 
