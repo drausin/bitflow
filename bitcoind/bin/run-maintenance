@@ -11,13 +11,13 @@ ROOT_DIR=$(pwd -P)
 popd > /dev/null
 
 # stop 
-${ROOT_DIR}/bin/stop-node
+"${ROOT_DIR}/bin/stop-node"
 
 # rotate logs
-${ROOT_DIR}/bin/rotate-logs
+"${ROOT_DIR}/bin/rotate-logs"
 
 # backup
-${ROOT_DIR}/bin/backup-data
+"${ROOT_DIR}/bin/backup-data"
 
 # start
-${ROOT_DIR}/bin/run-node full
+"${ROOT_DIR}/bin/run-node" full
