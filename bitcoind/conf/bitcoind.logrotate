@@ -1,4 +1,5 @@
 /data/bitcoin/*.log {
+    su bitflow
     daily
     missingok
     copytruncate

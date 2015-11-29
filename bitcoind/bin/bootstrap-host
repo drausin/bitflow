@@ -23,18 +23,18 @@ sudo mount /dev/xvdb /data
 sudo service docker start
 sudo usermod -a -G docker ec2-user
 
-# set up main bitcoin-flow user
-sudo useradd -s /bin/bash bitcoin-flow
-sudo mkdir /opt/bitcoin-flow
-sudo chown -R bitcoin-flow:bitcoin-flow /data
-sudo chown -R bitcoin-flow:bitcoin-flow /opt/bitcoin-flow
-sudo usermod -a -G docker bitcoin-flow
+# set up main bitflow user
+sudo useradd -s /bin/bash bitflow
+sudo mkdir /opt/bitflow
+sudo chown -R bitflow:bitflow /data
+sudo chown -R bitflow:bitflow /opt/bitcoin-flow
+sudo usermod -a -G docker bitflow
 
 # switch to bitcoin-flow user
 sudo su - bitcoin-flow
 
 # clone the repo
-LOCAL_REPO_DIR=/opt/bitcoin-flow/repos/bitcoin-flow
+LOCAL_REPO_DIR=/opt/bitflow/repos/bitcoin-flow
 mkdir -p "${LOCAL_REPO_DIR}"
 git clone https://github.com/drausin/bitcoin-flow.git "${LOCAL_REPO_DIR}"
 
