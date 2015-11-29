@@ -55,7 +55,8 @@ docker rm bitcoind-data bitcoind-node 2>/dev/null || true
 # N.B., whatever data exists in LOCAL_DATA_VOLUME_DIR will be mounted into CONTAINER_BITCOIN_HOME
 echo "creating bitcoin-data container..."
 docker run --name=bitcoind-data \
-    -v "${LOCAL_DATA_VOLUME_DIR}:${CONTAINER_BITCOIN_HOME}" "${BITCOIND_IMAGE}" \
+    -v "${LOCAL_DATA_VOLUME_DIR}:${CONTAINER_BITCOIN_HOME}" \
+    "${BITCOIND_IMAGE}" \
     chown "${BITCOIND_USER}:${BITCOIND_USER}" -R "${CONTAINER_BITCOIN_HOME}"
 
 # copy over local bitcoin.conf and make bitcoin user own it (this is kind of a hack b/c can't figure
@@ -70,7 +71,8 @@ docker run --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" "${BITCOIND_I
 
 # run the Docker container
 echo "running bitcoin-node container..."
-docker run --name=bitcoind-node --volumes-from=bitcoind-data --rm -u "${BITCOIND_USER}" \
+docker run --name=bitcoind-node --volumes-from=bitcoind-data -d \
+    -u "${BITCOIND_USER}" \
     -p "${PORT}:${PORT}" \
     -p 127.0.0.1:"${RPCPORT}:${RPCPORT}" \
     -e BITCOIND_RPCUSER="${RPCUSER}" \
