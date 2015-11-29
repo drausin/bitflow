@@ -14,9 +14,8 @@ popd > /dev/null
 source "${ROOT_DIR}/conf/bitcoind.properties"
 
 # confirm bitcoin-node container isn't running
-if [[   ($(docker ps -a --filter='name=bitcoind-data' | grep -v NAMES | wc -l) -gt 0) -a \
-        (docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" \
-            test -e "${CONTAINER_BITCOIN_HOME}/bitcoind.pid") ]]; then
+if [[ $(docker ps -a --filter='name=bitcoind-data' | grep -v NAMES | wc -l) -gt 0 && \
+    $(docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" test -e "${CONTAINER_BITCOIN_HOME}/bitcoind.pid") ]]; then
     echo "Aborting backup because bitcoind appears to be running"
     exit 2
 fi
