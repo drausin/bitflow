@@ -15,6 +15,7 @@ source "${ROOT_DIR}/conf/bitcoind.properties"
 source "${ROOT_DIR}/conf/bitcoind.secure.properties"
 
 # shut bitcoind down gracefully if it is running
-if docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" test -e "${CONTAINER_BITCOIN_HOME}/bitcoind.pid"; then
+if [[ $(docker ps -a --filter='name=bitcoind-data' | grep -v NAMES | wc -l) -gt 0 && \
+    $(docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" test -e "${CONTAINER_BITCOIN_HOME}/bitcoind.pid") ]]; then
     docker exec bitcoind-node bitcoin-cli -rpcuser=${RPCUSER} -rpcpassword=${RPCPASSWORD} stop
 fi
