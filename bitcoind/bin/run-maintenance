@@ -10,8 +10,8 @@ cd ..
 ROOT_DIR=$(pwd -P)
 popd > /dev/null
 
-# stop via upstart
-stop bitcoind
+# stop 
+${ROOT_DIR}/bin/stop-node
 
 # rotate logs
 ${ROOT_DIR}/bin/rotate-logs
@@ -19,5 +19,5 @@ ${ROOT_DIR}/bin/rotate-logs
 # backup
 ${ROOT_DIR}/bin/backup-data
 
-# start via upstart
-stop bitcoind
+# start
+${ROOT_DIR}/bin/run-node full
