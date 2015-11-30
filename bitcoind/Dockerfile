@@ -3,16 +3,6 @@
 FROM ubuntu:14.04
 MAINTAINER Drausin Wulsin <daedalus2718@gmail.com>
 
-# if this changes from /data/bitcoin, will need to update conf/bitcoind.logrotate as well
-ENV HOME /data/bitcoin 
-
-ENV BITCOIN_CONF ${HOME}/bitcoin.conf
-ENV BITCOIN_USER bitcoin
-
-# (mainnet) ports
-ENV CONN_PORT 8333
-ENV RPC_PORT 8332
-
 # For some reason, docker.io (0.9.1~dfsg1-2) pkg in Ubuntu 14.04 has permission
 # denied issues when executing /bin/bash from trusted builds.  Building locally
 # works fine (strange).  Using the upstream docker (0.11.1) pkg from
@@ -23,6 +13,18 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8842ce5e && \
 RUN apt-get update && \
     apt-get install -y bitcoind && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# if this changes from /data/bitcoin, will need to update conf/bitcoind.logrotate as well
+ENV HOME /data/bitcoin 
+
+# if this changes from bitflow, will need to update conf/bitcoind.logrotate as well
+ENV BITCOIN_USER bitflow
+
+ENV BITCOIN_CONF ${HOME}/bitcoin.conf
+
+# (mainnet) ports
+ENV CONN_PORT 8333
+ENV RPC_PORT 8332
 
 VOLUME [${HOME}]
 
