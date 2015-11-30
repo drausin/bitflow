@@ -1,0 +1,38 @@
+project(':bitcoin-flow-node') {
+    dependencies {
+        
+		// Logging
+        compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
+        compile "org.apache.logging.log4j:log4j-core:$log4jVersion"
+        compile "org.apache.logging.log4j:log4j-slf4j-impl:$log4jVersion"
+
+        // Commons
+        compile "org.apache.commons:commons-lang3:3.0"
+        compile "commons-io:commons-io:2.4"
+
+        // Google
+        compile "com.google.guava:guava:$guavaVersion"
+        compile "com.google.code.findbugs:jsr305:3.0.0"
+
+        // Jackson and serialization
+        compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
+        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
+        compile "org.apache.avro:avro:1.7.7"
+
+        // Sourceforge
+        compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
+
+        // Test
+        testCompile "junit:junit:$junitVersion"
+        testCompile "hamcrest:hamcrest-all:$hamcrestVersion"
+        testCompile "mockito:mockito-all:$mockitoVersion"
+        testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"
+        testCompile "org.hsqldb:hsqldb:2.3.3"
+        testCompile "org.dbunit:dbunit:2.5.1"
+        testCompile "com.mockrunner:mockrunner-jdbc:1.1.0"
+    }
+}

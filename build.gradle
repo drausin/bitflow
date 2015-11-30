@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+		jcenter()
+		maven {
+			url "http://dl.bintray.com/palantir/releases"
+		}
+	}
+	dependencies {
+        classpath 'com.palantir:gradle-baseline-java:0.2.2'
+		classpath 'com.palantir:gradle-gitsemver:0.6.0'
+    }
+}
+
+repositories {
+    jcenter()
+	mavenCentral()
+}
+
+allprojects {
+    configurations.all {
+        exclude module: 'slf4j-log4j12'
+        resolutionStrategy.force(
+                "org.slf4j:slf4j-api:$slf4jVersion",
+                "org.slf4j:slf4j-log4j12:$slf4jVersion",
+                "joda-time:joda-time:$jodaVersion",
+                "junit:junit:$junitVersion"
+        )
+    }
+
+    apply from: "$rootDir/gradle/idea.gradle"
+    apply plugin: 'java'
+	apply plugin: 'gitsemver'
+
+    group = 'org.drausin.bitcoinflow'
+    // version semverVersion()
+
+    apply plugin: 'com.palantir.baseline-checkstyle'
+    apply plugin: 'com.palantir.baseline-findbugs'
+    apply plugin: 'com.palantir.baseline-idea'
+	apply plugin: 'com.palantir.baseline-eclipse'
+
+    findbugsTest {
+      enabled = false
+    }
+}
+
+// root project
+apply plugin: 'com.palantir.baseline-config'
+
+subprojects {
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    task testJar(type: Jar) {
+        from sourceSets.test.output
+        classifier = 'test'
+    }
+
+    configurations {
+        testFixtures {
+            extendsFrom testRuntime
+        }
+    }
+
+    artifacts {
+        testFixtures testJar
+    }
+}
+

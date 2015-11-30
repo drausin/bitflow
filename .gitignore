@@ -8,5 +8,32 @@
 *.war
 *.ear
 
+# IntelliJ
+**/*.ipr
+**/*.iws
+**/*.iml
+out/
+**/*.log
+**/*.log.gz
+
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# various build stuff
+.ecbuild/
+build
+bin
+buildlib
+project
+target
+Build.scala
+build.sbt
+sbt-launch.jar
+lib
+.classpath
+.gradle/
+.settings/
+.project
+.checkstyle
+dependencyRepo/
+.bin
