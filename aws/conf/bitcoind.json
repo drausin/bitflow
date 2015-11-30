@@ -1,0 +1,29 @@
+{   
+    "ImageId": "ami-e3106686",
+    "KeyName": "bitcoin-flow-stone",
+    "SecurityGroupIds": ["sg-0dd9706b"],
+    "UserData": "Usually filled in from command line",
+    "InstanceType": "t2.small",
+    "Placement": {
+        "AvailabilityZone": "us-east-1e",
+        "Tenancy": "default"
+    },
+    "BlockDeviceMappings": [
+        {
+            "DeviceName": "/dev/sdb",
+            "Ebs": {
+                "VolumeSize": 75,
+                "DeleteOnTermination": true,
+                "VolumeType": "standard",
+                "Encrypted": false
+            }
+        }
+    ],
+    "Monitoring": {
+        "Enabled": false
+    },
+    "DisableApiTermination": false,
+    "IamInstanceProfile": {
+        "Name": "bitcoin-flow"
+    }
+}
