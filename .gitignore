@@ -22,8 +22,14 @@ hs_err_pid*
 # various build stuff
 .ecbuild/
 .baseline/
+.classpath
+.gradle/
+.settings/
+.project
+.checkstyle
 build
 bin
+.bin
 buildlib
 project
 target
@@ -31,10 +37,7 @@ Build.scala
 build.sbt
 sbt-launch.jar
 lib
-.classpath
-.gradle/
-.settings/
-.project
-.checkstyle
 dependencyRepo/
-.bin
+
+# other stuff
+notes.txt
