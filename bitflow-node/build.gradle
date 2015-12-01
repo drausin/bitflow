@@ -1,4 +1,4 @@
-project(':bitcoin-flow-node') {
+project(':bitflow-node') {
     dependencies {
         
 		// Logging

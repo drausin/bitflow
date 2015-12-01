@@ -1,69 +1,98 @@
 buildscript {
     repositories {
-		jcenter()
-		maven {
-			url "http://dl.bintray.com/palantir/releases"
-		}
+        jcenter()
+        maven {
+            url 'https://plugins.gradle.org/m2/'
+        }
 	}
 	dependencies {
-        classpath 'com.palantir:gradle-baseline-java:0.2.2'
-		classpath 'com.palantir:gradle-gitsemver:0.6.0'
+        classpath "com.palantir.gradle:pt-gradle:2.5-0.12.0"
+        classpath "com.palantir:gradle-baseline-java:${baselineVersion}"
+        classpath "com.palantir:jacoco-coverage:${jacocoCoverageVersion}"
+        classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}"
+        classpath "gradle.plugin.com.palantir.gradle.javadist:gradle-java-distribution:${gradleJavaDistVersion}"
+        classpath "gradle.plugin.org.inferred:gradle-processors:${gradleProcessorsVersion}"
+        classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.2.0"
     }
 }
 
-repositories {
-    jcenter()
-	mavenCentral()
-}
+apply plugin: 'com.palantir.baseline-config'
 
 allprojects {
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+
     configurations.all {
         exclude module: 'slf4j-log4j12'
-        resolutionStrategy.force(
-                "org.slf4j:slf4j-api:$slf4jVersion",
-                "org.slf4j:slf4j-log4j12:$slf4jVersion",
-                "joda-time:joda-time:$jodaVersion",
-                "junit:junit:$junitVersion"
-        )
+        resolutionStrategy {
+            failOnVersionConflict()
+            force "ch.qos.logback:logback-classic:${logbackVersion}"
+            force "ch.qos.logback:logback-core:${logbackVersion}"
+            force "com.fasterxml.jackson.core:jackson-annotations:${jacksonVersion}"
+            force "com.fasterxml.jackson.core:jackson-core:${jacksonVersion}"
+            force "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+            force "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
+            force "com.fasterxml.jackson.datatype:jackson-datatype-guava:${jacksonVersion}"
+            force "com.fasterxml.jackson.module:jackson-module-scala_2.10:${jacksonVersion}"
+            force "com.google.code.findbugs:jsr305:${jsr305Version}"
+            force "com.google.code.gson:gson:${gsonVersion}"
+            force "com.google.guava:guava:${guavaVersion}"
+            force "com.netflix.feign:feign-core:${feignVersion}"
+            force "com.netflix.feign:feign-jackson:${feignVersion}"
+            force "com.netflix.feign:feign-jaxrs:${feignVersion}"
+            force "com.netflix.feign:feign-okhttp:${feignVersion}"
+            force "com.squareup.okhttp:okhttp:${okhttpVersion}"
+            force "commons-io:commons-io:${commonsIoVersion}"
+            force "io.netty:netty-all:${nettyAllVersion}"
+            force "io.netty:netty:${nettyVersion}"
+            force "jline:jline:${jlineVersion}"
+            force "joda-time:joda-time:${jodaTimeVersion}"
+            force "junit:junit:${junitVersion}"
+            force "org.apache.avro:avro:${avroVersion}"
+            force "org.apache.commons:commons-lang3:${commonsLang3Version}"
+            force "org.apache.commons:commons-math3:${commonsMath3Version}"
+            force "org.apache.curator:curator-client:${curatorVersion}"
+            force "org.apache.curator:curator-framework:${curatorVersion}"
+            force "org.apache.httpcomponents:httpclient:${httpClientVersion}"
+            force "org.apache.httpcomponents:httpcore:${httpCoreVersion}"
+            force "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+            force "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
+            force "org.slf4j:slf4j-api:${slf4jVersion}"
+            force "org.xerial.snappy:snappy-java:${snappyVersion}"
+
+            // force these versions
+            force "commons-codec:commons-codec:${commonsCodecVersion}"
+            force "commons-lang:commons-lang:${commonsLangVersion}"
+            force "commons-logging:commons-logging:${commonsLoggingVersion}"
+            force "org.apache.logging.log4j:log4j-core:${log4jVersion}"
+            force "org.codehaus.jackson:jackson-core-asl:${codehausJacksonVersion}"
+            force "org.codehaus.jackson:jackson-jaxrs:${codehausJacksonVersion}"
+            force "org.codehaus.jackson:jackson-mapper-asl:${codehausJacksonVersion}"
+            force "org.codehaus.jackson:jackson-xc:${codehausJacksonVersion}"
+            force "org.slf4j:slf4j-log4j12:${slf4jLog4jVersion}"
+        }
     }
 
     apply from: "$rootDir/gradle/idea.gradle"
     apply plugin: 'java'
+    //apply plugin: 'pt-default-repos'
+    apply plugin: 'pt-versions'
 	apply plugin: 'gitsemver'
 
     group = 'org.drausin.bitcoinflow'
     // version semverVersion()
+    version = '0.0.0'
 
-    apply plugin: 'com.palantir.baseline-checkstyle'
+    //apply plugin: 'com.palantir.baseline-checkstyle'
     apply plugin: 'com.palantir.baseline-findbugs'
     apply plugin: 'com.palantir.baseline-idea'
 	apply plugin: 'com.palantir.baseline-eclipse'
-
-    findbugsTest {
-      enabled = false
-    }
 }
-
-// root project
-apply plugin: 'com.palantir.baseline-config'
 
 subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
-
-    task testJar(type: Jar) {
-        from sourceSets.test.output
-        classifier = 'test'
-    }
-
-    configurations {
-        testFixtures {
-            extendsFrom testRuntime
-        }
-    }
-
-    artifacts {
-        testFixtures testJar
-    }
 }
-

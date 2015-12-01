@@ -1,3 +1,3 @@
-rootProject.name='bitcoin-flow'
+rootProject.name='bitflow'
 
-include 'bitcoin-flow-node'
+include 'bitflow-node'
