@@ -78,7 +78,6 @@ allprojects {
 
     apply from: "$rootDir/gradle/idea.gradle"
     apply plugin: 'java'
-    //apply plugin: 'pt-default-repos'
     apply plugin: 'pt-versions'
 	apply plugin: 'gitsemver'
 
@@ -86,7 +85,7 @@ allprojects {
     // version semverVersion()
     version = '0.0.0'
 
-    //apply plugin: 'com.palantir.baseline-checkstyle'
+    apply plugin: 'com.palantir.baseline-checkstyle'
     apply plugin: 'com.palantir.baseline-findbugs'
     apply plugin: 'com.palantir.baseline-idea'
 	apply plugin: 'com.palantir.baseline-eclipse'

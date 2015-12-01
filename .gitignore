@@ -21,7 +21,6 @@ hs_err_pid*
 
 # various build stuff
 .ecbuild/
-.baseline/
 .classpath
 .gradle/
 .settings/
