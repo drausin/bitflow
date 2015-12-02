@@ -58,6 +58,7 @@ allprojects {
             force "org.apache.curator:curator-framework:${curatorVersion}"
             force "org.apache.httpcomponents:httpclient:${httpClientVersion}"
             force "org.apache.httpcomponents:httpcore:${httpCoreVersion}"
+            force "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
             force "org.hamcrest:hamcrest-core:${hamcrestVersion}"
             force "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
             force "org.slf4j:slf4j-api:${slf4jVersion}"

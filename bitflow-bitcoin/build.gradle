@@ -23,6 +23,9 @@ project(':bitflow-bitcoin') {
         compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
         compile "org.apache.avro:avro:1.7.7"
 
+        // Bitcoin
+        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+
         // Sourceforge
         compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
 
