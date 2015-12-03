@@ -16,7 +16,12 @@ buildscript {
     }
 }
 
+apply plugin: 'java'
 apply plugin: 'com.palantir.baseline-config'
+apply plugin: 'com.palantir.baseline-idea'
+apply plugin: 'com.palantir.baseline-eclipse'
+apply plugin: 'com.palantir.jacoco-coverage'
+apply plugin: 'com.palantir.jacoco-full-report'
 
 allprojects {
 
@@ -25,6 +30,10 @@ allprojects {
         mavenCentral()
     }
 
+    apply plugin: 'org.inferred.processors' // required in root project to generate IntelliJ project correctly
+
+    // version semverVersion()
+    version = '0.0.0'
     configurations.all {
         exclude module: 'slf4j-log4j12'
         resolutionStrategy {
@@ -76,23 +85,28 @@ allprojects {
             force "org.slf4j:slf4j-log4j12:${slf4jLog4jVersion}"
         }
     }
-
-    apply from: "$rootDir/gradle/idea.gradle"
-    apply plugin: 'java'
-    apply plugin: 'pt-versions'
-	apply plugin: 'gitsemver'
-
-    group = 'org.drausin.bitcoinflow'
-    // version semverVersion()
-    version = '0.0.0'
-
-    apply plugin: 'com.palantir.baseline-checkstyle'
-    apply plugin: 'com.palantir.baseline-findbugs'
-    apply plugin: 'com.palantir.baseline-idea'
-	apply plugin: 'com.palantir.baseline-eclipse'
 }
 
 subprojects {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+}
+
+// Code coverage
+//task('check')  // assumed to exist by jacoco-coverage.
+evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
+jacocoFullReport {
+    dependsOn << allprojects.collect { it.tasks.withType(JacocoReport).findAll { it != jacocoFullReport } }
+    // Ignore Immutables-generated code from coverage checks
+    afterEvaluate {
+        classDirectories = files(classDirectories.files.collect {
+            // Exclusion path is project-relative and has a base of compiled classes
+            fileTree(dir: it, exclude: '**/Immutable*.class')
+        })
+    }
+}
+
+
+jacocoCoverage {
+    reportThreshold 0.8
 }

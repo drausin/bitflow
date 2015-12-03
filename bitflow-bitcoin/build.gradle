@@ -1,3 +1,5 @@
+apply from: "${rootDir}/gradle/java.gradle"
+
 project(':bitflow-bitcoin') {
     dependencies {
         
@@ -31,8 +33,8 @@ project(':bitflow-bitcoin') {
 
         // Test
         testCompile "junit:junit:$junitVersion"
-        testCompile "hamcrest:hamcrest-all:$hamcrestVersion"
-        testCompile "mockito:mockito-all:$mockitoVersion"
+        testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
         testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"
         testCompile "org.hsqldb:hsqldb:2.3.3"
         testCompile "org.dbunit:dbunit:2.5.1"

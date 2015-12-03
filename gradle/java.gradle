@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'com.palantir.baseline-checkstyle'
+apply plugin: 'com.palantir.baseline-eclipse'
+apply plugin: 'com.palantir.baseline-findbugs'
+apply plugin: 'com.palantir.baseline-idea'
+apply plugin: 'jacoco'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('javax.servlet:servlet-api') with module("javax.servlet:javax.servlet-api:${javaxServletVersion}")
+    }
+}
+
+configurations.compile {
+    exclude group: 'javax.ws.rs', module: 'jsr311-api'  // clashes with javax.ws.rs:javax.ws.rs-api
+    exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // we use logback
+}
+
+checkstyle.toolVersion = '6.11.2'
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+// Ensure source folders exist
+eclipseClasspath.doLast {
+    eclipse.classpath.sourceSets.main.allSource.each { it.mkdirs() }
+    eclipse.classpath.sourceSets.main.output.each { it.mkdirs() }
+    eclipse.classpath.sourceSets.test.output.each { it.mkdirs() }
+}
