@@ -39,6 +39,7 @@ public class BlockchainInfoTest {
     private BlockchainInfo blockchainInfo2;
     private String rpcGetInfoJson;
     private String blockchainInfo1Json;
+    private final double ASSERT_EQUALS_PRECISION = 1E-9;
 
     @Before
     public final void setUp() throws Exception {
@@ -57,7 +58,7 @@ public class BlockchainInfoTest {
         standardMapper = new ObjectMapper();
         standardMapper.registerModule(blockchainModule);
 
-        // test RPC GetInfo response json
+        // from https://bitcoin.org/en/developer-reference#getblockchaininfo
         rpcGetInfoJson = "{\n"
                 + "    \"chain\" : \"test\",\n"
                 + "    \"blocks\" : 315280,\n"
@@ -122,38 +123,39 @@ public class BlockchainInfoTest {
     public final void testGetDifficulty() throws Exception {
         assertEquals(
                 (double) JsonPath.read(rpcGetInfoJson, "$.difficulty"),
-                blockchainInfo1.getDifficulty(), 1E-6);
+                blockchainInfo1.getDifficulty(), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 blockchainInfo1.getDifficulty(),
-                JsonPath.read(blockchainInfo1Json, "$.difficulty"), 1E-6);
+                JsonPath.read(blockchainInfo1Json, "$.difficulty"), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 (double) JsonPath.read(blockchainInfo1Json, "$.difficulty"),
-                blockchainInfo2.getDifficulty(), 1E-6);
+                blockchainInfo2.getDifficulty(), ASSERT_EQUALS_PRECISION);
     }
 
     @Test
     public final void testGetVerificationProgress() throws Exception {
         assertEquals(
                 (double) JsonPath.read(rpcGetInfoJson, "$.verificationprogress"),
-                blockchainInfo1.getVerificationProgress(), 1E-6);
+                blockchainInfo1.getVerificationProgress(), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 blockchainInfo1.getVerificationProgress(),
-                JsonPath.read(blockchainInfo1Json, "$.verificationProgress"), 1E-6);
+                JsonPath.read(blockchainInfo1Json, "$.verificationProgress"), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 (double) JsonPath.read(blockchainInfo1Json, "$.verificationProgress"),
-                blockchainInfo2.getVerificationProgress(), 1E-6);
+                blockchainInfo2.getVerificationProgress(), ASSERT_EQUALS_PRECISION);
     }
 
 
     @Test
     public final void testGetChainwork() throws Exception {
-        assertEquals(StringUtils.stripStart(JsonPath.read(rpcGetInfoJson, "$.chainwork").toString(), "0"),
+        assertEquals(
+                StringUtils.stripStart(JsonPath.read(rpcGetInfoJson, "$.chainwork").toString(), "0"),
                 blockchainInfo1.getChainwork().toString(16));
         assertEquals(
                 blockchainInfo1.getChainwork().toString(16),
-                JsonPath.read(blockchainInfo1Json, "$.chainwork"));
+                StringUtils.stripStart(JsonPath.read(blockchainInfo1Json, "$.chainwork"), "0"));
         assertEquals(
-                JsonPath.read(blockchainInfo1Json, "$.chainwork"),
+                StringUtils.stripStart(JsonPath.read(blockchainInfo1Json, "$.chainwork"), "0"),
                 blockchainInfo2.getChainwork().toString(16));
     }
 }
