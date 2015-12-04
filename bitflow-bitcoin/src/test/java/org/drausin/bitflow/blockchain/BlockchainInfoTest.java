@@ -24,6 +24,7 @@ import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Sha256Hash;
+import org.drausin.bitflow.blockchain.mixin.BlockchainInfoRpcMixIn;
 import org.drausin.bitflow.blockchain.serde.BigIntegerDeserializer;
 import org.drausin.bitflow.blockchain.serde.BigIntegerSerializer;
 import org.drausin.bitflow.blockchain.serde.Sha256HashSerializer;
@@ -42,7 +43,7 @@ public class BlockchainInfoTest {
     @Before
     public final void setUp() throws Exception {
 
-        SimpleModule blockchainModule = new SimpleModule("BlockchainModule", Version.unknownVersion());
+        SimpleModule blockchainModule = new SimpleModule("TestModule", Version.unknownVersion());
         blockchainModule.addSerializer(Sha256Hash.class, new Sha256HashSerializer());
         blockchainModule.addSerializer(BigInteger.class, new BigIntegerSerializer());
         blockchainModule.addDeserializer(BigInteger.class, new BigIntegerDeserializer());
