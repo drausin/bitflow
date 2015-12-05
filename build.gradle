@@ -30,10 +30,10 @@ allprojects {
         mavenCentral()
     }
 
-    apply plugin: 'org.inferred.processors' // required in root project to generate IntelliJ project correctly
-
+    group = 'org.drausin.bitflow'
     // version semverVersion()
     version = '0.0.0'
+
     configurations.all {
         exclude module: 'slf4j-log4j12'
         resolutionStrategy {
@@ -93,7 +93,6 @@ subprojects {
 }
 
 // Code coverage
-//task('check')  // assumed to exist by jacoco-coverage.
 evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
 jacocoFullReport {
     dependsOn << allprojects.collect { it.tasks.withType(JacocoReport).findAll { it != jacocoFullReport } }
@@ -105,7 +104,6 @@ jacocoFullReport {
         })
     }
 }
-
 
 jacocoCoverage {
     reportThreshold 0.8

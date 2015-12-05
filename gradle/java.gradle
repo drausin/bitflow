@@ -1,9 +1,11 @@
 apply plugin: 'java'
-apply plugin: 'com.palantir.baseline-checkstyle'
-apply plugin: 'com.palantir.baseline-eclipse'
-apply plugin: 'com.palantir.baseline-findbugs'
-apply plugin: 'com.palantir.baseline-idea'
 apply plugin: 'jacoco'
+apply plugin: 'com.palantir.baseline-checkstyle'
+apply plugin: 'com.palantir.baseline-findbugs'
+
+apply from: "$rootDir/gradle/idea.gradle"
+apply plugin: 'com.palantir.baseline-idea'
+apply plugin: 'com.palantir.baseline-eclipse'
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
