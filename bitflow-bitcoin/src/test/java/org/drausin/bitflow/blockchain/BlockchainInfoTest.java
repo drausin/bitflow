@@ -39,7 +39,7 @@ public class BlockchainInfoTest {
     private BlockchainInfo blockchainInfo2;
     private String rpcGetInfoJson;
     private String blockchainInfo1Json;
-    private final double ASSERT_EQUALS_PRECISION = 1E-9;
+    private static final double ASSERT_EQUALS_PRECISION = 1E-9;
 
     @Before
     public final void setUp() throws Exception {

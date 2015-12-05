@@ -60,7 +60,7 @@ public abstract class BlockRpcMixIn {
     abstract long getVersion();
 
     @JsonProperty("merkleroot")
-    abstract public Sha256Hash getMerkleRoot();
+    abstract Sha256Hash getMerkleRoot();
 
     @JsonProperty("tx")
     abstract List<Sha256Hash> getTransactionIds();

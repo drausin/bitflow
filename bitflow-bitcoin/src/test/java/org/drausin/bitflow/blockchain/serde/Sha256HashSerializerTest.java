@@ -19,7 +19,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
 import org.junit.Before;
 import org.junit.Test;
