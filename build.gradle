@@ -16,8 +16,9 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
 apply plugin: 'com.palantir.baseline-config'
+apply plugin: 'java'
+apply plugin: 'org.inferred.processors'
 apply plugin: 'com.palantir.baseline-idea'
 apply plugin: 'com.palantir.baseline-eclipse'
 apply plugin: 'com.palantir.jacoco-coverage'
