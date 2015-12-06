@@ -1,0 +1,13 @@
+apply from: "${rootDir}/gradle/java.gradle"
+
+project(':bitflow-bitcoin-api') {
+    apply plugin: 'org.inferred.processors'
+
+    dependencies {
+        compile project(':bitflow-bitcoin')
+        compile "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
+        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
+        processor "org.immutables:value:${immutablesVersion}"
+    }
+}
