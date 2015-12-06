@@ -14,17 +14,20 @@
 
 package org.drausin.bitflow.blockchain.api;
 
-import com.google.common.base.Optional;
-import java.util.Map;
+import java.util.List;
+import javax.annotation.CheckForNull;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.drausin.bitflow.blockchain.BlockHeader;
 import org.drausin.bitflow.blockchain.BlockchainInfo;
+import org.joda.time.DateTime;
 
 @Path("/blockchain")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -40,7 +43,6 @@ public interface BlockchainService {
     BlockchainInfo getBlockchainInfo(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader);
 
-
     /**
      * Gets the block header for a given block hash.
      *
@@ -49,13 +51,36 @@ public interface BlockchainService {
     @GET
     @Path("/block/header/{hash}")
     @Produces(MediaType.APPLICATION_JSON)
-    Optional<Map<String, Object>> getBlockHeader(
+    BlockHeader getBlockHeader(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
             @PathParam("hash") String hash);
 
-    // TODO: getBlockTimeSubchain(long fromTime, long toTime)
+    /**
+     * Gets the block header subchain of blocks created within a given time window.
+     *
+     * @param from (optional) the time after (inclusive) which to get the first block; must be specified if to
+     * parameter is not
+     * @param to (optional) the time before (exclusive) which to get the last block
+     */
+    @GET
+    @Path("/block/header/subchain/time")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<BlockHeader> getBlockHeaderTimeSubchain(
+            @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
+            @CheckForNull @QueryParam("from") DateTime from,
+            @CheckForNull @QueryParam("to") DateTime to);
 
-    // TODO: getBlockTimeSubchain(Date fromDate, Date toDate)
-
-    // TODO: getBlockHeightSubchain(long fromHeight, long toHeight)
+    /**
+     * Gets the block header subchain of blocks created within a given height range, relative to the current best block.
+     *
+     * @param from the height above (inclusive) which to get the first block
+     * @param to the height below (exclusive) which to get the last block
+     */
+    @GET
+    @Path("/block/header/subchain/height")
+    @Produces(MediaType.APPLICATION_JSON)
+    List<BlockHeader> getBlockHeaderHeightSubchain(
+            @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
+            @CheckForNull @QueryParam("from") DateTime from,
+            @CheckForNull @QueryParam("to") DateTime to);
 }
