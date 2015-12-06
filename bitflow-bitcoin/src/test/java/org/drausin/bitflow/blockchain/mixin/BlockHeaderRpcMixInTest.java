@@ -26,7 +26,7 @@ import org.junit.Test;
 /**
  * Created by dwulsin on 12/4/15.
  */
-public class BlockRpcMixInTest {
+public class BlockHeaderRpcMixInTest {
 
     private static class BlockRpcMixInImpl extends BlockRpcMixIn {
 

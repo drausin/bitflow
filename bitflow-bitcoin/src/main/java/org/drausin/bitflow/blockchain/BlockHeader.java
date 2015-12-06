@@ -27,7 +27,7 @@ import org.bitcoinj.core.Sha256Hash;
  * Created by dwulsin on 12/3/15.
  */
 @Immutable
-public final class Block {
+public final class BlockHeader {
 
     private final Sha256Hash headerHash;
     private final long numConfirmations;
@@ -45,7 +45,7 @@ public final class Block {
     private final Sha256Hash nextBlockHash;
 
     @JsonCreator
-    public Block(
+    public BlockHeader(
             @JsonProperty("headerHash") Sha256Hash headerHash,
             @JsonProperty("numConfirmations") long numConfirmations,
             @JsonProperty("sizeBytes") long sizeBytes,

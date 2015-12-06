@@ -34,12 +34,12 @@ import org.junit.Test;
 /**
  * Created by dwulsin on 12/4/15.
  */
-public class BlockTest {
+public class BlockHeaderTest {
 
     private ObjectMapper rpcMapper;
     private ObjectMapper standardMapper;
-    private Block block1;
-    private Block block2;
+    private BlockHeader blockHeader1;
+    private BlockHeader blockHeader2;
     private String rpcGetBlockJson;
     private String block1Json;
     private static final double ASSERT_EQUALS_PRECISION = 1E-9;
@@ -55,7 +55,7 @@ public class BlockTest {
         // mapper from RPC json schema
         rpcMapper = new ObjectMapper();
         rpcMapper.registerModule(blockModule);
-        rpcMapper.setMixIns(ImmutableMap.<Class<?>, Class<?>>of(Block.class, BlockRpcMixIn.class));
+        rpcMapper.setMixIns(ImmutableMap.<Class<?>, Class<?>>of(BlockHeader.class, BlockRpcMixIn.class));
 
         // mapper from standard json properties
         standardMapper = new ObjectMapper();
@@ -81,57 +81,57 @@ public class BlockTest {
                 + "    \"nextblockhash\" : \"00000000afe1928529ac766f1237657819a11cfcc8ca6d67f119e868ed5b6188\"\n"
                 + "}";
 
-        block1 = rpcMapper.readValue(rpcGetBlockJson, Block.class);
-        block1Json = standardMapper.writeValueAsString(block1);
-        block2 = standardMapper.readValue(block1Json, Block.class);
+        blockHeader1 = rpcMapper.readValue(rpcGetBlockJson, BlockHeader.class);
+        block1Json = standardMapper.writeValueAsString(blockHeader1);
+        blockHeader2 = standardMapper.readValue(block1Json, BlockHeader.class);
     }
 
     @Test
     public final void testGetHeaderHash() throws Exception {
-        assertEquals(JsonPath.read(rpcGetBlockJson, "$.hash"), block1.getHeaderHash().toString());
-        assertEquals(block1.getHeaderHash().toString(), JsonPath.read(block1Json, "$.headerHash"));
-        assertEquals(JsonPath.read(block1Json, "$.headerHash"), block2.getHeaderHash().toString());
+        assertEquals(JsonPath.read(rpcGetBlockJson, "$.hash"), blockHeader1.getHeaderHash().toString());
+        assertEquals(blockHeader1.getHeaderHash().toString(), JsonPath.read(block1Json, "$.headerHash"));
+        assertEquals(JsonPath.read(block1Json, "$.headerHash"), blockHeader2.getHeaderHash().toString());
     }
 
     @Test
     public final void testGetNumConfirmations() throws Exception {
         assertEquals(
                 ((Integer) JsonPath.read(rpcGetBlockJson, "$.confirmations")).longValue(),
-                block1.getNumConfirmations());
+                blockHeader1.getNumConfirmations());
         assertEquals(
-                block1.getNumConfirmations(),
+                blockHeader1.getNumConfirmations(),
                 ((Integer) JsonPath.read(block1Json, "$.numConfirmations")).longValue());
         assertEquals(
                 ((Integer) JsonPath.read(block1Json, "$.numConfirmations")).longValue(),
-                block2.getNumConfirmations());
+                blockHeader2.getNumConfirmations());
     }
 
     @Test
     public final void testGetSizeBytes() throws Exception {
-        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.size")).longValue(), block1.getSizeBytes());
-        assertEquals(block1.getSizeBytes(), ((Integer) JsonPath.read(block1Json, "$.sizeBytes")).longValue());
-        assertEquals(((Integer) JsonPath.read(block1Json, "$.sizeBytes")).longValue(), block2.getSizeBytes());
+        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.size")).longValue(), blockHeader1.getSizeBytes());
+        assertEquals(blockHeader1.getSizeBytes(), ((Integer) JsonPath.read(block1Json, "$.sizeBytes")).longValue());
+        assertEquals(((Integer) JsonPath.read(block1Json, "$.sizeBytes")).longValue(), blockHeader2.getSizeBytes());
     }
 
     @Test
     public final void testGetHeight() throws Exception {
-        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.height")).longValue(), block1.getHeight());
-        assertEquals(block1.getHeight(), ((Integer) JsonPath.read(block1Json, "$.height")).longValue());
-        assertEquals(((Integer) JsonPath.read(block1Json, "$.height")).longValue(), block2.getHeight());
+        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.height")).longValue(), blockHeader1.getHeight());
+        assertEquals(blockHeader1.getHeight(), ((Integer) JsonPath.read(block1Json, "$.height")).longValue());
+        assertEquals(((Integer) JsonPath.read(block1Json, "$.height")).longValue(), blockHeader2.getHeight());
     }
 
     @Test
     public final void testGetVersion() throws Exception {
-        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.version")).longValue(), block1.getVersion());
-        assertEquals(block1.getVersion(), ((Integer) JsonPath.read(block1Json, "$.version")).longValue());
-        assertEquals(((Integer) JsonPath.read(block1Json, "$.version")).longValue(), block2.getVersion());
+        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.version")).longValue(), blockHeader1.getVersion());
+        assertEquals(blockHeader1.getVersion(), ((Integer) JsonPath.read(block1Json, "$.version")).longValue());
+        assertEquals(((Integer) JsonPath.read(block1Json, "$.version")).longValue(), blockHeader2.getVersion());
     }
 
     @Test
     public final void testGetMerkleRoot() throws Exception {
-        assertEquals(JsonPath.read(rpcGetBlockJson, "$.merkleroot"), block1.getMerkleRoot().toString());
-        assertEquals(block1.getMerkleRoot().toString(), JsonPath.read(block1Json, "$.merkleRoot"));
-        assertEquals(JsonPath.read(block1Json, "$.merkleRoot"), block2.getMerkleRoot().toString());
+        assertEquals(JsonPath.read(rpcGetBlockJson, "$.merkleroot"), blockHeader1.getMerkleRoot().toString());
+        assertEquals(blockHeader1.getMerkleRoot().toString(), JsonPath.read(block1Json, "$.merkleRoot"));
+        assertEquals(JsonPath.read(block1Json, "$.merkleRoot"), blockHeader2.getMerkleRoot().toString());
     }
 
     @Test
@@ -139,74 +139,74 @@ public class BlockTest {
 
         assertEquals(
                 JsonPath.read(rpcGetBlockJson, "$.tx").toString(),
-                standardMapper.writeValueAsString(block1.getTransactionIds()));
+                standardMapper.writeValueAsString(blockHeader1.getTransactionIds()));
         assertEquals(
-                standardMapper.writeValueAsString(block1.getTransactionIds()),
+                standardMapper.writeValueAsString(blockHeader1.getTransactionIds()),
                 JsonPath.read(block1Json, "$.transactionIds").toString());
         assertEquals(
                 JsonPath.read(block1Json, "$.transactionIds").toString(),
-                standardMapper.writeValueAsString(block2.getTransactionIds()));
+                standardMapper.writeValueAsString(blockHeader2.getTransactionIds()));
     }
 
     @Test
     public final void testGetCreatedTime() throws Exception {
-        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.time")).longValue(), block1.getCreatedTime());
-        assertEquals(block1.getCreatedTime(), ((Integer) JsonPath.read(block1Json, "$.createdTime")).longValue());
-        assertEquals(((Integer) JsonPath.read(block1Json, "$.createdTime")).longValue(), block2.getCreatedTime());
+        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.time")).longValue(), blockHeader1.getCreatedTime());
+        assertEquals(blockHeader1.getCreatedTime(), ((Integer) JsonPath.read(block1Json, "$.createdTime")).longValue());
+        assertEquals(((Integer) JsonPath.read(block1Json, "$.createdTime")).longValue(), blockHeader2.getCreatedTime());
     }
 
     @Test
     public final void testGetNonce() throws Exception {
-        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.nonce")).longValue(), block1.getNonce());
-        assertEquals(block1.getNonce(), ((Integer) JsonPath.read(block1Json, "$.nonce")).longValue());
-        assertEquals(((Integer) JsonPath.read(block1Json, "$.nonce")).longValue(), block2.getNonce());
+        assertEquals(((Integer) JsonPath.read(rpcGetBlockJson, "$.nonce")).longValue(), blockHeader1.getNonce());
+        assertEquals(blockHeader1.getNonce(), ((Integer) JsonPath.read(block1Json, "$.nonce")).longValue());
+        assertEquals(((Integer) JsonPath.read(block1Json, "$.nonce")).longValue(), blockHeader2.getNonce());
     }
 
     @Test
     public final void testGetDifficultyTarget() throws Exception {
         assertEquals(
                 StringUtils.stripStart(JsonPath.read(rpcGetBlockJson, "$.bits"), "0"),
-                block1.getDifficultyTarget().toString(16));
+                blockHeader1.getDifficultyTarget().toString(16));
         assertEquals(
-                block1.getDifficultyTarget().toString(16),
+                blockHeader1.getDifficultyTarget().toString(16),
                 StringUtils.stripStart(JsonPath.read(block1Json, "$.difficultyTarget"), "0"));
         assertEquals(
                 StringUtils.stripStart(JsonPath.read(block1Json, "$.difficultyTarget"), "0"),
-                block2.getDifficultyTarget().toString(16));
+                blockHeader2.getDifficultyTarget().toString(16));
     }
 
     @Test
     public final void testGetDifficulty() throws Exception {
         assertEquals(
                 (double) JsonPath.read(rpcGetBlockJson, "$.difficulty"),
-                block1.getDifficulty(), ASSERT_EQUALS_PRECISION);
+                blockHeader1.getDifficulty(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                block1.getDifficulty(),
+                blockHeader1.getDifficulty(),
                 JsonPath.read(block1Json, "$.difficulty"), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 (double) JsonPath.read(block1Json, "$.difficulty"),
-                block2.getDifficulty(), ASSERT_EQUALS_PRECISION);
+                blockHeader2.getDifficulty(), ASSERT_EQUALS_PRECISION);
     }
 
     @Test
     public final void testGetChainwork() throws Exception {
         assertEquals(StringUtils.stripStart(JsonPath.read(rpcGetBlockJson, "$.chainwork").toString(), "0"),
-                block1.getChainwork().toString(16));
-        assertEquals(block1.getChainwork().toString(16), JsonPath.read(block1Json, "$.chainwork"));
-        assertEquals(JsonPath.read(block1Json, "$.chainwork"), block2.getChainwork().toString(16));
+                blockHeader1.getChainwork().toString(16));
+        assertEquals(blockHeader1.getChainwork().toString(16), JsonPath.read(block1Json, "$.chainwork"));
+        assertEquals(JsonPath.read(block1Json, "$.chainwork"), blockHeader2.getChainwork().toString(16));
     }
 
     @Test
     public final void testGetPreviousBlockHash() throws Exception {
-        assertEquals(JsonPath.read(rpcGetBlockJson, "$.previousblockhash"), block1.getPreviousBlockHash().toString());
-        assertEquals(block1.getPreviousBlockHash().toString(), JsonPath.read(block1Json, "$.previousBlockHash"));
-        assertEquals(JsonPath.read(block1Json, "$.previousBlockHash"), block2.getPreviousBlockHash().toString());
+        assertEquals(JsonPath.read(rpcGetBlockJson, "$.previousblockhash"), blockHeader1.getPreviousBlockHash().toString());
+        assertEquals(blockHeader1.getPreviousBlockHash().toString(), JsonPath.read(block1Json, "$.previousBlockHash"));
+        assertEquals(JsonPath.read(block1Json, "$.previousBlockHash"), blockHeader2.getPreviousBlockHash().toString());
     }
 
     @Test
     public final void testGetNextBlockHash() throws Exception {
-        assertEquals(JsonPath.read(rpcGetBlockJson, "$.nextblockhash"), block1.getNextBlockHash().toString());
-        assertEquals(block1.getNextBlockHash().toString(), JsonPath.read(block1Json, "$.nextBlockHash"));
-        assertEquals(JsonPath.read(block1Json, "$.nextBlockHash"), block2.getNextBlockHash().toString());
+        assertEquals(JsonPath.read(rpcGetBlockJson, "$.nextblockhash"), blockHeader1.getNextBlockHash().toString());
+        assertEquals(blockHeader1.getNextBlockHash().toString(), JsonPath.read(block1Json, "$.nextBlockHash"));
+        assertEquals(JsonPath.read(block1Json, "$.nextBlockHash"), blockHeader2.getNextBlockHash().toString());
     }
 }
