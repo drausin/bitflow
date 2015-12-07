@@ -79,8 +79,6 @@ import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.mixin.BlockHeaderRpcMixIn;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
