@@ -22,6 +22,8 @@ import org.bitcoinj.core.Sha256Hash;
 
 /**
  * Immutable implementation of {@link BlockchainInfo}.
+ *
+ * @author dwulsin
  */
 @Immutable
 public final class ImmutableBlockchainInfo implements BlockchainInfo {
@@ -51,43 +53,36 @@ public final class ImmutableBlockchainInfo implements BlockchainInfo {
         this.chainwork = chainwork;
     }
 
-    @JsonProperty
     @Override
     public String getChain() {
         return chain;
     }
 
-    @JsonProperty
     @Override
     public long getNumBlocks() {
         return numBlocks;
     }
 
-    @JsonProperty
     @Override
     public long getNumHeaders() {
         return numHeaders;
     }
 
-    @JsonProperty
     @Override
     public Sha256Hash getBestBlockHash() {
         return bestBlockHash;
     }
 
-    @JsonProperty
     @Override
     public double getDifficulty() {
         return difficulty;
     }
 
-    @JsonProperty
     @Override
     public double getVerificationProgress() {
         return verificationProgress;
     }
 
-    @JsonProperty
     @Override
     public BigInteger getChainwork() {
         return chainwork;

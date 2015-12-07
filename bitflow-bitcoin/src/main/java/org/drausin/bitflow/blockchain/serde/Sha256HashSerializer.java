@@ -24,7 +24,7 @@ import org.bitcoinj.core.Sha256Hash;
 /**
  * Serialize Sha256Hash objects to their hex string values
  *
- * Created by dwulsin on 12/3/15.
+ * @author dwulsin
  */
 public class Sha256HashSerializer extends JsonSerializer<Sha256Hash> {
     @Override

@@ -24,7 +24,7 @@ import java.math.BigInteger;
 /**
  * Serialize Sha256Hash objects to their hex string values
  *
- * Created by dwulsin on 12/3/15.
+ * @author dwulsin
  */
 public class BigIntegerSerializer extends JsonSerializer<BigInteger> {
     @Override

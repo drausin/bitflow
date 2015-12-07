@@ -24,6 +24,8 @@ import org.drausin.bitflow.blockchain.BlockchainInfo;
 
 /**
  * MixIn to map Bitcoind RPC json fields to object fields.
+ *
+ * @author dwulsin
  */
 public abstract class BlockchainInfoRpcMixIn implements BlockchainInfo {
 
