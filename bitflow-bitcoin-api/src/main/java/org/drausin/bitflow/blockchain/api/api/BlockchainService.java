@@ -39,8 +39,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import org.drausin.bitflow.blockchain.api.BlockHeader;
-import org.drausin.bitflow.blockchain.api.BlockchainInfo;
 import org.joda.time.DateTime;
 
 @Path("/blockchain")

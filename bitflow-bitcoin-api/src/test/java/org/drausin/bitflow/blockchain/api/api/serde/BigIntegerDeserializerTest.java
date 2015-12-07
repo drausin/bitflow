@@ -48,7 +48,6 @@ import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonParser;
 import java.math.BigInteger;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

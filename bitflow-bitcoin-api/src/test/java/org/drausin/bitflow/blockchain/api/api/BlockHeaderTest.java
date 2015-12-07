@@ -51,12 +51,10 @@ import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.BlockHeader;
-import org.drausin.bitflow.blockchain.api.ImmutableBlockHeader;
-import org.drausin.bitflow.blockchain.api.mixin.BlockHeaderRpcMixIn;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
-import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
+import org.drausin.bitflow.blockchain.api.api.mixin.BlockHeaderRpcMixIn;
+import org.drausin.bitflow.blockchain.api.api.serde.BigIntegerDeserializer;
+import org.drausin.bitflow.blockchain.api.api.serde.BigIntegerSerializer;
+import org.drausin.bitflow.blockchain.api.api.serde.Sha256HashSerializer;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -48,7 +48,6 @@ import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

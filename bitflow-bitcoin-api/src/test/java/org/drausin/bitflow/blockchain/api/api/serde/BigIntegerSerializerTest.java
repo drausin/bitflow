@@ -48,7 +48,6 @@ import static org.mockito.Mockito.verify;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import java.math.BigInteger;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
