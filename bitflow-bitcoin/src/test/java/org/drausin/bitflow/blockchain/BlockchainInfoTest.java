@@ -52,7 +52,8 @@ public class BlockchainInfoTest {
         // mapper from RPC json schema
         rpcMapper = new ObjectMapper();
         rpcMapper.registerModule(blockchainModule);
-        rpcMapper.setMixIns(ImmutableMap.<Class<?>, Class<?>>of(BlockchainInfo.class, BlockchainInfoRpcMixIn.class));
+        rpcMapper.addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
+
 
         // mapper from standard json properties
         standardMapper = new ObjectMapper();
@@ -69,9 +70,9 @@ public class BlockchainInfoTest {
                 + "    \"chainwork\" : \"0000000000000000000000000000000000000000000000015e984b4fb9f9b350\"\n"
                 + "}";
 
-        blockchainInfo1 = rpcMapper.readValue(rpcGetInfoJson, BlockchainInfo.class);
+        blockchainInfo1 = rpcMapper.readValue(rpcGetInfoJson, ImmutableBlockchainInfo.class);
         blockchainInfo1Json = standardMapper.writeValueAsString(blockchainInfo1);
-        blockchainInfo2 = standardMapper.readValue(blockchainInfo1Json, BlockchainInfo.class);
+        blockchainInfo2 = standardMapper.readValue(blockchainInfo1Json, ImmutableBlockchainInfo.class);
     }
 
     @Test
