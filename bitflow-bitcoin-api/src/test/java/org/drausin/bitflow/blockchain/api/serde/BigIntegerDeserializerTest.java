@@ -54,60 +54,39 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.blockchain.api.api;
+package org.drausin.bitflow.blockchain.api.serde;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import com.fasterxml.jackson.core.JsonParser;
 import java.math.BigInteger;
-import org.bitcoinj.core.Sha256Hash;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
 
-/**
- * Current information about the blockchain as returned by the Bitcoind
- * <a href="https://bitcoin.org/en/developer-reference#getblockchaininfo">GetInfo() RPC</a>.
- *
- * @author dwulsin
- */
-public interface BlockchainInfo {
+public class BigIntegerDeserializerTest {
 
-    /**
-     * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.
-     */
-    @JsonProperty
-    String getChain();
+    private BigIntegerDeserializer bigIntegerDeserializer;
 
-    /**
-     * Get the number of validated blocks in the local best block chain.
-     */
-    @JsonProperty
-    long getNumBlocks();
+    @Mock
+    private JsonParser parser;
 
-    /**
-     * Get the number of validated headers in the local best headers chain.
-     */
-    @JsonProperty
-    long getNumHeaders();
+    @Before
+    public final void setUp() throws Exception {
+        bigIntegerDeserializer = new BigIntegerDeserializer();
+        parser = mock(JsonParser.class);
+    }
 
-    /**
-     * Get the hash of the header of the highest validated block in the best block chain.
-     */
-    @JsonProperty
-    Sha256Hash getBestBlockHash();
+    @Test
+    public final void testDeserialize() throws Exception {
+        when(parser.getValueAsString()).thenReturn("100");
+        assertEquals(new BigInteger("256", 10), bigIntegerDeserializer.deserialize(parser, null));
+    }
 
-    /**
-     * Get the difficulty of the highest-height block in the best block chain.
-     */
-    @JsonProperty
-    double getDifficulty();
-
-    /**
-     * Get the estimate of what percentage of the block chain transactions have been verified so far, starting at 0.0
-     * and increasing to 1.0 for fully verified.
-     */
-    @JsonProperty
-    double getVerificationProgress();
-
-    /**
-     * Get the estimated number of block header hashes checked from the genesis block to this block.
-     */
-    @JsonProperty
-    BigInteger getChainwork();
+    @Test
+    public final void testHandledType() throws Exception {
+        assertEquals(BigInteger.class, bigIntegerDeserializer.handledType());
+    }
 }
