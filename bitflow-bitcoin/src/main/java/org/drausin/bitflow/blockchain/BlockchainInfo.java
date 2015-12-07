@@ -28,79 +28,49 @@
 
 package org.drausin.bitflow.blockchain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
-import javax.annotation.concurrent.Immutable;
 import org.bitcoinj.core.Sha256Hash;
 
-
 /**
- * Current information about the blockchain as returned by the Bitcoind GetInfo() RPC
- *
- * Created by dwulsin on 12/2/15.
+ * Current information about the blockchain as returned by the Bitcoind
+ * <a href="https://bitcoin.org/en/developer-reference#getblockchaininfo">GetInfo() RPC</a>
  */
-@Immutable
-public final class BlockchainInfo {
+public interface BlockchainInfo {
 
-    private final String chain;
-    private final long numBlocks;
-    private final long numHeaders;
-    private final Sha256Hash bestBlockHash;
-    private final double difficulty;
-    private final double verificationProgress;
-    private final BigInteger chainwork;
+    /**
+     * The name of the blockchain (i.e., one of {'main', 'test', 'regtest'}
+     */
+    String getChain();
 
-    @JsonCreator
-    public BlockchainInfo(
-            @JsonProperty("chain") String chain,
-            @JsonProperty("numBlocks") long numBlocks,
-            @JsonProperty("numHeaders")long numHeaders,
-            @JsonProperty("bestBlockHash") Sha256Hash bestBlockHash,
-            @JsonProperty("difficulty") double difficulty,
-            @JsonProperty("verificationProgress") double verificationProgress,
-            @JsonProperty("chainwork") BigInteger chainwork) {
-        this.chain = chain;
-        this.numBlocks = numBlocks;
-        this.numHeaders = numHeaders;
-        this.bestBlockHash = bestBlockHash;
-        this.difficulty = difficulty;
-        this.verificationProgress = verificationProgress;
-        this.chainwork = chainwork;
-    }
+    /**
+     * The number of validated blocks in the local best block chain
+     */
+    long getNumBlocks();
 
-    @JsonProperty("chain")
-    public String getChain() {
-        return chain;
-    }
+    /**
+     * The number of validated headers in the local best headers chain
+     */
+    long getNumHeaders();
 
-    @JsonProperty("numBlocks")
-    public long getNumBlocks() {
-        return numBlocks;
-    }
+    /**
+     * The hash of the header of the highest validated block in the best block chain
+     */
+    Sha256Hash getBestBlockHash();
 
-    @JsonProperty("numHeaders")
-    public long getNumHeaders() {
-        return numHeaders;
-    }
+    /**
+     * The difficulty of the highest-height block in the best block chain
+     */
+    double getDifficulty();
 
-    @JsonProperty("bestBlockHash")
-    public Sha256Hash getBestBlockHash() {
-        return bestBlockHash;
-    }
+    /**
+     * Estimate of what percentage of the block chain transactions have been verified so far, starting at 0.0 and
+     * increasing to 1.0 for fully verified
+     */
+    double getVerificationProgress();
 
-    @JsonProperty("difficulty")
-    public double getDifficulty() {
-        return difficulty;
-    }
-
-    @JsonProperty("verificationProgress")
-    public double getVerificationProgress() {
-        return verificationProgress;
-    }
-
-    @JsonProperty("chainwork")
-    public BigInteger getChainwork() {
-        return chainwork;
-    }
+    /**
+     * The estimated number of block header hashes checked from the genesis block to this block
+     */
+    BigInteger getChainwork();
 }

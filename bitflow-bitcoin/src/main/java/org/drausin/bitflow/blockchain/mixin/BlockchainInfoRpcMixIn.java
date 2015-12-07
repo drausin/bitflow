@@ -17,45 +17,72 @@ package org.drausin.bitflow.blockchain.mixin;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
+
 import org.bitcoinj.core.Sha256Hash;
+import org.drausin.bitflow.blockchain.BlockchainInfo;
 
 
 /**
  * MixIn to map Bitcoind RPC json fields to object fields
- *
- * Created by dwulsin on 12/3/15.
  */
-public abstract class BlockchainInfoRpcMixIn {
+public abstract class BlockchainInfoRpcMixIn implements BlockchainInfo {
 
     @JsonCreator
     public BlockchainInfoRpcMixIn(
             @JsonProperty("chain") String chain,
             @JsonProperty("blocks") long numBlocks,
-            @JsonProperty("headers")long numHeaders,
+            @JsonProperty("headers") long numHeaders,
             @JsonProperty("bestblockhash") Sha256Hash bestBlockHash,
             @JsonProperty("difficulty") double difficulty,
             @JsonProperty("verificationprogress") double verificationProgress,
             @JsonProperty("chainwork") BigInteger chainwork) {}
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("chain")
-    abstract String getName();
+    @Override
+    public abstract String getChain();
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("blocks")
-    abstract long getNumBlocks();
+    @Override
+    public abstract long getNumBlocks();
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("headers")
-    abstract long getNumHeaders();
+    @Override
+    public abstract long getNumHeaders();
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("bestblockhash")
-    abstract Sha256Hash getBestBlockHash();
+    @Override
+    public abstract Sha256Hash getBestBlockHash();
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("difficulty")
-    abstract double getDifficulty();
+    @Override
+    public abstract double getDifficulty();
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("verificationprogress")
-    abstract double getVerificationProgress();
+    @Override
+    public abstract double getVerificationProgress();
 
+    /**
+     * {@inheritDoc}
+     */
     @JsonProperty("chainwork")
-    abstract BigInteger getChainwork();
-
+    @Override
+    public abstract BigInteger getChainwork();
 }
