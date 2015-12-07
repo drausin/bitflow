@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.google.common.collect.ImmutableMap;
 import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;

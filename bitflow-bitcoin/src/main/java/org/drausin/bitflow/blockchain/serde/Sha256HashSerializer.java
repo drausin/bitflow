@@ -22,7 +22,7 @@ import java.io.IOException;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
- * Serialize Sha256Hash objects to their hex string values
+ * Serialize Sha256Hash objects to their hex string values.
  *
  * @author dwulsin
  */

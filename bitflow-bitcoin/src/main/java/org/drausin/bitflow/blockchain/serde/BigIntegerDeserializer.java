@@ -22,7 +22,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
- * Deserialize BigIntegers from their hex string values
+ * Deserialize BigIntegers from their hex string values.
  *
  * @author dwulsin
  */

@@ -18,12 +18,11 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
 import java.util.List;
-import javax.annotation.OverridingMethodsMustInvokeSuper;
 import javax.annotation.concurrent.Immutable;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
- * Immutable implementation of {@link BlockHeader}
+ * Immutable implementation of {@link BlockHeader}.
  *
  * @author dwulsin
  */
