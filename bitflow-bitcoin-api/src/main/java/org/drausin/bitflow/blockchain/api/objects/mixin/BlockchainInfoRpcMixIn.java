@@ -54,14 +54,14 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.blockchain.api.mixin;
+package org.drausin.bitflow.blockchain.api.objects.mixin;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
 
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.BlockchainInfo;
+import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
 
 /**

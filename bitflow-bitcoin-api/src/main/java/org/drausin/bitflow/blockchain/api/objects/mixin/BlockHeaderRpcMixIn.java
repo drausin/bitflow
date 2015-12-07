@@ -54,79 +54,92 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.blockchain.api;
+package org.drausin.bitflow.blockchain.api.objects.mixin;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
-import javax.annotation.concurrent.Immutable;
+import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
+import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 
 /**
- * Immutable implementation of {@link BlockchainInfo}.
+ * MixIn to map Bitcoind RPC json fields to object fields.
  *
  * @author dwulsin
  */
-@Immutable
-public final class ImmutableBlockchainInfo implements BlockchainInfo {
-    private final String chain;
-    private final long numBlocks;
-    private final long numHeaders;
-    private final Sha256Hash bestBlockHash;
-    private final double difficulty;
-    private final double verificationProgress;
-    private final BigInteger chainwork;
+public abstract class BlockHeaderRpcMixIn implements BlockHeader {
 
     @JsonCreator
-    public ImmutableBlockchainInfo(
-            @JsonProperty("chain") String chain,
-            @JsonProperty("numBlocks") long numBlocks,
-            @JsonProperty("numHeaders") long numHeaders,
-            @JsonProperty("bestBlockHash") Sha256Hash bestBlockHash,
+    public BlockHeaderRpcMixIn(
+            @JsonProperty("hash") Sha256Hash headerHash,
+            @JsonProperty("confirmations") long numConfirmations,
+            @JsonProperty("size") long sizeBytes,
+            @JsonProperty("height") long height,
+            @JsonProperty("version") long version,
+            @JsonProperty("merkleroot") Sha256Hash merkleRoot,
+            @JsonProperty("tx") List<Sha256Hash> transactionIds,
+            @JsonProperty("time") long createdTime,
+            @JsonProperty("nonce") long nonce,
+            @JsonProperty("bits") BigInteger difficultyTarget,
             @JsonProperty("difficulty") double difficulty,
-            @JsonProperty("verificationProgress") double verificationProgress,
-            @JsonProperty("chainwork") BigInteger chainwork) {
-        this.chain = chain;
-        this.numBlocks = numBlocks;
-        this.numHeaders = numHeaders;
-        this.bestBlockHash = bestBlockHash;
-        this.difficulty = difficulty;
-        this.verificationProgress = verificationProgress;
-        this.chainwork = chainwork;
-    }
+            @JsonProperty("chainwork") BigInteger chainwork,
+            @JsonProperty("previousblockhash") Sha256Hash previousBlockHash,
+            @JsonProperty("nextblockhash") Sha256Hash nextBlockHash) {}
 
+    @JsonProperty("hash")
     @Override
-    public String getChain() {
-        return chain;
-    }
+    public abstract Sha256Hash getHeaderHash();
 
+    @JsonProperty("confirmations")
     @Override
-    public long getNumBlocks() {
-        return numBlocks;
-    }
+    public abstract long getNumConfirmations();
 
+    @JsonProperty("size")
     @Override
-    public long getNumHeaders() {
-        return numHeaders;
-    }
+    public abstract long getSizeBytes();
 
+    @JsonProperty("height")
     @Override
-    public Sha256Hash getBestBlockHash() {
-        return bestBlockHash;
-    }
+    public abstract long getHeight();
 
+    @JsonProperty("version")
     @Override
-    public double getDifficulty() {
-        return difficulty;
-    }
+    public abstract long getVersion();
 
+    @JsonProperty("merkleroot")
     @Override
-    public double getVerificationProgress() {
-        return verificationProgress;
-    }
+    public abstract Sha256Hash getMerkleRoot();
 
+    @JsonProperty("tx")
     @Override
-    public BigInteger getChainwork() {
-        return chainwork;
-    }
+    public abstract List<Sha256Hash> getTransactionIds();
+
+    @JsonProperty("time")
+    @Override
+    public abstract long getCreatedTime();
+
+    @JsonProperty("nonce")
+    @Override
+    public abstract long getNonce();
+
+    @JsonProperty("bits")
+    @Override
+    public abstract BigInteger getDifficultyTarget();
+
+    @JsonProperty("difficulty")
+    @Override
+    public abstract double getDifficulty();
+
+    @JsonProperty("chainwork")
+    @Override
+    public abstract BigInteger getChainwork();
+
+    @JsonProperty("previousblockhash")
+    @Override
+    public abstract Sha256Hash getPreviousBlockHash();
+
+    @JsonProperty("nextblockhash")
+    @Override
+    public abstract Sha256Hash getNextBlockHash();
 }
