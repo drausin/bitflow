@@ -46,6 +46,7 @@ allprojects {
             force "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
             force "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
             force "com.fasterxml.jackson.datatype:jackson-datatype-guava:${jacksonVersion}"
+            force "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}"
             force "com.fasterxml.jackson.module:jackson-module-scala_2.10:${jacksonVersion}"
             force "com.google.code.findbugs:jsr305:${jsr305Version}"
             force "com.google.code.gson:gson:${gsonVersion}"
@@ -93,19 +94,24 @@ subprojects {
     targetCompatibility = '1.8'
 }
 
+jacocoCoverage {
+    reportThreshold 0.8
+}
+
 // Code coverage
 evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
 jacocoFullReport {
     dependsOn << allprojects.collect { it.tasks.withType(JacocoReport).findAll { it != jacocoFullReport } }
+
     // Ignore Immutables-generated code from coverage checks
     afterEvaluate {
         classDirectories = files(classDirectories.files.collect {
             // Exclusion path is project-relative and has a base of compiled classes
-            fileTree(dir: it, exclude: '**/Immutable*.class')
+            fileTree(dir: it, excludes: [
+                    '**/Immutable*.class',  // Immutable* classes are usually generated
+                    '**/*MixIn.class'       // *MixIn classes usually have trivial method implementations
+            ])
         })
     }
 }
 
-jacocoCoverage {
-    reportThreshold 0.8
-}
