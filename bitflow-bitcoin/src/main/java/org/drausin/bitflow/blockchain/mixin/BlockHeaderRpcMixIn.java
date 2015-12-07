@@ -19,16 +19,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
+import org.drausin.bitflow.blockchain.BlockHeader;
 
 /**
- * MixIn to map Bitcoind RPC json fields to object fields
+ * MixIn to map Bitcoind RPC json fields to object fields.
  *
- * Created by dwulsin on 12/4/15.
+ * @author dwulsin
  */
-public abstract class BlockRpcMixIn {
+public abstract class BlockHeaderRpcMixIn implements BlockHeader {
 
     @JsonCreator
-    public BlockRpcMixIn(
+    public BlockHeaderRpcMixIn(
             @JsonProperty("hash") Sha256Hash headerHash,
             @JsonProperty("confirmations") long numConfirmations,
             @JsonProperty("size") long sizeBytes,
@@ -45,44 +46,58 @@ public abstract class BlockRpcMixIn {
             @JsonProperty("nextblockhash") Sha256Hash nextBlockHash) {}
 
     @JsonProperty("hash")
-    abstract Sha256Hash getHeaderHash();
+    @Override
+    public abstract Sha256Hash getHeaderHash();
 
     @JsonProperty("confirmations")
-    abstract long getNumConfirmations();
+    @Override
+    public abstract long getNumConfirmations();
 
     @JsonProperty("size")
-    abstract long getSizeBytes();
+    @Override
+    public abstract long getSizeBytes();
 
     @JsonProperty("height")
-    abstract long getHeight();
+    @Override
+    public abstract long getHeight();
 
     @JsonProperty("version")
-    abstract long getVersion();
+    @Override
+    public abstract long getVersion();
 
     @JsonProperty("merkleroot")
-    abstract Sha256Hash getMerkleRoot();
+    @Override
+    public abstract Sha256Hash getMerkleRoot();
 
     @JsonProperty("tx")
-    abstract List<Sha256Hash> getTransactionIds();
+    @Override
+    public abstract List<Sha256Hash> getTransactionIds();
 
     @JsonProperty("time")
-    abstract long getCreatedTime();
+    @Override
+    public abstract long getCreatedTime();
 
     @JsonProperty("nonce")
-    abstract long getNonce();
+    @Override
+    public abstract long getNonce();
 
     @JsonProperty("bits")
-    abstract BigInteger getDifficultyTarget();
+    @Override
+    public abstract BigInteger getDifficultyTarget();
 
     @JsonProperty("difficulty")
-    abstract double getDifficulty();
+    @Override
+    public abstract double getDifficulty();
 
     @JsonProperty("chainwork")
-    abstract BigInteger getChainwork();
+    @Override
+    public abstract BigInteger getChainwork();
 
     @JsonProperty("previousblockhash")
-    abstract Sha256Hash getPreviousBlockHash();
+    @Override
+    public abstract Sha256Hash getPreviousBlockHash();
 
     @JsonProperty("nextblockhash")
-    abstract Sha256Hash getNextBlockHash();
+    @Override
+    public abstract Sha256Hash getNextBlockHash();
 }

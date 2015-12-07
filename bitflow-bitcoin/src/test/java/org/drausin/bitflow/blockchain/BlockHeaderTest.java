@@ -24,16 +24,13 @@ import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.mixin.BlockRpcMixIn;
+import org.drausin.bitflow.blockchain.mixin.BlockHeaderRpcMixIn;
 import org.drausin.bitflow.blockchain.serde.BigIntegerDeserializer;
 import org.drausin.bitflow.blockchain.serde.BigIntegerSerializer;
 import org.drausin.bitflow.blockchain.serde.Sha256HashSerializer;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * Created by dwulsin on 12/4/15.
- */
 public class BlockHeaderTest {
 
     private ObjectMapper rpcMapper;
@@ -55,7 +52,7 @@ public class BlockHeaderTest {
         // mapper from RPC json schema
         rpcMapper = new ObjectMapper();
         rpcMapper.registerModule(blockModule);
-        rpcMapper.setMixIns(ImmutableMap.<Class<?>, Class<?>>of(BlockHeader.class, BlockRpcMixIn.class));
+        rpcMapper.addMixIn(ImmutableBlockHeader.class, BlockHeaderRpcMixIn.class);
 
         // mapper from standard json properties
         standardMapper = new ObjectMapper();
@@ -81,9 +78,9 @@ public class BlockHeaderTest {
                 + "    \"nextblockhash\" : \"00000000afe1928529ac766f1237657819a11cfcc8ca6d67f119e868ed5b6188\"\n"
                 + "}";
 
-        blockHeader1 = rpcMapper.readValue(rpcGetBlockJson, BlockHeader.class);
+        blockHeader1 = rpcMapper.readValue(rpcGetBlockJson, ImmutableBlockHeader.class);
         block1Json = standardMapper.writeValueAsString(blockHeader1);
-        blockHeader2 = standardMapper.readValue(block1Json, BlockHeader.class);
+        blockHeader2 = standardMapper.readValue(block1Json, ImmutableBlockHeader.class);
     }
 
     @Test

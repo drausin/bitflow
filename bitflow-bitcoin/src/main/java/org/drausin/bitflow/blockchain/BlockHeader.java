@@ -14,135 +14,106 @@
 
 package org.drausin.bitflow.blockchain;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
 import java.util.List;
-import javax.annotation.concurrent.Immutable;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
- * Information about a block as returned by the Bitcoind GetBlock() RPC
+ * Information about a block as returned by the Bitcoind
+ * <a href="https://bitcoin.org/en/developer-reference#getblock">GetBlock() RPC</a>.
  *
- * Created by dwulsin on 12/3/15.
+ * @author dwulsin
  */
-@Immutable
-public final class BlockHeader {
+public interface BlockHeader {
 
-    private final Sha256Hash headerHash;
-    private final long numConfirmations;
-    private final long sizeBytes;
-    private final long height;
-    private final long version;
-    private final Sha256Hash merkleRoot;
-    private final List<Sha256Hash> transactionIds;
-    private final long createdTime;
-    private final long nonce;
-    private final BigInteger difficultyTarget;
-    private final double difficulty;
-    private final BigInteger chainwork;
-    private final Sha256Hash previousBlockHash;
-    private final Sha256Hash nextBlockHash;
+    /**
+     * Get the hash of the block header.
+     */
+    @JsonProperty
+    Sha256Hash getHeaderHash();
 
-    @JsonCreator
-    public BlockHeader(
-            @JsonProperty("headerHash") Sha256Hash headerHash,
-            @JsonProperty("numConfirmations") long numConfirmations,
-            @JsonProperty("sizeBytes") long sizeBytes,
-            @JsonProperty("height") long height,
-            @JsonProperty("version") long version,
-            @JsonProperty("merkleRoot") Sha256Hash merkleRoot,
-            @JsonProperty("transactionIds") List<Sha256Hash> transactionIds,
-            @JsonProperty("createdTime") long createdTime,
-            @JsonProperty("nonce") long nonce,
-            @JsonProperty("difficultyTarget") BigInteger difficultyTarget,
-            @JsonProperty("difficulty") double difficulty,
-            @JsonProperty("chainwork") BigInteger chainwork,
-            @JsonProperty("previousBlockHash") Sha256Hash previousBlockHash,
-            @JsonProperty("nextBlockHash") Sha256Hash nextBlockHash) {
-        this.headerHash = headerHash;
-        this.numConfirmations = numConfirmations;
-        this.sizeBytes = sizeBytes;
-        this.height = height;
-        this.version = version;
-        this.merkleRoot = merkleRoot;
-        this.transactionIds = transactionIds;
-        this.createdTime = createdTime;
-        this.nonce = nonce;
-        this.difficultyTarget = difficultyTarget;
-        this.difficulty = difficulty;
-        this.chainwork = chainwork;
-        this.previousBlockHash = previousBlockHash;
-        this.nextBlockHash = nextBlockHash;
-    }
+    /**
+     * Get the number of confirmations the transactions in this block have. This value starts at 1 when this block is
+     * at the tip of the best block chain. It will be -1 if the the block is not part of the best block chain.
+     */
+    @JsonProperty
+    long getNumConfirmations();
 
-    @JsonProperty("headerHash")
-    public Sha256Hash getHeaderHash() {
-        return headerHash;
-    }
+    /**
+     * Get the number of bytes of this block in serialized block format.
+     */
+    @JsonProperty
+    long getSizeBytes();
 
-    @JsonProperty("numConfirmations")
-    public long getNumConfirmations() {
-        return numConfirmations;
-    }
+    /**
+     * Get the height of this block on its block chain.
+     */
+    @JsonProperty
+    long getHeight();
 
-    @JsonProperty("sizeBytes")
-    public long getSizeBytes() {
-        return sizeBytes;
-    }
+    /**
+     * Get this block’s version number.
+     * @see <a href="https://bitcoin.org/en/developer-reference#block-versions">Block Versions</a>
+     */
+    @JsonProperty
+    long getVersion();
 
-    @JsonProperty("height")
-    public long getHeight() {
-        return height;
-    }
+    /**
+     * Get the merkle root for this block.
+     */
+    @JsonProperty
+    Sha256Hash getMerkleRoot();
 
-    @JsonProperty("version")
-    public long getVersion() {
-        return version;
-    }
+    /**
+     * Get a list of the IDs of the transactions in this block. The transactions appear in the array in the same
+     * order they appear in the serialized block. While not technically part of the block header, this list is handy
+     * and reasonably lightweight, so we include it.
+     */
+    @JsonProperty
+    List<Sha256Hash> getTransactionIds();
 
-    @JsonProperty("merkleRoot")
-    public Sha256Hash getMerkleRoot() {
-        return merkleRoot;
-    }
+    /**
+     * Get the approximate time when the block was created, store as seconds since the the 1970 epoch.
+     */
+    @JsonProperty
+    long getCreatedTime();
 
-    @JsonProperty("transactionIds")
-    public List<Sha256Hash> getTransactionIds() {
-        return transactionIds;
-    }
+    /**
+     * Get the nonce which was successful at turning this particular block into one that could be added to the best.
+     * block chain.
+     */
+    @JsonProperty
+    long getNonce();
 
-    @JsonProperty("createdTime")
-    public long getCreatedTime() {
-        return createdTime;
-    }
+    /**
+     * Get the target threshhold (a.k.a., nBits) the block header had to pass.
+     */
+    @JsonProperty
+    BigInteger getDifficultyTarget();
 
-    @JsonProperty("nonce")
-    public long getNonce() {
-        return nonce;
-    }
+    /**
+     * Get the estimated amount of work done to find this block relative to the estimated amount of work done to find
+     * block 0.
+     */
+    @JsonProperty
+    double getDifficulty();
 
-    @JsonProperty("difficultyTarget")
-    public BigInteger getDifficultyTarget() {
-        return difficultyTarget;
-    }
+    /**
+     * Get the estimated number of block header hashes miners had to check from the genesis block to this block.
+     */
+    @JsonProperty
+    BigInteger getChainwork();
 
-    @JsonProperty("difficulty")
-    public double getDifficulty() {
-        return difficulty;
-    }
+    /**
+     * Get the header hash of the previous block.
+     */
+    @JsonProperty
+    Sha256Hash getPreviousBlockHash();
 
-    @JsonProperty("chainwork")
-    public BigInteger getChainwork() {
-        return chainwork;
-    }
-
-    @JsonProperty("previousBlockHash")
-    public Sha256Hash getPreviousBlockHash() {
-        return previousBlockHash;
-    }
-
-    @JsonProperty("nextBlockHash")
-    public Sha256Hash getNextBlockHash() {
-        return nextBlockHash;
-    }
+    /**
+     * Get the header hash of the next block.
+     */
+    @JsonProperty
+    Sha256Hash getNextBlockHash();
 }
