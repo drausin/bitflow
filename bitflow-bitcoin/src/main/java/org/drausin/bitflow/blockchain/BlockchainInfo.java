@@ -28,49 +28,48 @@
 
 package org.drausin.bitflow.blockchain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
  * Current information about the blockchain as returned by the Bitcoind
- * <a href="https://bitcoin.org/en/developer-reference#getblockchaininfo">GetInfo() RPC</a>
+ * <a href="https://bitcoin.org/en/developer-reference#getblockchaininfo">GetInfo() RPC</a>.
  */
 public interface BlockchainInfo {
 
     /**
-     * The name of the blockchain (i.e., one of {'main', 'test', 'regtest'}
+     * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.
      */
     String getChain();
 
     /**
-     * The number of validated blocks in the local best block chain
+     * Get the number of validated blocks in the local best block chain.
      */
     long getNumBlocks();
 
     /**
-     * The number of validated headers in the local best headers chain
+     * Get the number of validated headers in the local best headers chain.
      */
     long getNumHeaders();
 
     /**
-     * The hash of the header of the highest validated block in the best block chain
+     * Get the hash of the header of the highest validated block in the best block chain.
      */
     Sha256Hash getBestBlockHash();
 
     /**
-     * The difficulty of the highest-height block in the best block chain
+     * Get the difficulty of the highest-height block in the best block chain.
      */
     double getDifficulty();
 
     /**
-     * Estimate of what percentage of the block chain transactions have been verified so far, starting at 0.0 and
-     * increasing to 1.0 for fully verified
+     * Get the estimate of what percentage of the block chain transactions have been verified so far, starting at 0.0
+     * and increasing to 1.0 for fully verified.
      */
     double getVerificationProgress();
 
     /**
-     * The estimated number of block header hashes checked from the genesis block to this block
+     * Get the estimated number of block header hashes checked from the genesis block to this block.
      */
     BigInteger getChainwork();
 }

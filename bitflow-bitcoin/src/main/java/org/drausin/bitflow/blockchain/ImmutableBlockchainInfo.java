@@ -25,92 +25,71 @@ import org.bitcoinj.core.Sha256Hash;
  */
 @Immutable
 public final class ImmutableBlockchainInfo implements BlockchainInfo {
-  private final String chain;
-  private final long numBlocks;
-  private final long numHeaders;
-  private final Sha256Hash bestBlockHash;
-  private final double difficulty;
-  private final double verificationProgress;
-  private final BigInteger chainwork;
+    private final String chain;
+    private final long numBlocks;
+    private final long numHeaders;
+    private final Sha256Hash bestBlockHash;
+    private final double difficulty;
+    private final double verificationProgress;
+    private final BigInteger chainwork;
 
-  @JsonCreator
-  public ImmutableBlockchainInfo(
-          @JsonProperty("chain") String chain,
-          @JsonProperty("numBlocks") long numBlocks,
-          @JsonProperty("numHeaders") long numHeaders,
-          @JsonProperty("bestBlockHash") Sha256Hash bestBlockHash,
-          @JsonProperty("difficulty") double difficulty,
-          @JsonProperty("verificationProgress") double verificationProgress,
-          @JsonProperty("chainwork") BigInteger chainwork) {
-    this.chain = chain;
-    this.numBlocks = numBlocks;
-    this.numHeaders = numHeaders;
-    this.bestBlockHash = bestBlockHash;
-    this.difficulty = difficulty;
-    this.verificationProgress = verificationProgress;
-    this.chainwork = chainwork;
-  }
+    @JsonCreator
+    public ImmutableBlockchainInfo(
+            @JsonProperty("chain") String chain,
+            @JsonProperty("numBlocks") long numBlocks,
+            @JsonProperty("numHeaders") long numHeaders,
+            @JsonProperty("bestBlockHash") Sha256Hash bestBlockHash,
+            @JsonProperty("difficulty") double difficulty,
+            @JsonProperty("verificationProgress") double verificationProgress,
+            @JsonProperty("chainwork") BigInteger chainwork) {
+        this.chain = chain;
+        this.numBlocks = numBlocks;
+        this.numHeaders = numHeaders;
+        this.bestBlockHash = bestBlockHash;
+        this.difficulty = difficulty;
+        this.verificationProgress = verificationProgress;
+        this.chainwork = chainwork;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public String getChain() {
-    return chain;
-  }
+    @JsonProperty
+    @Override
+    public String getChain() {
+        return chain;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public long getNumBlocks() {
-    return numBlocks;
-  }
+    @JsonProperty
+    @Override
+    public long getNumBlocks() {
+        return numBlocks;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public long getNumHeaders() {
-    return numHeaders;
-  }
+    @JsonProperty
+    @Override
+    public long getNumHeaders() {
+        return numHeaders;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public Sha256Hash getBestBlockHash() {
-    return bestBlockHash;
-  }
+    @JsonProperty
+    @Override
+    public Sha256Hash getBestBlockHash() {
+        return bestBlockHash;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public double getDifficulty() {
-    return difficulty;
-  }
+    @JsonProperty
+    @Override
+    public double getDifficulty() {
+        return difficulty;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public double getVerificationProgress() {
-    return verificationProgress;
-  }
+    @JsonProperty
+    @Override
+    public double getVerificationProgress() {
+        return verificationProgress;
+    }
 
-  /**
-   * {@inheritDoc}
-   */
-  @JsonProperty
-  @Override
-  public BigInteger getChainwork() {
-    return chainwork;
-  }
+    @JsonProperty
+    @Override
+    public BigInteger getChainwork() {
+        return chainwork;
+    }
 }

@@ -23,7 +23,7 @@ import org.drausin.bitflow.blockchain.BlockchainInfo;
 
 
 /**
- * MixIn to map Bitcoind RPC json fields to object fields
+ * MixIn to map Bitcoind RPC json fields to object fields.
  */
 public abstract class BlockchainInfoRpcMixIn implements BlockchainInfo {
 
@@ -37,51 +37,30 @@ public abstract class BlockchainInfoRpcMixIn implements BlockchainInfo {
             @JsonProperty("verificationprogress") double verificationProgress,
             @JsonProperty("chainwork") BigInteger chainwork) {}
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("chain")
     @Override
     public abstract String getChain();
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("blocks")
     @Override
     public abstract long getNumBlocks();
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("headers")
     @Override
     public abstract long getNumHeaders();
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("bestblockhash")
     @Override
     public abstract Sha256Hash getBestBlockHash();
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("difficulty")
     @Override
     public abstract double getDifficulty();
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("verificationprogress")
     @Override
     public abstract double getVerificationProgress();
 
-    /**
-     * {@inheritDoc}
-     */
     @JsonProperty("chainwork")
     @Override
     public abstract BigInteger getChainwork();
