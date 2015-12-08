@@ -1,7 +1,10 @@
 apply from: "${rootDir}/gradle/java.gradle"
+apply plugin: 'org.inferred.processors'
 
 project(':bitflow-bitcoin') {
+
     dependencies {
+        compile project(':bitflow-bitcoin-api')
         
 		// Logging
         compile "org.slf4j:slf4j-log4j12:$slf4jVersion"
@@ -39,5 +42,7 @@ project(':bitflow-bitcoin') {
         testCompile "org.hsqldb:hsqldb:2.3.3"
         testCompile "org.dbunit:dbunit:2.5.1"
         testCompile "com.mockrunner:mockrunner-jdbc:1.1.0"
+
+        processor "org.immutables:value:${immutablesVersion}"
     }
 }
