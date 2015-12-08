@@ -81,7 +81,7 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public interface BlockHeader extends BlockchainResult {
+public interface BlockHeader {
 
     /**
      * Get the hash of the block header.
