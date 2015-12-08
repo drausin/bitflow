@@ -94,7 +94,7 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public interface BlockchainInfo {
+public interface BlockchainInfo extends BlockchainResult {
 
     /**
      * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.
