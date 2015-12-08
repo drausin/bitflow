@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Map;
+import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.immutables.value.Value;
 
 /**
@@ -30,7 +31,7 @@ import org.immutables.value.Value;
 @Value.Style(visibility = Value.Style.ImplementationVisibility.PACKAGE)
 @JsonSerialize(as = ImmutableBitcoindRpcResponse.class)
 @JsonDeserialize(as = ImmutableBitcoindRpcResponse.class)
-public abstract class BitcoindRpcResponse<BlockchainResult> {
+public abstract class BitcoindRpcResponse {
 
     @Value.Parameter
     @JsonProperty("result")
@@ -44,7 +45,7 @@ public abstract class BitcoindRpcResponse<BlockchainResult> {
     @JsonProperty("id")
     public abstract String getId();
 
-    public static BitcoindRpcResponseError of(Map<String, Object> result, BitcoindRpcResponseError error) {
-        return ImmutableBitcoindRpcResponse.of(result, error);
+    public static BitcoindRpcResponse of(BlockchainResult result, BitcoindRpcResponseError error, String id) {
+        return ImmutableBitcoindRpcResponse.of(result, error, id);
     }
 }

@@ -33,12 +33,12 @@ public interface BitcoindRpcService {
      * Get the current information about the blockchain.
      */
     @POST
-    BitcoindRpcResponse<BlockchainInfo> getBlockchainInfo();
+    BitcoindRpcResponse getBlockchainInfo();
 
     /**
      * Get the header for a given block header hash.
      */
     @POST
-    BitcoindRpcResponse<BlockHeader> getBlockHeader(
+    BitcoindRpcResponse getBlockHeader(
             Sha256Hash headerHash);
 }
