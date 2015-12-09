@@ -39,6 +39,5 @@ public interface BitcoindRpcService {
      * Get the header for a given block header hash.
      */
     @POST
-    BitcoindRpcResponse getBlockHeader(
-            Sha256Hash headerHash);
+    BitcoindRpcResponse getBlockHeader(Sha256Hash headerHash);
 }
