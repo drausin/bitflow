@@ -14,13 +14,11 @@
 
 package org.drausin.bitflow.blockchain.client;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-import static org.hamcrest.CoreMatchers.instanceOf;
 
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.google.common.collect.ImmutableList;
 import com.jayway.jsonpath.JsonPath;
@@ -31,21 +29,18 @@ public class BitcoindRpcRequestTest {
 
     private ObjectMapper rpcMapper;
     private BitcoindRpcRequest request1;
-    private BitcoindRpcRequest request2;
     private String rpcRequestJson;
     private String request1Json;
 
     @Before
     public void setUp() throws Exception {
 
-        SimpleModule testModule = new SimpleModule("TestModule", Version.unknownVersion());
-
-        // mapper from standard json properties
         rpcMapper = new ObjectMapper();
         rpcMapper.registerModule(new GuavaModule()); // to handle (immutable) collections out of the box
 
         // from https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs
-        rpcRequestJson = "{\n"
+        rpcRequestJson =
+                "{\n"
                 + "    \"method\": \"getblockhash\",\n"
                 + "    \"params\": [0],\n"
                 + "    \"id\": \"foo\"\n"
@@ -53,8 +48,6 @@ public class BitcoindRpcRequestTest {
 
         request1 = rpcMapper.readValue(rpcRequestJson, ImmutableBitcoindRpcRequest.class);
         request1Json = rpcMapper.writeValueAsString(request1);
-        request2 = rpcMapper.readValue(request1Json, ImmutableBitcoindRpcRequest.class);
-
     }
 
     @Test
