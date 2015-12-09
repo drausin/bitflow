@@ -30,14 +30,15 @@ package org.drausin.bitflow.blockchain.client.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.google.common.base.Preconditions;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.immutables.value.Value;
 
 /**
  * The RPC request to the bitcoin daemon.
  *
- * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  * @author dwulsin
+ * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.PACKAGE)
@@ -58,5 +59,12 @@ public abstract class BitcoindRpcResponse {
 
     public static BitcoindRpcResponse of(BlockchainResult result, BitcoindRpcResponseError error, String id) {
         return ImmutableBitcoindRpcResponse.of(result, error, id);
+    }
+
+    public final void validate(Class<? extends BlockchainResult> resultType) {
+        Preconditions.checkNotNull(getError(), String.format("reponse error: {}", getError()));
+        Preconditions.checkState(getResult().getClass().equals(resultType),
+                String.format("unexpected response type: expected was {}, actual is {}", getResult().getClass(),
+                        resultType));
     }
 }
