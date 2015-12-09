@@ -19,24 +19,23 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcResponse;
+import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
+import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
 /**
- * Created by dwulsin on 12/7/15.
+ * Client service for bitcoinc RPCs.
+ *
+ * @author dwulsin
  */
-@Path("/")
-@Consumes(MediaType.APPLICATION_JSON)
 public interface BitcoindRpcService {
 
     /**
      * Get the current information about the blockchain.
      */
-    @POST
-    BitcoindRpcResponse getBlockchainInfo();
+    BlockchainInfo getBlockchainInfo(String authHeader);
 
     /**
      * Get the header for a given block header hash.
      */
-    @POST
-    BitcoindRpcResponse getBlockHeader(Sha256Hash headerHash);
+    BlockHeader getBlockHeader(String authHeader, Sha256Hash headerHash);
 }
