@@ -109,7 +109,6 @@ public class BlockchainInfoTest {
         rpcMapper.registerModule(blockchainModule);
         rpcMapper.addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
 
-
         // mapper from standard json properties
         standardMapper = new ObjectMapper();
         standardMapper.registerModule(blockchainModule);

@@ -28,7 +28,6 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.PACKAGE, strictBuilder = true)
-@JsonSerialize(as = ImmutableBitcoindRpcResponseError.class)
 @JsonDeserialize(as = ImmutableBitcoindRpcResponseError.class)
 public abstract class BitcoindRpcResponseError {
 
