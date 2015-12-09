@@ -31,7 +31,7 @@ import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.mixin.BlockHeaderRpcMixIn;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
 import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
-import org.drausin.bitflow.blockchain.client.serde.BlockHeaderDeserializer;
+import org.drausin.bitflow.blockchain.api.serde.BlockHeaderDeserializer;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;

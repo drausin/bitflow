@@ -29,7 +29,7 @@ import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockchainInfo;
 import org.drausin.bitflow.blockchain.api.objects.mixin.BlockchainInfoRpcMixIn;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
-import org.drausin.bitflow.blockchain.client.serde.BlockchainInfoDeserializer;
+import org.drausin.bitflow.blockchain.api.serde.BlockchainInfoDeserializer;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
