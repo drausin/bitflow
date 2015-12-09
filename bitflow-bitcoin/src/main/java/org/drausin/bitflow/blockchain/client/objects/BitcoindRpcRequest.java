@@ -65,6 +65,10 @@ public abstract class BitcoindRpcRequest {
     @JsonProperty("params")
     public abstract List<Object> getParams();
 
+    public static BitcoindRpcRequest of(String method, List<Object> params) {
+        return BitcoindRpcRequest.of("", method, params);
+    }
+
     public static BitcoindRpcRequest of(String id, String method, List<Object> params) {
         return ImmutableBitcoindRpcRequest.of(id, method, params);
     }
