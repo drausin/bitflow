@@ -85,6 +85,7 @@
 package org.drausin.bitflow.blockchain.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -94,7 +95,7 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public interface BlockchainInfo {
+public interface BlockchainInfo extends BlockchainResult {
 
     /**
      * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.
