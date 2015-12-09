@@ -16,8 +16,6 @@ package org.drausin.bitflow.blockchain.client;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import java.util.Map;
 import org.immutables.value.Value;
 
 /**
@@ -39,7 +37,7 @@ public abstract class BitcoindRpcResponseError {
     @JsonProperty("message")
     public abstract String getMessage();
 
-    public static BitcoindRpcResponseError of(long code, String message){
+    public static BitcoindRpcResponseError of(long code, String message) {
         return ImmutableBitcoindRpcResponseError.of(code, message);
     }
 }

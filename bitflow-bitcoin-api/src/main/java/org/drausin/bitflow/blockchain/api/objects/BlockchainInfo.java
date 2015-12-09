@@ -85,7 +85,6 @@
 package org.drausin.bitflow.blockchain.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
 

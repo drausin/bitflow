@@ -19,8 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
 /**
  * Created by dwulsin on 12/7/15.

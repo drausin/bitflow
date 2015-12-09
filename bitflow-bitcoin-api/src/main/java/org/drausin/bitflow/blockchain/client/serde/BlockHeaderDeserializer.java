@@ -25,14 +25,14 @@ import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
 
 /**
- * BlockHeader deserializer for configuration with ObjectMapper.addDeserializer(...)
+ * BlockHeader deserializer for configuration with ObjectMapper.addDeserializer(...).
  *
  * @author dwulsin
  */
 public class BlockHeaderDeserializer extends JsonDeserializer {
 
     @Override
-    public BlockchainResult deserialize(JsonParser parser, DeserializationContext ctxt)
+    public final BlockchainResult deserialize(JsonParser parser, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         ObjectMapper mapper = (ObjectMapper) parser.getCodec();
         ObjectNode object = mapper.readTree(parser);

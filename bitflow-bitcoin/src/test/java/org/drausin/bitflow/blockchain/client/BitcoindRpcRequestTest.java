@@ -14,7 +14,6 @@
 
 package org.drausin.bitflow.blockchain.client;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
@@ -22,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.google.common.collect.ImmutableList;
 import com.jayway.jsonpath.JsonPath;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,7 +33,7 @@ public class BitcoindRpcRequestTest {
     private String request1Json;
 
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
 
         rpcMapper = new ObjectMapper();
         rpcMapper.registerModule(new GuavaModule()); // to handle (immutable) collections out of the box
@@ -51,26 +51,26 @@ public class BitcoindRpcRequestTest {
     }
 
     @Test
-    public void testGetId() throws Exception {
+    public final void testGetId() throws Exception {
         assertEquals(JsonPath.read(rpcRequestJson, "$.method"), request1.getMethod());
         assertEquals(request1.getMethod(), JsonPath.read(request1Json, "$.method"));
     }
 
     @Test
-    public void testGetMethod() throws Exception {
+    public final void testGetMethod() throws Exception {
         assertEquals(JsonPath.read(rpcRequestJson, "$.params"), request1.getParams());
         assertEquals(request1.getParams(), JsonPath.read(request1Json, "$.params"));
     }
 
     @Test
-    public void testGetParams() throws Exception {
+    public final void testGetParams() throws Exception {
         assertEquals(JsonPath.read(rpcRequestJson, "$.id"), request1.getId());
         assertEquals(request1.getId(), JsonPath.read(request1Json, "$.id"));
     }
 
     @Test
-    public void testOf() throws Exception {
+    public final void testOf() throws Exception {
         assertThat(BitcoindRpcRequest.of("foo", "getblockhash", ImmutableList.of(0)),
-                instanceOf(ImmutableBitcoindRpcRequest.class));
+                CoreMatchers.instanceOf(ImmutableBitcoindRpcRequest.class));
     }
 }
