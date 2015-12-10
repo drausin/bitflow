@@ -78,8 +78,8 @@ public class BitcoindRpcRequestTest {
 
     @Test
     public final void testGetParams() throws Exception {
-        assertEquals(JsonPath.read(rpcRequestJson, "$.id"), request1.getId());
-        assertEquals(request1.getId(), JsonPath.read(request1Json, "$.id"));
+        assertEquals(JsonPath.read(rpcRequestJson, "$.id"), request1.getId().get());
+        assertEquals(request1.getId().get(), JsonPath.read(request1Json, "$.id"));
     }
 
     @Test

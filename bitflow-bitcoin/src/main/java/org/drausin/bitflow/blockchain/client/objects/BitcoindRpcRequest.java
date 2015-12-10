@@ -30,6 +30,7 @@ package org.drausin.bitflow.blockchain.client.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Optional;
 import java.util.List;
 import org.immutables.value.Value;
 
@@ -49,7 +50,7 @@ public abstract class BitcoindRpcRequest {
      */
     @Value.Parameter
     @JsonProperty("id")
-    public abstract String getId();
+    public abstract Optional<String> getId();
 
     /**
      * Get the RPC method name.
@@ -66,10 +67,10 @@ public abstract class BitcoindRpcRequest {
     public abstract List<Object> getParams();
 
     public static BitcoindRpcRequest of(String method, List<Object> params) {
-        return BitcoindRpcRequest.of("", method, params);
+        return ImmutableBitcoindRpcRequest.of(Optional.absent(), method, params);
     }
 
     public static BitcoindRpcRequest of(String id, String method, List<Object> params) {
-        return ImmutableBitcoindRpcRequest.of(id, method, params);
+        return ImmutableBitcoindRpcRequest.of(Optional.of(id), method, params);
     }
 }
