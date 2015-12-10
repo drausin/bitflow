@@ -34,6 +34,10 @@ project(':bitflow-bitcoin') {
         // Sourceforge
         compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
 
+        // ReST stuff
+        compile "io.dropwizard:dropwizard-client:$dropwizardVersion"
+        compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+
         // Test
         testCompile "junit:junit:$junitVersion"
         testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
