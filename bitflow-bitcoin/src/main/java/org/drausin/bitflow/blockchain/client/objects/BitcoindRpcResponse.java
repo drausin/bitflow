@@ -74,7 +74,7 @@ public abstract class BitcoindRpcResponse {
         if (getError().isPresent()) {
             throw new IllegalStateException("error value is present: %s".format(getError().get().toString()));
         }
-        if(!resultType.isAssignableFrom(getResult().get().getClass())) {
+        if (!resultType.isAssignableFrom(getResult().get().getClass())) {
             throw new IllegalStateException("result value is not of type %s".format(resultType.toString()));
         }
         return true;
