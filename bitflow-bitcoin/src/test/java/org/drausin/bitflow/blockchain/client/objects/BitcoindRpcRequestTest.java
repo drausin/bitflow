@@ -86,5 +86,7 @@ public class BitcoindRpcRequestTest {
     public final void testOf() throws Exception {
         assertThat(BitcoindRpcRequest.of("foo", "getblockhash", ImmutableList.of(0)),
                 CoreMatchers.instanceOf(ImmutableBitcoindRpcRequest.class));
+        assertThat(BitcoindRpcRequest.of("getblockhash", ImmutableList.of(0)),
+                CoreMatchers.instanceOf(ImmutableBitcoindRpcRequest.class));
     }
 }
