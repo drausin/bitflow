@@ -41,7 +41,7 @@ import org.immutables.value.Value;
  * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  */
 @Value.Immutable
-@Value.Style(visibility = Value.Style.ImplementationVisibility.PACKAGE)
+@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME)
 @JsonDeserialize(as = ImmutableBitcoindRpcResponse.class)
 public abstract class BitcoindRpcResponse {
 

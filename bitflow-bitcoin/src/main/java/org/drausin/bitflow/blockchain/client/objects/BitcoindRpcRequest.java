@@ -41,7 +41,7 @@ import org.immutables.value.Value;
  * @author dwulsin
  */
 @Value.Immutable
-@Value.Style(visibility = Value.Style.ImplementationVisibility.PACKAGE, strictBuilder = true)
+@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
 @JsonSerialize(as = ImmutableBitcoindRpcRequest.class)
 public abstract class BitcoindRpcRequest {
 
