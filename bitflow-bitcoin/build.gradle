@@ -36,7 +36,8 @@ project(':bitflow-bitcoin') {
 
         // ReST stuff
         compile "io.dropwizard:dropwizard-client:$dropwizardVersion"
-        compile "org.eclipse.jetty:jetty-server:$jettyVersion"
+        compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+        compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
 
         // Test
         testCompile "junit:junit:$junitVersion"
