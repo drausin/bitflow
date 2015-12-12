@@ -57,7 +57,7 @@ import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
  *
  * @author dwulsin
  */
-public class BlockHeaderDeserializer extends JsonDeserializer {
+public class BlockHeaderDeserializer extends JsonDeserializer<BlockchainResult> {
 
     @Override
     public final BlockchainResult deserialize(JsonParser parser, DeserializationContext ctxt)
