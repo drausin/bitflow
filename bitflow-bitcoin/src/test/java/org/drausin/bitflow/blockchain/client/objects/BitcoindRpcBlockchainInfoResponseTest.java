@@ -69,7 +69,7 @@ public class BitcoindRpcBlockchainInfoResponseTest {
         rpcMapper.registerModule(testModule);
         rpcMapper.addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
 
-        resultResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT,
+        resultResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
                 ImmutableBitcoindRpcResponse.class);
         errorResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.ERROR_RESPONSE,
                 ImmutableBitcoindRpcResponse.class);
@@ -101,27 +101,27 @@ public class BitcoindRpcBlockchainInfoResponseTest {
     @Test
     public final void testGetResult() throws Exception {
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.result.chain"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.chain"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getChain());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.result.blocks"))
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.blocks"))
                         .longValue(),
                 ((BlockchainInfo) resultResponse.getResult().get()).getNumBlocks());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.result.headers"))
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.headers"))
                         .longValue(),
                 ((BlockchainInfo) resultResponse.getResult().get()).getNumHeaders());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.result.bestblockhash"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.bestblockhash"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getBestBlockHash().toString());
         assertEquals(
-                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.result.difficulty"),
+                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.difficulty"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getDifficulty(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.result.verificationprogress"),
+                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.verificationprogress"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getVerificationProgress(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT,
+                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
                         "$.result.chainwork").toString(), "0"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getChainwork().toString(16));
     }
@@ -158,7 +158,7 @@ public class BitcoindRpcBlockchainInfoResponseTest {
     public final void testGetId() throws Exception {
         assertTrue(resultResponse.getId().isPresent());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT, "$.id"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.id"),
                 resultResponse.getId().get());
     }
 

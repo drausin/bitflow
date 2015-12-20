@@ -16,7 +16,7 @@ package org.drausin.bitflow.blockchain.client.objects;
 
 public final class BitcoindRpcJsonResponses {
 
-    public static final String BLOCKCHAIN_INFO_RESULT = "{\n"
+    public static final String BLOCKCHAIN_INFO_RESPONSE = "{\n"
             + "    \"result\": {\n"
             + "         \"chain\" : \"test\",\n"
             + "         \"blocks\" : 315280,\n"
@@ -30,7 +30,7 @@ public final class BitcoindRpcJsonResponses {
             + "    \"id\": \"foo\"\n"
             + "}";
 
-    public static final String BLOCK_HEADER_RESULT = "{\n"
+    public static final String BLOCK_HEADER_RESPONSE = "{\n"
             + "    \"result\": {\n"
             + "         \"hash\" : \"000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39\",\n"
             + "         \"confirmations\" : 88029,\n"

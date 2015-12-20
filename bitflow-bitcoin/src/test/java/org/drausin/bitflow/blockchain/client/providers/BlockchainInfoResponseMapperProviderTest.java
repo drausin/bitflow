@@ -36,7 +36,7 @@ public class BlockchainInfoResponseMapperProviderTest {
     @Test
     public void testGetContext() throws Exception {
         ObjectMapper context = provider.getContext(BitcoindRpcResponse.class);
-        BitcoindRpcResponse resultResponse = context.readValue(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESULT,
+        BitcoindRpcResponse resultResponse = context.readValue(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
                 ImmutableBitcoindRpcResponse.class);
         assertTrue(resultResponse.validateResult(BlockchainInfo.class));
     }

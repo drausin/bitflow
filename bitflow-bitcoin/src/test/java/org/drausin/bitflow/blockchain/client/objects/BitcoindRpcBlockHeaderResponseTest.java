@@ -71,7 +71,7 @@ public class BitcoindRpcBlockHeaderResponseTest {
         rpcMapper.registerModule(testModule);
         rpcMapper.addMixIn(ImmutableBlockHeader.class, BlockHeaderRpcMixIn.class);
 
-        resultResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT,
+        resultResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE,
                 ImmutableBitcoindRpcResponse.class);
         errorResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.ERROR_RESPONSE,
                 ImmutableBitcoindRpcResponse.class);
@@ -85,49 +85,49 @@ public class BitcoindRpcBlockHeaderResponseTest {
     @Test
     public final void testGetResult() throws Exception {
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.hash"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.hash"),
                 ((BlockHeader) resultResponse.getResult().get()).getHeaderHash().toString());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.confirmations"))
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.confirmations"))
                         .longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getNumConfirmations());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.size")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.size")).longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getSizeBytes());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.height")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.height")).longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getHeight());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.version")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.version")).longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getVersion());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.merkleroot"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.merkleroot"),
                 ((BlockHeader) resultResponse.getResult().get()).getMerkleRoot().toString());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.tx").toString(),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.tx").toString(),
                 rpcMapper.writeValueAsString(((BlockHeader) resultResponse.getResult().get()).getTransactionIds()));
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.time")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.time")).longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getCreatedTime());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.nonce")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.nonce")).longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getNonce());
         assertEquals(
-                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.bits"),
+                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.bits"),
                         "0"),
                 ((BlockHeader) resultResponse.getResult().get()).getDifficultyTarget().toString(16));
         assertEquals(
-                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.difficulty"),
+                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.difficulty"),
                 ((BlockHeader) resultResponse.getResult().get()).getDifficulty(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT,
+                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE,
                         "$.result.chainwork").toString(), "0"),
                 ((BlockHeader) resultResponse.getResult().get()).getChainwork().toString(16));
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.previousblockhash"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.previousblockhash"),
                 ((BlockHeader) resultResponse.getResult().get()).getPreviousBlockHash().toString());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.result.nextblockhash"),
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.nextblockhash"),
                 ((BlockHeader) resultResponse.getResult().get()).getNextBlockHash().toString());
     }
 
@@ -148,7 +148,7 @@ public class BitcoindRpcBlockHeaderResponseTest {
 
     @Test
     public final void testGetId() throws Exception {
-        assertEquals(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESULT, "$.id"), resultResponse.getId().get());
+        assertEquals(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.id"), resultResponse.getId().get());
     }
 
     @Test
