@@ -72,8 +72,7 @@ public class BitcoindRpcResourceTest extends JerseyTest {
     protected Application configure() {
         return new ResourceConfig(BitcoindRpcTestResource.class)
                 .register(BitcoindRpcRequestMapperProvider.class)
-                .register(JacksonFeature.class)
-                .register(HttpAuthenticationFeature.basic("testrpcuser", "testrpcpassword"));
+                .register(JacksonFeature.class);
     }
 
     @Before
