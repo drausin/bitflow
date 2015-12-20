@@ -21,7 +21,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
@@ -35,11 +34,12 @@ import org.glassfish.jersey.jackson.JacksonFeature;
 
 public final class BitcoindRpcResource implements BitcoindRpcService {
 
-    public static String BLOCKCHAIN_INFO_RPC_METHOD = "getinfo";
-    public static String BLOCK_HEADER_RPC_METHOD = "getblock";
+    public static final String BLOCKCHAIN_INFO_RPC_METHOD = "getinfo";
+    public static final String BLOCK_HEADER_RPC_METHOD = "getblock";
 
     private final BitcoindRpcServiceConfig config;
     private final HttpAuthenticationFeature rpcAuth;
+
     private final WebTarget blockchainInfoTarget;
     private final WebTarget blockHeaderTarget;
 
@@ -50,17 +50,33 @@ public final class BitcoindRpcResource implements BitcoindRpcService {
         this.blockHeaderTarget = getBlockHeaderClient().target(config.getUri());
     }
 
-    public BitcoindRpcServiceConfig getConfig() { return config; }
+    public BitcoindRpcServiceConfig getConfig() {
+        return config;
+    }
 
-    public HttpAuthenticationFeature getRpcAuth() { return rpcAuth; }
+    public HttpAuthenticationFeature getRpcAuth() {
+        return rpcAuth;
+    }
 
-    public Client getBlockchainInfoClient() { return getBlockchainInfoClient(ClientBuilder.newClient()); }
+    public WebTarget getBlockchainInfoTarget() {
+        return blockchainInfoTarget;
+    }
+
+    public WebTarget getBlockHeaderTarget() {
+        return blockHeaderTarget;
+    }
+
+    public Client getBlockchainInfoClient() {
+        return getBlockchainInfoClient(ClientBuilder.newClient());
+    }
 
     public Client getBlockchainInfoClient(Client current) {
         return getCommonClient(current).register(BlockchainInfoResponseMapperProvider.class);
     }
 
-    public Client getBlockHeaderClient() { return getBlockHeaderClient(ClientBuilder.newClient()); }
+    public Client getBlockHeaderClient() {
+        return getBlockHeaderClient(ClientBuilder.newClient());
+    }
 
     public Client getBlockHeaderClient(Client current) {
         return getCommonClient(current).register(BlockHeaderResponseMapperProvider.class);
@@ -74,26 +90,24 @@ public final class BitcoindRpcResource implements BitcoindRpcService {
 
     @Override
     public BlockchainInfo getBlockchainInfo(String authHeader) throws IllegalStateException {
-        // TODO(dwulsin): validateResult authHeader
+        // TODO(dwulsin): validateResult authHeader or remove it?
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
-        BitcoindRpcResponse response = _readResponse(this.blockchainInfoTarget, request);
+        BitcoindRpcResponse response = readResponse(getBlockchainInfoTarget(), request);
         response.validateResult(BlockchainInfo.class);
-        return ((BlockchainInfo) response.getResult().get());
+        return (BlockchainInfo) response.getResult().get();
     }
 
     @Override
     public BlockHeader getBlockHeader(String authHeader, Sha256Hash headerHash) throws IllegalStateException {
-        // TODO(dwulsin): validateResult authHeader
+        // TODO(dwulsin): validateResult authHeader or remove it?
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
-        BitcoindRpcResponse response = _readResponse(this.blockHeaderTarget, request);
+        BitcoindRpcResponse response = readResponse(getBlockHeaderTarget(), request);
         response.validateResult(BlockHeader.class);
-        return ((BlockHeader) response.getResult().get());
+        return (BlockHeader) response.getResult().get();
     }
 
-    private static BitcoindRpcResponse _readResponse(WebTarget target, BitcoindRpcRequest request) {
-        Response response = target.request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE));
-        BitcoindRpcResponse rpcResponse = response.readEntity(BitcoindRpcResponse.class);
-        return rpcResponse;
+    private static BitcoindRpcResponse readResponse(WebTarget target, BitcoindRpcRequest request) {
+        return target.request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), BitcoindRpcResponse.class);
     }
 }

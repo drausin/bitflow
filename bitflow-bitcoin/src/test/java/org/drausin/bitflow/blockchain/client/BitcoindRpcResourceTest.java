@@ -30,7 +30,6 @@ import org.drausin.bitflow.blockchain.client.config.BitcoindRpcServiceConfig;
 import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcJsonResponses;
 import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcRequest;
 import org.drausin.bitflow.blockchain.client.providers.BitcoindRpcRequestMapperProvider;
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
@@ -41,6 +40,7 @@ import org.junit.Test;
 
 public class BitcoindRpcResourceTest extends JerseyTest {
 
+    private BitcoindRpcServiceConfig bitcoindRpcServiceConfig;
     private BitcoindRpcResource bitcoindRpcResource;
 
     @Path("/")
@@ -50,7 +50,7 @@ public class BitcoindRpcResourceTest extends JerseyTest {
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("")
-        public String makeRpc(BitcoindRpcRequest request) throws IOException {
+        public final String makeRpc(BitcoindRpcRequest request) throws IOException {
 
             if (request.getMethod().equals(BitcoindRpcResource.BLOCKCHAIN_INFO_RPC_METHOD)) {
                 return BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE;
@@ -64,12 +64,12 @@ public class BitcoindRpcResourceTest extends JerseyTest {
     }
 
     @Override
-    protected TestContainerFactory getTestContainerFactory() {
+    protected final TestContainerFactory getTestContainerFactory() {
         return new GrizzlyTestContainerFactory();
     }
 
     @Override
-    protected Application configure() {
+    protected final Application configure() {
         return new ResourceConfig(BitcoindRpcTestResource.class)
                 .register(BitcoindRpcRequestMapperProvider.class)
                 .register(JacksonFeature.class);
@@ -77,17 +77,22 @@ public class BitcoindRpcResourceTest extends JerseyTest {
 
     @Before
     @Override
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
 
-        BitcoindRpcServiceConfig config = new BitcoindRpcServiceConfig(getBaseUri().toString(),
-                "testrpcuser", "testrpcpassword");
-        bitcoindRpcResource = new BitcoindRpcResource(config);
+        bitcoindRpcServiceConfig = new BitcoindRpcServiceConfig(getBaseUri().toString(), "testrpcuser",
+                "testrpcpassword");
+        bitcoindRpcResource = new BitcoindRpcResource(bitcoindRpcServiceConfig);
 
         super.setUp();
     }
 
     @Test
-    public void testGetBlockchainInfo() throws Exception {
+    public final void testGetConfig() {
+        assertEquals(bitcoindRpcServiceConfig, bitcoindRpcResource.getConfig());
+    }
+
+    @Test
+    public final void testGetBlockchainInfo() throws Exception {
 
         BlockchainInfo result = bitcoindRpcResource.getBlockchainInfo("dummy auth header");
         assertEquals(
@@ -96,7 +101,7 @@ public class BitcoindRpcResourceTest extends JerseyTest {
     }
 
     @Test
-    public void testGetBlockHeader() throws Exception {
+    public final void testGetBlockHeader() throws Exception {
         Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE,
                 "$.result.hash").toString());
         assertEquals(headerHash, bitcoindRpcResource.getBlockHeader("dummy auth header", headerHash).getHeaderHash());

@@ -118,7 +118,8 @@ public class BitcoindRpcBlockchainInfoResponseTest {
                 (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.difficulty"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getDifficulty(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.verificationprogress"),
+                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
+                        "$.result.verificationprogress"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getVerificationProgress(), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,

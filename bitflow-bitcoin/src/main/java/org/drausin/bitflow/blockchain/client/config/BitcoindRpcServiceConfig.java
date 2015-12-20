@@ -37,9 +37,15 @@ public final class BitcoindRpcServiceConfig {
         this.rpcPassword = rpcPassword;
     }
 
-    public String getUri() { return uri; }
+    public String getUri() {
+        return uri;
+    }
 
-    public String getRpcUser() { return rpcUser; }
+    public String getRpcUser() {
+        return rpcUser;
+    }
 
-    public String getRpcPassword() { return rpcPassword; }
+    public String getRpcPassword() {
+        return rpcPassword;
+    }
 }

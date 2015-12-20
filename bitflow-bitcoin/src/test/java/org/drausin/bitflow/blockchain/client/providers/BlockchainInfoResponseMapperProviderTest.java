@@ -29,12 +29,12 @@ public class BlockchainInfoResponseMapperProviderTest {
     private BlockchainInfoResponseMapperProvider provider;
 
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
         provider = new BlockchainInfoResponseMapperProvider();
     }
 
     @Test
-    public void testGetContext() throws Exception {
+    public final void testGetContext() throws Exception {
         ObjectMapper context = provider.getContext(BitcoindRpcResponse.class);
         BitcoindRpcResponse resultResponse = context.readValue(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
                 ImmutableBitcoindRpcResponse.class);

@@ -14,7 +14,7 @@
 
 package org.drausin.bitflow.blockchain.client.config;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class BitcoindRpcServiceConfigTest {
     private String rpcPassword;
 
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
 
         uri = "http://localhost:0000";
         rpcUser = "auser";
@@ -37,17 +37,17 @@ public class BitcoindRpcServiceConfigTest {
     }
 
     @Test
-    public void testGetUri() throws Exception {
+    public final void testGetUri() throws Exception {
         assertEquals(uri, config.getUri());
     }
 
     @Test
-    public void testGetRpcUser() throws Exception {
+    public final void testGetRpcUser() throws Exception {
         assertEquals(rpcUser, config.getRpcUser());
     }
 
     @Test
-    public void testGetRpcPassword() throws Exception {
+    public final void testGetRpcPassword() throws Exception {
         assertEquals(rpcPassword, config.getRpcPassword());
     }
 }

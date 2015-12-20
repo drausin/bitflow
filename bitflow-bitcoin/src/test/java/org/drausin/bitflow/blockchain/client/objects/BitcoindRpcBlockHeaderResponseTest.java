@@ -95,10 +95,12 @@ public class BitcoindRpcBlockHeaderResponseTest {
                 ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.size")).longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getSizeBytes());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.height")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.height"))
+                        .longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getHeight());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.version")).longValue(),
+                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.version"))
+                        .longValue(),
                 ((BlockHeader) resultResponse.getResult().get()).getVersion());
         assertEquals(
                 JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.result.merkleroot"),
@@ -148,7 +150,9 @@ public class BitcoindRpcBlockHeaderResponseTest {
 
     @Test
     public final void testGetId() throws Exception {
-        assertEquals(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.id"), resultResponse.getId().get());
+        assertEquals(
+                JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE, "$.id"),
+                resultResponse.getId().get());
     }
 
     @Test

@@ -35,7 +35,7 @@ public class BitcoindRpcRequestMapperProvider implements ContextResolver<ObjectM
     }
 
     @Override
-    public ObjectMapper getContext(Class<?> type) {
+    public final ObjectMapper getContext(Class<?> type) {
         return this.mapper;
     }
 

@@ -51,11 +51,11 @@ public class BlockHeaderResponseMapperProvider extends BitcoindRpcResponseMapper
     }
 
     @Override
-    public ObjectMapper getContext(Class<?> type) {
+    public final ObjectMapper getContext(Class<?> type) {
         return this.mapper;
     }
 
-    private static SimpleModule getBlockHeaderModule(){
+    private static SimpleModule getBlockHeaderModule() {
         return getCommonModule().addDeserializer(BlockchainResult.class, new BlockHeaderDeserializer());
     }
 

@@ -60,5 +60,6 @@ public final class BitcoindRpcJsonResponses {
             + "    \"id\": \"foo\"\n"
             + "}";
 
+    private BitcoindRpcJsonResponses() {}
 
 }
