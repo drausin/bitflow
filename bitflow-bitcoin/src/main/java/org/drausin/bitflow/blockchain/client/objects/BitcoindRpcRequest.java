@@ -29,6 +29,7 @@
 package org.drausin.bitflow.blockchain.client.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
 import java.util.List;
@@ -43,6 +44,7 @@ import org.immutables.value.Value;
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
 @JsonSerialize(as = ImmutableBitcoindRpcRequest.class)
+@JsonDeserialize(as = ImmutableBitcoindRpcRequest.class)
 public abstract class BitcoindRpcRequest {
 
     /**
