@@ -14,7 +14,10 @@
 
 package org.drausin.bitflow.blockchain.client.config;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.apache.commons.lang3.Validate;
 
 /**
@@ -29,9 +32,9 @@ public final class BitcoindRpcServiceConfig {
     private final String rpcPassword;
 
     public BitcoindRpcServiceConfig(
-            @JsonProperty String uri,
-            @JsonProperty String rpcUser,
-            @JsonProperty String rpcPassword) {
+            @JsonProperty("uri") String uri,
+            @JsonProperty("rpcUser") String rpcUser,
+            @JsonProperty("rpcPassword") String rpcPassword) {
         this.uri = Validate.notEmpty(uri, "Must specify an RPC service URI");
         this.rpcUser = Validate.notEmpty(rpcUser, "Must specify a non-empty RPC user");
         this.rpcPassword = rpcPassword;
