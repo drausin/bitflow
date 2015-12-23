@@ -14,12 +14,14 @@ tasks.withType(JavaCompile) {
 configurations.all {
     resolutionStrategy.dependencySubstitution {
         substitute module('javax.servlet:servlet-api') with module("javax.servlet:javax.servlet-api:${javaxServletVersion}")
+        substitute module('org.apache.logging.log4j:log4j-slf4j-impl') with module("ch.qos.logback:logback-classic:${logbackVersion}")
     }
 }
 
 configurations.compile {
     exclude group: 'javax.ws.rs', module: 'jsr311-api'  // clashes with javax.ws.rs:javax.ws.rs-api
     exclude group: 'org.slf4j', module: 'slf4j-log4j12'  // we use logback
+    exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j-impl'  // we use logback
 }
 
 checkstyle.toolVersion = '6.11.2'
