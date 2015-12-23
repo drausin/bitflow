@@ -42,6 +42,7 @@
 
 package org.drausin.bitflow.blockchain.api;
 
+import io.dropwizard.jersey.params.DateTimeParam;
 import java.util.List;
 import javax.annotation.CheckForNull;
 import javax.ws.rs.Consumes;
@@ -53,9 +54,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
-import org.joda.time.DateTime;
 
 @Path("/blockchain")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -67,6 +68,7 @@ public interface BlockchainService {
      */
     @GET
     @Path("/info")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     BlockchainInfo getBlockchainInfo(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader);
@@ -78,10 +80,11 @@ public interface BlockchainService {
      */
     @GET
     @Path("/block/header/{hash}")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     BlockHeader getBlockHeader(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
-            @PathParam("hash") String hash);
+            @PathParam("hash") Sha256Hash hash);
 
     /**
      * Gets the block header subchain of blocks created within a given time window.
@@ -92,11 +95,12 @@ public interface BlockchainService {
      */
     @GET
     @Path("/block/header/subchain/time")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     List<BlockHeader> getBlockHeaderTimeSubchain(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
-            @CheckForNull @QueryParam("from") DateTime from,
-            @CheckForNull @QueryParam("to") DateTime to);
+            @CheckForNull @QueryParam("from") DateTimeParam from,
+            @CheckForNull @QueryParam("to") DateTimeParam to);
 
     /**
      * Gets the block header subchain of blocks created within a given height range, relative to the current best block.
@@ -106,9 +110,10 @@ public interface BlockchainService {
      */
     @GET
     @Path("/block/header/subchain/height")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     List<BlockHeader> getBlockHeaderHeightSubchain(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
-            @CheckForNull @QueryParam("from") DateTime from,
-            @CheckForNull @QueryParam("to") DateTime to);
+            @CheckForNull @QueryParam("from") long from,
+            @CheckForNull @QueryParam("to") long to);
 }

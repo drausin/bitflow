@@ -21,6 +21,7 @@ project(':bitflow-bitcoin-api') {
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
         compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
         compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
+        compile "io.dropwizard:dropwizard-jersey:${dropwizardVersion}"
 
         // Test
         testCompile "junit:junit:$junitVersion"

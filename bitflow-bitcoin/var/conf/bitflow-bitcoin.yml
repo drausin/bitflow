@@ -1,0 +1,37 @@
+# the unique identifier for this blockchain instances
+instance: main
+
+# Bitcoind RPC Service configuration
+# bitcoindRpc:
+#   uris:       the URI(s) of the bitcoind node RPC services
+bitcoindRpc:
+  uri: http://localhost:8332
+  rpcUser: rpcuser
+  rpcPassword: bitflow
+
+# Set to false to disable showing stack traces in http error responses
+includeStackTraceInErrors: true
+
+# Dropwizard Server Settings
+server:
+  rootPath: /api/*
+  applicationConnectors:
+    - type: http
+      port: 8100
+
+  adminConnectors:
+    - type: http
+      port: 8101
+
+# Logging settings
+logging:
+    # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
+    level: WARN
+    loggers:
+        io.dropwizard: INFO
+    appenders:
+        - type: console
+        - type: file
+          currentLogFilename: var/log/foundry-metadata.log
+          archive: true
+          archivedLogFilenamePattern: var/log/foundry-metadata-%d.log
