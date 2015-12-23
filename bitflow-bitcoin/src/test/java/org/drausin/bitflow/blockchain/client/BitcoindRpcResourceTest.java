@@ -94,7 +94,7 @@ public class BitcoindRpcResourceTest extends JerseyTest {
     @Test
     public final void testGetBlockchainInfo() throws Exception {
 
-        BlockchainInfo result = bitcoindRpcResource.getBlockchainInfo("dummy auth header");
+        BlockchainInfo result = bitcoindRpcResource.getBlockchainInfo();
         assertEquals(
                 JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.chain"),
                 result.getChain());
@@ -104,6 +104,6 @@ public class BitcoindRpcResourceTest extends JerseyTest {
     public final void testGetBlockHeader() throws Exception {
         Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE,
                 "$.result.hash").toString());
-        assertEquals(headerHash, bitcoindRpcResource.getBlockHeader("dummy auth header", headerHash).getHeaderHash());
+        assertEquals(headerHash, bitcoindRpcResource.getBlockHeader(headerHash).getHeaderHash());
     }
 }

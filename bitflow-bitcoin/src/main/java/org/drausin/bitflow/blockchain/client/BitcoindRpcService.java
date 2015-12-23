@@ -28,10 +28,10 @@ public interface BitcoindRpcService {
     /**
      * Get the current information about the blockchain.
      */
-    BlockchainInfo getBlockchainInfo(String authHeader);
+    BlockchainInfo getBlockchainInfo();
 
     /**
      * Get the header for a given block header hash.
      */
-    BlockHeader getBlockHeader(String authHeader, Sha256Hash headerHash);
+    BlockHeader getBlockHeader(Sha256Hash headerHash);
 }

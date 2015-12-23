@@ -89,8 +89,7 @@ public final class BitcoindRpcResource implements BitcoindRpcService {
     }
 
     @Override
-    public BlockchainInfo getBlockchainInfo(String authHeader) throws IllegalStateException {
-        // TODO(dwulsin): validateResult authHeader or remove it?
+    public BlockchainInfo getBlockchainInfo() throws IllegalStateException {
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
         BitcoindRpcResponse response = readResponse(getBlockchainInfoTarget(), request);
         response.validateResult(BlockchainInfo.class);
@@ -98,8 +97,7 @@ public final class BitcoindRpcResource implements BitcoindRpcService {
     }
 
     @Override
-    public BlockHeader getBlockHeader(String authHeader, Sha256Hash headerHash) throws IllegalStateException {
-        // TODO(dwulsin): validateResult authHeader or remove it?
+    public BlockHeader getBlockHeader(Sha256Hash headerHash) throws IllegalStateException {
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
         BitcoindRpcResponse response = readResponse(getBlockHeaderTarget(), request);
         response.validateResult(BlockHeader.class);
