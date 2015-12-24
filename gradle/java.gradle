@@ -2,8 +2,6 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'com.palantir.baseline-checkstyle'
 apply plugin: 'com.palantir.baseline-findbugs'
-
-apply from: "$rootDir/gradle/idea.gradle"
 apply plugin: 'com.palantir.baseline-idea'
 apply plugin: 'com.palantir.baseline-eclipse'
 
