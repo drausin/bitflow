@@ -201,4 +201,80 @@ public final class ImmutableBlockHeader implements BlockHeader {
     public Sha256Hash getNextBlockHash() {
         return nextBlockHash;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ImmutableBlockHeader that = (ImmutableBlockHeader) o;
+
+        if (getNumConfirmations() != that.getNumConfirmations()) {
+            return false;
+        }
+        if (getSizeBytes() != that.getSizeBytes()) {
+            return false;
+        }
+        if (getHeight() != that.getHeight()) {
+            return false;
+        }
+        if (getVersion() != that.getVersion()) {
+            return false;
+        }
+        if (getCreatedTime() != that.getCreatedTime()) {
+            return false;
+        }
+        if (getNonce() != that.getNonce()) {
+            return false;
+        }
+        if (Double.compare(that.getDifficulty(), getDifficulty()) != 0) {
+            return false;
+        }
+        if (!getHeaderHash().equals(that.getHeaderHash())) {
+            return false;
+        }
+        if (!getMerkleRoot().equals(that.getMerkleRoot())) {
+            return false;
+        }
+        if (!getTransactionIds().equals(that.getTransactionIds())) {
+            return false;
+        }
+        if (!getDifficultyTarget().equals(that.getDifficultyTarget())) {
+            return false;
+        }
+        if (!getChainwork().equals(that.getChainwork())) {
+            return false;
+        }
+        if (!getPreviousBlockHash().equals(that.getPreviousBlockHash())) {
+            return false;
+        }
+        return getNextBlockHash().equals(that.getNextBlockHash());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getHeaderHash().hashCode();
+        result = 31 * result + (int) (getNumConfirmations() ^ (getNumConfirmations() >>> 32));
+        result = 31 * result + (int) (getSizeBytes() ^ (getSizeBytes() >>> 32));
+        result = 31 * result + (int) (getHeight() ^ (getHeight() >>> 32));
+        result = 31 * result + (int) (getVersion() ^ (getVersion() >>> 32));
+        result = 31 * result + getMerkleRoot().hashCode();
+        result = 31 * result + getTransactionIds().hashCode();
+        result = 31 * result + (int) (getCreatedTime() ^ (getCreatedTime() >>> 32));
+        result = 31 * result + (int) (getNonce() ^ (getNonce() >>> 32));
+        result = 31 * result + getDifficultyTarget().hashCode();
+        temp = Double.doubleToLongBits(getDifficulty());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + getChainwork().hashCode();
+        result = 31 * result + getPreviousBlockHash().hashCode();
+        result = 31 * result + getNextBlockHash().hashCode();
+        return result;
+    }
 }

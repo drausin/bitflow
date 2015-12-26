@@ -143,4 +143,53 @@ public final class ImmutableBlockchainInfo implements BlockchainInfo {
     public BigInteger getChainwork() {
         return chainwork;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ImmutableBlockchainInfo that = (ImmutableBlockchainInfo) o;
+
+        if (getNumBlocks() != that.getNumBlocks()) {
+            return false;
+        }
+        if (getNumHeaders() != that.getNumHeaders()) {
+            return false;
+        }
+        if (Double.compare(that.getDifficulty(), getDifficulty()) != 0) {
+            return false;
+        }
+        if (Double.compare(that.getVerificationProgress(), getVerificationProgress()) != 0) {
+            return false;
+        }
+        if (!getChain().equals(that.getChain())) {
+            return false;
+        }
+        if (!getBestBlockHash().equals(that.getBestBlockHash())) {
+            return false;
+        }
+        return getChainwork().equals(that.getChainwork());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = getChain().hashCode();
+        result = 31 * result + (int) (getNumBlocks() ^ (getNumBlocks() >>> 32));
+        result = 31 * result + (int) (getNumHeaders() ^ (getNumHeaders() >>> 32));
+        result = 31 * result + getBestBlockHash().hashCode();
+        temp = Double.doubleToLongBits(getDifficulty());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getVerificationProgress());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + getChainwork().hashCode();
+        return result;
+    }
 }
