@@ -14,7 +14,9 @@
 
 package org.drausin.bitflow.blockchain.client.config;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -49,5 +51,15 @@ public class BitcoindRpcServiceConfigTest {
     @Test
     public final void testGetRpcPassword() throws Exception {
         assertEquals(rpcPassword, config.getRpcPassword());
+    }
+
+    @Test
+    public final void testEquals() throws Exception {
+        assertThat(config, is(new BitcoindRpcServiceConfig(uri, rpcUser, rpcPassword)));
+    }
+
+    @Test
+    public final void testHashCode() throws Exception {
+        assertEquals((new BitcoindRpcServiceConfig(uri, rpcUser, rpcPassword)).hashCode(), config.hashCode());
     }
 }
