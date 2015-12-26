@@ -14,8 +14,8 @@
 
 package org.drausin.bitflow.blockchain;
 
-import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -31,7 +31,7 @@ public class BlockchainResourceTest {
     private BlockchainResource blockchainResource;
 
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
         BitcoindRpcService bitcoindRpcService = mock(BitcoindRpcService.class);
 
         when(bitcoindRpcService.getBlockchainInfo()).thenReturn(BitcoindRpcExampleResponses.getBlockchainInfoResult());
@@ -42,14 +42,14 @@ public class BlockchainResourceTest {
     }
 
     @Test
-    public void testGetBlockchainInfo() throws Exception {
+    public final void testGetBlockchainInfo() throws Exception {
         assertThat(
                 blockchainResource.getBlockchainInfo("dummy auth header"),
                 is(BitcoindRpcExampleResponses.getBlockchainInfoResult()));
     }
 
     @Test
-    public void testGetBlockHeader() throws Exception {
+    public final void testGetBlockHeader() throws Exception {
         assertThat(
                 blockchainResource.getBlockHeader("dummy auth header", any(Sha256Hash.class)),
                 is(BitcoindRpcExampleResponses.getBlockHeaderResult()));

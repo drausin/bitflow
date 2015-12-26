@@ -203,15 +203,16 @@ public final class ImmutableBlockHeader implements BlockHeader {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    @SuppressWarnings("checkstyle:cyclomaticcomplexity")
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
-        ImmutableBlockHeader that = (ImmutableBlockHeader) o;
+        ImmutableBlockHeader that = (ImmutableBlockHeader) obj;
 
         if (getNumConfirmations() != that.getNumConfirmations()) {
             return false;
@@ -257,6 +258,7 @@ public final class ImmutableBlockHeader implements BlockHeader {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
     public int hashCode() {
         int result;
         long temp;

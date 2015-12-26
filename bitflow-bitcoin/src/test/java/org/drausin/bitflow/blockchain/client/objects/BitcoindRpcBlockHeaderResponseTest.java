@@ -53,7 +53,6 @@ public class BitcoindRpcBlockHeaderResponseTest {
 
     @Before
     public final void setUp() throws Exception {
-        
         rpcMapper = BlockHeaderResponseMapperProvider.getBlockHeaderMapper();
 
         resultJsonResponse = BitcoindRpcExampleResponses.getBlockHeaderJsonResponse();

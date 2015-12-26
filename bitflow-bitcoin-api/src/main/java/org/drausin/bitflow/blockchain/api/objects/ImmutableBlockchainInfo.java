@@ -145,15 +145,16 @@ public final class ImmutableBlockchainInfo implements BlockchainInfo {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
+    @SuppressWarnings("checkstyle:cyclomaticcomplexity")
+    public boolean equals(Object obj) {
+        if (this == obj) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
 
-        ImmutableBlockchainInfo that = (ImmutableBlockchainInfo) o;
+        ImmutableBlockchainInfo that = (ImmutableBlockchainInfo) obj;
 
         if (getNumBlocks() != that.getNumBlocks()) {
             return false;
@@ -178,6 +179,7 @@ public final class ImmutableBlockchainInfo implements BlockchainInfo {
     }
 
     @Override
+    @SuppressWarnings("checkstyle:variabledeclarationusagedistance")
     public int hashCode() {
         int result;
         long temp;

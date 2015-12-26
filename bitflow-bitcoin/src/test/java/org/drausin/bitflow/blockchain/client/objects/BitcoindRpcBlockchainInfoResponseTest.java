@@ -32,20 +32,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockchainInfo;
-import org.drausin.bitflow.blockchain.client.providers.BlockchainInfoResponseMapperProvider;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
 public class BitcoindRpcBlockchainInfoResponseTest {
 
-    private ObjectMapper rpcMapper;
     private String resultJsonResponse;
     private String errorJsonResponse;
     private BitcoindRpcResponse resultResponse;
@@ -54,9 +51,6 @@ public class BitcoindRpcBlockchainInfoResponseTest {
 
     @Before
     public final void setUp() throws Exception {
-
-        rpcMapper = BlockchainInfoResponseMapperProvider.getBlockchainInfoMapper();
-
         resultJsonResponse = BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse();
         errorJsonResponse = BitcoindRpcExampleResponses.getErrorJsonResponse();
         resultResponse = BitcoindRpcExampleResponses.getBlockchainInfoResponse();

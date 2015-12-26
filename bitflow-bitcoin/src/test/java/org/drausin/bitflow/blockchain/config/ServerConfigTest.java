@@ -39,7 +39,7 @@ public class ServerConfigTest {
             "src/test/resources/bitflow-bitcoin-test.yml");
 
     private ServerConfig serverConfig;
-    Map<String, Object> configMap;
+    private Map<String, Object> configMap;
 
     @Before
     public final void setUp() throws IOException {
@@ -53,12 +53,12 @@ public class ServerConfigTest {
     }
 
     @Test
-    public void testGetInstance() throws Exception {
+    public final void testGetInstance() throws Exception {
         assertThat(serverConfig.getInstance(), is(configMap.get("instance")));
     }
 
     @Test
-    public void testGetBitcoindRpc() throws Exception {
+    public final void testGetBitcoindRpc() throws Exception {
         Map<String, Object> bitcoinRpcConfigMap = (HashMap<String, Object>) configMap.get("bitcoindRpc");
         BitcoindRpcServiceConfig expected = new BitcoindRpcServiceConfig(
                 bitcoinRpcConfigMap.get("uri").toString(),
@@ -68,7 +68,7 @@ public class ServerConfigTest {
     }
 
     @Test
-    public void testGetBitcoindRpcNotEquals() throws Exception {
+    public final void testGetBitcoindRpcNotEquals() throws Exception {
         Map<String, Object> bitcoinRpcConfigMap = (HashMap<String, Object>) configMap.get("bitcoindRpc");
         BitcoindRpcServiceConfig notExpected1 = new BitcoindRpcServiceConfig(
                 "dummy",
@@ -93,7 +93,7 @@ public class ServerConfigTest {
     }
 
     @Test
-    public void testGetIncludeStackTraceInErrors() throws Exception {
+    public final void testGetIncludeStackTraceInErrors() throws Exception {
         assertThat(serverConfig.getIncludeStackTraceInErrors().get(), is(configMap.get("includeStackTraceInErrors")));
     }
 

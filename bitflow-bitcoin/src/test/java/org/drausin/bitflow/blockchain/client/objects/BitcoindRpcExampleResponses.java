@@ -14,8 +14,6 @@
 
 package org.drausin.bitflow.blockchain.client.objects;
 
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.spi.json.JsonProvider;
 import java.io.IOException;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;

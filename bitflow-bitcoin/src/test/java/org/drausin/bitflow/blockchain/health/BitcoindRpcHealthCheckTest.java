@@ -14,11 +14,11 @@
 
 package org.drausin.bitflow.blockchain.health;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
 
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.drausin.bitflow.blockchain.client.BitcoindRpcService;
@@ -32,20 +32,20 @@ public class BitcoindRpcHealthCheckTest {
     private BitcoindRpcService bitcoindRpcService;
 
     @Before
-    public void setUp() throws Exception {
+    public final void setUp() throws Exception {
         bitcoindRpcService = mock(BitcoindRpcService.class);
         bitcoindRpcHealthCheck = new BitcoindRpcHealthCheck(bitcoindRpcService);
     }
 
     @Test
-    public void testCheckHealthy() throws Exception {
+    public final void testCheckHealthy() throws Exception {
         when(bitcoindRpcService.getBlockchainInfo())
                 .thenReturn(BitcoindRpcExampleResponses.getBlockchainInfoResult());
         assertTrue(bitcoindRpcHealthCheck.check().isHealthy());
     }
 
     @Test
-    public void testCheckUnhealthyZeroBlocks() throws Exception {
+    public final void testCheckUnhealthyZeroBlocks() throws Exception {
         BlockchainInfo blockchainInfo = mock(BlockchainInfo.class);
         when(blockchainInfo.getNumBlocks()).thenReturn(0L);
         when(bitcoindRpcService.getBlockchainInfo()).thenReturn(blockchainInfo);
@@ -53,7 +53,7 @@ public class BitcoindRpcHealthCheckTest {
     }
 
     @Test
-    public void testCheckUnhealthyException() throws Exception {
+    public final void testCheckUnhealthyException() throws Exception {
         doThrow(new IllegalStateException("dummy message")).when(bitcoindRpcService).getBlockchainInfo();
         assertFalse(bitcoindRpcHealthCheck.check().isHealthy());
     }
