@@ -48,4 +48,33 @@ public final class BitcoindRpcServiceConfig {
     public String getRpcPassword() {
         return rpcPassword;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        BitcoindRpcServiceConfig that = (BitcoindRpcServiceConfig) o;
+
+        if (!getUri().equals(that.getUri())) {
+            return false;
+        }
+        if (!getRpcUser().equals(that.getRpcUser())) {
+            return false;
+        }
+        return getRpcPassword().equals(that.getRpcPassword());
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUri().hashCode();
+        result = 31 * result + getRpcUser().hashCode();
+        result = 31 * result + getRpcPassword().hashCode();
+        return result;
+    }
 }

@@ -29,6 +29,13 @@ idea {
         inheritOutputDirs = true
 
         excludeDirs -= file("${buildDir}")
+        excludeDirs += file("${buildDir}/dependency-cache")
+        excludeDirs += file("${buildDir}/jacoco")
+        excludeDirs += file("${buildDir}/libs")
+        excludeDirs += file("${buildDir}/reports")
+        excludeDirs += file("${buildDir}/resources")
+        excludeDirs += file("${buildDir}/test-results")
+        excludeDirs += file("${buildDir}/tmp")
 
         sourceDirs = [file("src/main/java"), file("src/main/resources"), file("${buildDir}/classes/main")] as Set
         testSourceDirs = [file("src/test/java"), file("src/test/resources"), file("${buildDir}/classes/test")] as Set

@@ -32,20 +32,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.jayway.jsonpath.JsonPath;
-import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
-import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockchainInfo;
-import org.drausin.bitflow.blockchain.api.objects.mixin.BlockchainInfoRpcMixIn;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
-import org.drausin.bitflow.blockchain.api.serde.BlockchainInfoDeserializer;
+import org.drausin.bitflow.blockchain.client.providers.BlockchainInfoResponseMapperProvider;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,6 +46,8 @@ import org.junit.Test;
 public class BitcoindRpcBlockchainInfoResponseTest {
 
     private ObjectMapper rpcMapper;
+    private String resultJsonResponse;
+    private String errorJsonResponse;
     private BitcoindRpcResponse resultResponse;
     private BitcoindRpcResponse errorResponse;
     private static final double ASSERT_EQUALS_PRECISION = 1E-9;
@@ -60,19 +55,12 @@ public class BitcoindRpcBlockchainInfoResponseTest {
     @Before
     public final void setUp() throws Exception {
 
-        SimpleModule testModule = new SimpleModule("TestModule", Version.unknownVersion());
-        testModule.addDeserializer(BigInteger.class, new BigIntegerDeserializer());
-        testModule.addDeserializer(BlockchainResult.class, new BlockchainInfoDeserializer());
+        rpcMapper = BlockchainInfoResponseMapperProvider.getBlockchainInfoMapper();
 
-        rpcMapper = new ObjectMapper();
-        rpcMapper.registerModule(new GuavaModule());
-        rpcMapper.registerModule(testModule);
-        rpcMapper.addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
-
-        resultResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
-                ImmutableBitcoindRpcResponse.class);
-        errorResponse = rpcMapper.readValue(BitcoindRpcJsonResponses.ERROR_RESPONSE,
-                ImmutableBitcoindRpcResponse.class);
+        resultJsonResponse = BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse();
+        errorJsonResponse = BitcoindRpcExampleResponses.getErrorJsonResponse();
+        resultResponse = BitcoindRpcExampleResponses.getBlockchainInfoResponse();
+        errorResponse = BitcoindRpcExampleResponses.getErrorResponse();
     }
 
     @Test
@@ -101,28 +89,28 @@ public class BitcoindRpcBlockchainInfoResponseTest {
     @Test
     public final void testGetResult() throws Exception {
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.chain"),
+                JsonPath.read(resultJsonResponse, "$.result.chain"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getChain());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.blocks"))
+                ((Integer) JsonPath.read(resultJsonResponse, "$.result.blocks"))
                         .longValue(),
                 ((BlockchainInfo) resultResponse.getResult().get()).getNumBlocks());
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.headers"))
+                ((Integer) JsonPath.read(resultJsonResponse, "$.result.headers"))
                         .longValue(),
                 ((BlockchainInfo) resultResponse.getResult().get()).getNumHeaders());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.bestblockhash"),
+                JsonPath.read(resultJsonResponse, "$.result.bestblockhash"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getBestBlockHash().toString());
         assertEquals(
-                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.difficulty"),
+                (double) JsonPath.read(resultJsonResponse, "$.result.difficulty"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getDifficulty(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                (double) JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
+                (double) JsonPath.read(resultJsonResponse,
                         "$.result.verificationprogress"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getVerificationProgress(), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                StringUtils.stripStart(JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE,
+                StringUtils.stripStart(JsonPath.read(resultJsonResponse,
                         "$.result.chainwork").toString(), "0"),
                 ((BlockchainInfo) resultResponse.getResult().get()).getChainwork().toString(16));
     }
@@ -148,10 +136,10 @@ public class BitcoindRpcBlockchainInfoResponseTest {
     @Test
     public final void testGetError() throws Exception {
         assertEquals(
-                ((Integer) JsonPath.read(BitcoindRpcJsonResponses.ERROR_RESPONSE, "$.error.code")).longValue(),
+                ((Integer) JsonPath.read(errorJsonResponse, "$.error.code")).longValue(),
                 errorResponse.getError().get().getCode());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.ERROR_RESPONSE, "$.error.message"),
+                JsonPath.read(errorJsonResponse, "$.error.message"),
                 errorResponse.getError().get().getMessage());
     }
 
@@ -159,7 +147,7 @@ public class BitcoindRpcBlockchainInfoResponseTest {
     public final void testGetId() throws Exception {
         assertTrue(resultResponse.getId().isPresent());
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.id"),
+                JsonPath.read(resultJsonResponse, "$.id"),
                 resultResponse.getId().get());
     }
 

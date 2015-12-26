@@ -56,13 +56,14 @@ public class BlockchainInfoResponseMapperProvider extends BitcoindRpcResponseMap
         return this.mapper;
     }
 
-    private static SimpleModule getBlockchainInfoModule() {
-        return getCommonModule().addDeserializer(BlockchainResult.class, new BlockchainInfoDeserializer());
-    }
-
-    private static ObjectMapper getBlockchainInfoMapper() {
+    public static ObjectMapper getBlockchainInfoMapper() {
         return getCommonMapper()
                 .registerModule(getBlockchainInfoModule())
                 .addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
     }
+
+    private static SimpleModule getBlockchainInfoModule() {
+        return getCommonModule().addDeserializer(BlockchainResult.class, new BlockchainInfoDeserializer());
+    }
+
 }

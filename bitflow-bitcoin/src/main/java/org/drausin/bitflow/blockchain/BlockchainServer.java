@@ -18,6 +18,7 @@ import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.drausin.bitflow.blockchain.client.BitcoindRpcResource;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
+import org.drausin.bitflow.blockchain.health.BitcoindRpcHealthCheck;
 
 public class BlockchainServer extends Application<ServerConfig> {
 
@@ -28,6 +29,8 @@ public class BlockchainServer extends Application<ServerConfig> {
         BlockchainResource blockchainResource = new BlockchainResource(bitcoindRpcResource);
 
         env.jersey().register(blockchainResource);
+
+        env.healthChecks().register("bitcoindRpc", new BitcoindRpcHealthCheck(bitcoindRpcResource));
 
         //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
         // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)

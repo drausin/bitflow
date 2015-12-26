@@ -27,7 +27,7 @@ import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.drausin.bitflow.blockchain.client.config.BitcoindRpcServiceConfig;
-import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcJsonResponses;
+import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcExampleResponses;
 import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcRequest;
 import org.drausin.bitflow.blockchain.client.providers.BitcoindRpcRequestMapperProvider;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -53,9 +53,9 @@ public class BitcoindRpcResourceTest extends JerseyTest {
         public final String makeRpc(BitcoindRpcRequest request) throws IOException {
 
             if (request.getMethod().equals(BitcoindRpcResource.BLOCKCHAIN_INFO_RPC_METHOD)) {
-                return BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE;
+                return BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse();
             } else if (request.getMethod().equals(BitcoindRpcResource.BLOCK_HEADER_RPC_METHOD)) {
-                return BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE;
+                return BitcoindRpcExampleResponses.getBlockHeaderJsonResponse();
             } else {
                 throw new IllegalArgumentException("%s is not a valid RPC request method".format(
                         request.getMethod().toString()));
@@ -96,13 +96,13 @@ public class BitcoindRpcResourceTest extends JerseyTest {
 
         BlockchainInfo result = bitcoindRpcResource.getBlockchainInfo();
         assertEquals(
-                JsonPath.read(BitcoindRpcJsonResponses.BLOCKCHAIN_INFO_RESPONSE, "$.result.chain"),
+                JsonPath.read(BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse(), "$.result.chain"),
                 result.getChain());
     }
 
     @Test
     public final void testGetBlockHeader() throws Exception {
-        Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE,
+        Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoindRpcExampleResponses.getBlockHeaderJsonResponse(),
                 "$.result.hash").toString());
         assertEquals(headerHash, bitcoindRpcResource.getBlockHeader(headerHash).getHeaderHash());
     }

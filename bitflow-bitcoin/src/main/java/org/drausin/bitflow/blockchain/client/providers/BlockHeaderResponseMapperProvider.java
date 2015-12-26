@@ -55,13 +55,13 @@ public class BlockHeaderResponseMapperProvider extends BitcoindRpcResponseMapper
         return this.mapper;
     }
 
-    private static SimpleModule getBlockHeaderModule() {
-        return getCommonModule().addDeserializer(BlockchainResult.class, new BlockHeaderDeserializer());
-    }
-
-    private static ObjectMapper getBlockHeaderMapper() {
+    public static ObjectMapper getBlockHeaderMapper() {
         return getCommonMapper()
                 .registerModule(getBlockHeaderModule())
                 .addMixIn(ImmutableBlockHeader.class, BlockHeaderRpcMixIn.class);
+    }
+
+    private static SimpleModule getBlockHeaderModule() {
+        return getCommonModule().addDeserializer(BlockchainResult.class, new BlockHeaderDeserializer());
     }
 }

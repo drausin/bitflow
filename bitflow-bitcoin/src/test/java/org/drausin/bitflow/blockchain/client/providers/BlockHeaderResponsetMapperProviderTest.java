@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcJsonResponses;
+import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcExampleResponses;
 import org.drausin.bitflow.blockchain.client.objects.BitcoindRpcResponse;
 import org.drausin.bitflow.blockchain.client.objects.ImmutableBitcoindRpcResponse;
 import org.junit.Before;
@@ -36,7 +36,7 @@ public class BlockHeaderResponsetMapperProviderTest {
     @Test
     public final void testGetContext() throws Exception {
         ObjectMapper context = provider.getContext(BitcoindRpcResponse.class);
-        BitcoindRpcResponse resultResponse = context.readValue(BitcoindRpcJsonResponses.BLOCK_HEADER_RESPONSE,
+        BitcoindRpcResponse resultResponse = context.readValue(BitcoindRpcExampleResponses.getBlockHeaderJsonResponse(),
                 ImmutableBitcoindRpcResponse.class);
         assertTrue(resultResponse.validateResult(BlockHeader.class));
     }
