@@ -15,7 +15,7 @@ RUN apt-get update && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # if this changes from /data/bitcoin, will need to update conf/bitcoind.logrotate as well
-ENV HOME /data/bitcoin 
+ENV HOME /data/bitcoin
 
 # if this changes from bitflow, will need to update conf/bitcoind.logrotate as well
 ENV BITCOIN_USER bitflow
