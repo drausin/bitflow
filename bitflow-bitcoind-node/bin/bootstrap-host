@@ -1,0 +1,59 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+set -x # for temporary debugging
+
+# update and install a few other things
+sudo yum update -y
+sudo yum install -y htop upstart git
+
+# hack to install Docker 1.8.2, not yet available in yum repos
+sudo yum install -y docker
+sudo cp /usr/bin/docker /usr/bin/docker.old
+sudo curl -o /usr/bin/docker https://get.docker.com/builds/Linux/x86_64/docker-1.8.2
+
+# mount EBS as /data
+sudo mkfs -t ext4 /dev/xvdb 
+sudo mkdir /data
+sudo mount /dev/xvdb /data
+
+# start docker service
+# N.B., this needs to happen after we mount /data above for Docker to pick up mount
+sudo service docker start
+sudo usermod -a -G docker ec2-user
+
+# set up main bitflow user
+sudo useradd -s /bin/bash bitflow
+sudo mkdir /opt/bitflow
+sudo chown -R bitflow:bitflow /data
+sudo chown -R bitflow:bitflow /opt/bitcoin-flow
+sudo usermod -a -G docker bitflow
+
+# switch to bitcoin-flow user
+sudo su - bitcoin-flow
+
+# clone the repo
+LOCAL_REPO_DIR=/opt/bitflow/repos/bitcoin-flow
+mkdir -p "${LOCAL_REPO_DIR}"
+git clone https://github.com/drausin/bitcoin-flow.git "${LOCAL_REPO_DIR}"
+
+# ensure ROOT_DIR exists
+ROOT_DIR="${LOCAL_REPO_DIR}/bitcoind"
+[[ -d "${ROOT_DIR}" ]]
+
+# grab the configuration we need
+source "${ROOT_DIR}/conf/bitcoind.properties"
+aws s3 cp "${S3_SECURE_CONF_FILEPATH}" "${ROOT_DIR}/conf/bitcoind.secure.properties"
+
+# add bitcoin-flow-stone public key to bitcoin-flow users's known hosts
+mkdir -p ~/.ssh
+touch ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+aws s3 cp "s3://${S3_BUCKET}/${ENV}/conf/aws/bitcoin-flow-stone.pub" - >> ~/.ssh/authorized_keys
+
+# sync latest saved blockchain state
+"${ROOT_DIR}/bin/restore-data"
+
+# start the full node 
+"${ROOT_DIR}/bin/run-node" full
