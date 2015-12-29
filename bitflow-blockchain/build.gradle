@@ -5,7 +5,7 @@ apply plugin: 'com.palantir.java-distribution'
 project(':bitflow-blockchain') {
 
     dependencies {
-        compile project(':bitflow-bitcoin-api')
+        compile project(':bitflow-blockchain-api')
         
 		// Logging
         compile "ch.qos.logback:logback-classic:${logbackVersion}"

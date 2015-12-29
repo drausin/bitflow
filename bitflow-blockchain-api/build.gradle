@@ -1,6 +1,6 @@
 apply from: "${rootDir}/gradle/java.gradle"
 
-project(':bitflow-bitcoin-api') {
+project(':bitflow-blockchain-api') {
     apply plugin: 'org.inferred.processors'
 
     dependencies {
