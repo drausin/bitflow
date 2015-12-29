@@ -3,7 +3,7 @@ apply plugin: 'com.palantir.docker'
 project(':bitflow-bitcoind-node') {
 
     docker {
-        name 'hub.docker.com/daedalus2718/bitcoind:latest'
+        name 'docker.io/daedalus2718/bitcoind'
         dockerfile 'Dockerfile'
         files 'bitcoind.logrotate'
     }
