@@ -15,14 +15,6 @@ encrypt_properties:
 decrypt_properties:
 	openssl cast5-cbc -d -in ${SECURE_PROPERTIES}.cast5 -out ${SECURE_PROPERTIES} -pass env:BITCOIN_FLOW_PASSWORD
 	chmod 600 ${SECURE_PROPERTIES}
-
-build_image:
-	docker build -t ${BITCOIND_IMAGE} .
-
-publish_image:
-	echo "if this doesn't work you may need to first log in via docker login"
-	docker push ${BITCOIND_IMAGE}
-
 clean:
 	rm -f ${SECURE_PROPERTIES}
 	rm -f conf/current-*.conf

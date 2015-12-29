@@ -24,11 +24,11 @@ will overwrite the `bitcoin.secure.properties.cast5` file that you can commit.
 
 When you the Dockerfile, you will want to re-build it via
 
-        make build_image
+        ./gradlew bitflow-bitcoind-node:docker
 
 You can publish this image to DockerHub via 
 
-        make publish_image
+        ./gradlew bitflow-bitcoind-node:dockerPush
 
 ## Run
 
