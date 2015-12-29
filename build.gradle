@@ -6,12 +6,12 @@ buildscript {
         }
 	}
 	dependencies {
-        classpath "com.palantir.gradle:pt-gradle:2.5-0.12.0"
         classpath "com.palantir:gradle-baseline-java:${baselineVersion}"
         classpath "com.palantir:jacoco-coverage:${jacocoCoverageVersion}"
         classpath "gradle.plugin.com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}"
         classpath "gradle.plugin.com.palantir.gradle.javadist:gradle-java-distribution:${gradleJavaDistVersion}"
         classpath "gradle.plugin.org.inferred:gradle-processors:${gradleProcessorsVersion}"
+        classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:${gradleGitVersionVersion}"
         classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.2.0"
     }
 }
@@ -23,6 +23,7 @@ apply plugin: 'com.palantir.baseline-idea'
 apply plugin: 'com.palantir.baseline-eclipse'
 apply plugin: 'com.palantir.jacoco-coverage'
 apply plugin: 'com.palantir.jacoco-full-report'
+apply plugin: "com.palantir.git-version"
 
 allprojects {
 
@@ -32,8 +33,7 @@ allprojects {
     }
 
     group = 'org.drausin.bitflow'
-    // version semverVersion()
-    version = '0.0.0'
+    version gitVersion()
 
     configurations.all {
         exclude module: 'slf4j-log4j12'
