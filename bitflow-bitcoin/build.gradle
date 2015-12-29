@@ -1,5 +1,6 @@
 apply from: "${rootDir}/gradle/java.gradle"
 apply plugin: 'org.inferred.processors'
+apply plugin: 'com.palantir.java-distribution'
 
 project(':bitflow-bitcoin') {
 
@@ -52,5 +53,11 @@ project(':bitflow-bitcoin') {
         testCompile "com.mockrunner:mockrunner-jdbc:1.1.0"
 
         processor "org.immutables:value:${immutablesVersion}"
+    }
+
+    distribution {
+        serviceName 'bitflow-bitcoin'
+        mainClass 'org.drausin.bitflow.blockchain.BlockchainServer'
+        args 'server', 'var/conf/bitflow-bitcoin.yml'
     }
 }
