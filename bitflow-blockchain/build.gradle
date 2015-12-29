@@ -2,7 +2,7 @@ apply from: "${rootDir}/gradle/java.gradle"
 apply plugin: 'org.inferred.processors'
 apply plugin: 'com.palantir.java-distribution'
 
-project(':bitflow-bitcoin') {
+project(':bitflow-blockchain') {
 
     dependencies {
         compile project(':bitflow-bitcoin-api')
