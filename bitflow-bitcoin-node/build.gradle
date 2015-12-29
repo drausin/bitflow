@@ -1,6 +1,6 @@
 apply plugin: 'com.palantir.docker'
 
-project(':bitflow-bitcoind-node') {
+project(':bitflow-bitcoin-node') {
 
     docker {
         name 'docker.io/daedalus2718/bitcoind'
