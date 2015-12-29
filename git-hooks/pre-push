@@ -1,0 +1,11 @@
+#!/bin/bash
+
+git stash -q --keep-index
+
+./scripts/verify
+
+RESULT=$?
+
+git stash pop -q
+
+exit ${RESULT}

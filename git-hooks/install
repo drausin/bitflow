@@ -1,0 +1,12 @@
+#!/bin/bash
+
+srcDir=$(cd "$(dirname "$0")" && pwd)
+hooksDir=$(cd "$(dirname "$0")/../.git/hooks" && pwd)
+
+# remove old hook links
+find $hooksDir -type l -delete
+
+# add current hook links
+ln -sf "$srcDir"/* "$hooksDir"
+
+echo "git hooks from ${srcDir} installed into ${hooksDir}"
