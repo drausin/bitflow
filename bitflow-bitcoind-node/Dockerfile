@@ -33,7 +33,7 @@ RUN mkdir -p ${HOME}/logs
 RUN useradd -s /bin/bash -d ${HOME} ${BITCOIN_USER}
 RUN chown ${BITCOIN_USER}:${BITCOIN_USER} -R ${HOME}
 
-ADD conf/bitcoind.logrotate /etc/logrotate.d/bitcoind
+ADD bitcoind.logrotate /etc/logrotate.d/bitcoind
 
 EXPOSE ${CONN_PORT} ${RPC_PORT}
 

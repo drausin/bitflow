@@ -2,3 +2,4 @@ rootProject.name='bitflow'
 
 include 'bitflow-bitcoin'
 include 'bitflow-bitcoin-api'
+include 'bitflow-bitcoind-node'
