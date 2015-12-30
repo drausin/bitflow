@@ -17,29 +17,29 @@ package org.drausin.bitflow.blockchain;
 import io.dropwizard.jersey.params.DateTimeParam;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
 public class BlockchainResource implements BlockchainService {
 
-    private BitcoindRpcService bitcoindRpcService;
+    private BitcoinNodeService bitcoinNodeService;
 
-    public BlockchainResource(BitcoindRpcService bitcoindRpcService) {
-        this.bitcoindRpcService = bitcoindRpcService;
+    public BlockchainResource(BitcoinNodeService bitcoinNodeService) {
+        this.bitcoinNodeService = bitcoinNodeService;
     }
 
     @Override
     public final BlockchainInfo getBlockchainInfo(String authHeader) {
         // TODO(dwulsin): what to do with authHeader?
-        return bitcoindRpcService.getBlockchainInfo();
+        return bitcoinNodeService.getBlockchainInfo();
     }
 
     @Override
     public final BlockHeader getBlockHeader(String authHeader, Sha256Hash hash) {
         // TODO(dwulsin): what to do with authHeader?
-        return bitcoindRpcService.getBlockHeader(hash);
+        return bitcoinNodeService.getBlockHeader(hash);
     }
 
     @Override

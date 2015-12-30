@@ -20,7 +20,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcExampleResponses;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.junit.Before;
@@ -29,17 +29,17 @@ import org.junit.Test;
 public class BitcoindRpcHealthCheckTest {
 
     private BitcoindRpcHealthCheck bitcoindRpcHealthCheck;
-    private BitcoindRpcService bitcoindRpcService;
+    private BitcoinNodeService bitcoinNodeService;
 
     @Before
     public final void setUp() throws Exception {
-        bitcoindRpcService = mock(BitcoindRpcService.class);
-        bitcoindRpcHealthCheck = new BitcoindRpcHealthCheck(bitcoindRpcService);
+        bitcoinNodeService = mock(BitcoinNodeService.class);
+        bitcoindRpcHealthCheck = new BitcoindRpcHealthCheck(bitcoinNodeService);
     }
 
     @Test
     public final void testCheckHealthy() throws Exception {
-        when(bitcoindRpcService.getBlockchainInfo())
+        when(bitcoinNodeService.getBlockchainInfo())
                 .thenReturn(BitcoindRpcExampleResponses.getBlockchainInfoResult());
         assertTrue(bitcoindRpcHealthCheck.check().isHealthy());
     }
@@ -48,13 +48,13 @@ public class BitcoindRpcHealthCheckTest {
     public final void testCheckUnhealthyZeroBlocks() throws Exception {
         BlockchainInfo blockchainInfo = mock(BlockchainInfo.class);
         when(blockchainInfo.getNumBlocks()).thenReturn(0L);
-        when(bitcoindRpcService.getBlockchainInfo()).thenReturn(blockchainInfo);
+        when(bitcoinNodeService.getBlockchainInfo()).thenReturn(blockchainInfo);
         assertFalse(bitcoindRpcHealthCheck.check().isHealthy());
     }
 
     @Test
     public final void testCheckUnhealthyException() throws Exception {
-        doThrow(new IllegalStateException("dummy message")).when(bitcoindRpcService).getBlockchainInfo();
+        doThrow(new IllegalStateException("dummy message")).when(bitcoinNodeService).getBlockchainInfo();
         assertFalse(bitcoindRpcHealthCheck.check().isHealthy());
     }
 }

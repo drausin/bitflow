@@ -15,8 +15,6 @@
 package org.drausin.bitflow.blockchain.config;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -24,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import org.drausin.bitflow.bitcoin.config.BitcoindRpcServiceConfig;
 import org.drausin.bitflow.blockchain.BlockchainServer;
 import org.junit.Before;
 import org.junit.ClassRule;

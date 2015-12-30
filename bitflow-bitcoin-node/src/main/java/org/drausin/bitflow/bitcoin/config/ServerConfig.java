@@ -32,17 +32,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.Validate;
 
 /**
- * RPC service configuation.
+ * Bitcoin node configuration.
  *
  * @author dwulsin
  */
-public final class BitcoindRpcServiceConfig {
+public final class ServerConfig {
 
     private final String uri;
     private final String rpcUser;
     private final String rpcPassword;
 
-    public BitcoindRpcServiceConfig(
+    public ServerConfig(
             @JsonProperty("uri") String uri,
             @JsonProperty("rpcUser") String rpcUser,
             @JsonProperty("rpcPassword") String rpcPassword) {
@@ -72,7 +72,7 @@ public final class BitcoindRpcServiceConfig {
             return false;
         }
 
-        BitcoindRpcServiceConfig that = (BitcoindRpcServiceConfig) obj;
+        ServerConfig that = (ServerConfig) obj;
 
         if (!getUri().equals(that.getUri())) {
             return false;

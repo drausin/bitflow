@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcExampleResponses;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,13 +32,13 @@ public class BlockchainResourceTest {
 
     @Before
     public final void setUp() throws Exception {
-        BitcoindRpcService bitcoindRpcService = mock(BitcoindRpcService.class);
+        BitcoinNodeService bitcoinNodeService = mock(BitcoinNodeService.class);
 
-        when(bitcoindRpcService.getBlockchainInfo()).thenReturn(BitcoindRpcExampleResponses.getBlockchainInfoResult());
-        when(bitcoindRpcService.getBlockHeader(any(Sha256Hash.class)))
+        when(bitcoinNodeService.getBlockchainInfo()).thenReturn(BitcoindRpcExampleResponses.getBlockchainInfoResult());
+        when(bitcoinNodeService.getBlockHeader(any(Sha256Hash.class)))
                 .thenReturn(BitcoindRpcExampleResponses.getBlockHeaderResult());
 
-        blockchainResource = new BlockchainResource(bitcoindRpcService);
+        blockchainResource = new BlockchainResource(bitcoinNodeService);
     }
 
     @Test

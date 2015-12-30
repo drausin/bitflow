@@ -22,36 +22,36 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcResponse;
 import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
 import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.config.BitcoindRpcServiceConfig;
+import org.drausin.bitflow.bitcoin.config.ServerConfig;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public final class BitcoindRpcResource implements BitcoindRpcService {
+public final class BitcoinNodeResource implements BitcoinNodeService {
 
     public static final String BLOCKCHAIN_INFO_RPC_METHOD = "getinfo";
     public static final String BLOCK_HEADER_RPC_METHOD = "getblock";
 
-    private final BitcoindRpcServiceConfig config;
+    private final ServerConfig config;
     private final HttpAuthenticationFeature rpcAuth;
 
     private final WebTarget blockchainInfoTarget;
     private final WebTarget blockHeaderTarget;
 
-    public BitcoindRpcResource(@JsonProperty BitcoindRpcServiceConfig config) {
+    public BitcoinNodeResource(@JsonProperty ServerConfig config) {
         this.config = config;
         this.rpcAuth = HttpAuthenticationFeature.basic(config.getRpcUser(), config.getRpcPassword());
         this.blockchainInfoTarget = getBlockchainInfoClient().target(config.getUri());
         this.blockHeaderTarget = getBlockHeaderClient().target(config.getUri());
     }
 
-    public BitcoindRpcServiceConfig getConfig() {
+    public ServerConfig getConfig() {
         return config;
     }
 

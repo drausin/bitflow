@@ -35,9 +35,9 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BitcoindRpcServiceConfigTest {
+public class BitcoinNodeServerConfigTest {
 
-    private BitcoindRpcServiceConfig config;
+    private ServerConfig config;
     private String uri;
     private String rpcUser;
     private String rpcPassword;
@@ -49,7 +49,7 @@ public class BitcoindRpcServiceConfigTest {
         rpcUser = "auser";
         rpcPassword = "apassword";
 
-        config = new BitcoindRpcServiceConfig(uri, rpcUser, rpcPassword);
+        config = new ServerConfig(uri, rpcUser, rpcPassword);
     }
 
     @Test
@@ -69,11 +69,11 @@ public class BitcoindRpcServiceConfigTest {
 
     @Test
     public final void testEquals() throws Exception {
-        assertThat(config, is(new BitcoindRpcServiceConfig(uri, rpcUser, rpcPassword)));
+        assertThat(config, is(new ServerConfig(uri, rpcUser, rpcPassword)));
     }
 
     @Test
     public final void testHashCode() throws Exception {
-        assertEquals((new BitcoindRpcServiceConfig(uri, rpcUser, rpcPassword)).hashCode(), config.hashCode());
+        assertEquals((new ServerConfig(uri, rpcUser, rpcPassword)).hashCode(), config.hashCode());
     }
 }

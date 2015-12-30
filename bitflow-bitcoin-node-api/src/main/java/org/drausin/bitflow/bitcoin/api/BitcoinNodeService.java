@@ -16,11 +16,9 @@ package org.drausin.bitflow.bitcoin.api;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
@@ -29,7 +27,7 @@ import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 @Path("/bitcoinnode")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public interface BitcoindRpcService {
+public interface BitcoinNodeService {
 
     /**
      * Gets current information about the blockchain.

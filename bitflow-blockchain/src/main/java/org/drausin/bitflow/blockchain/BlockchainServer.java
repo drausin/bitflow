@@ -21,7 +21,7 @@ import feign.jaxrs.JAXRSContract;
 import feign.okhttp.OkHttpClient;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoindRpcResponseMapperProvider;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
 import org.drausin.bitflow.blockchain.health.BitcoindRpcHealthCheck;
@@ -37,18 +37,18 @@ public class BlockchainServer extends Application<ServerConfig> {
     @Override
     public final void run(ServerConfig config, Environment env) throws Exception {
 
-        BitcoindRpcService bitcoindRpcService = Feign.builder()
+        BitcoinNodeService bitcoinNodeService = Feign.builder()
                 .encoder(new JacksonEncoder(BitcoindRpcResponseMapperProvider.getCommonMapper()))
                 .decoder(new JacksonDecoder(BitcoindRpcResponseMapperProvider.getCommonMapper()))
                 .contract(new JAXRSContract())
                 .client(new OkHttpClient())
-                .target(BitcoindRpcService.class, config.getBitcoinNodeUri());
+                .target(BitcoinNodeService.class, config.getBitcoinNodeUri());
 
-        BlockchainResource blockchainResource = new BlockchainResource(bitcoindRpcService);
+        BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
 
         env.jersey().register(blockchainResource);
 
-        env.healthChecks().register("bitcoindRpc", new BitcoindRpcHealthCheck(bitcoindRpcService));
+        env.healthChecks().register("bitcoindRpc", new BitcoindRpcHealthCheck(bitcoinNodeService));
 
         //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
         // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)

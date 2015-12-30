@@ -15,21 +15,21 @@
 package org.drausin.bitflow.blockchain.health;
 
 import com.codahale.metrics.health.HealthCheck;
-import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
 public class BitcoindRpcHealthCheck extends HealthCheck {
 
-    private final BitcoindRpcService bitcoindRpcService;
+    private final BitcoinNodeService bitcoinNodeService;
 
-    public BitcoindRpcHealthCheck(BitcoindRpcService bitcoindRpcService) {
-        this.bitcoindRpcService = bitcoindRpcService;
+    public BitcoindRpcHealthCheck(BitcoinNodeService bitcoinNodeService) {
+        this.bitcoinNodeService = bitcoinNodeService;
     }
 
     @Override
     protected final Result check() throws Exception {
         try {
-            BlockchainInfo blockchainInfo = bitcoindRpcService.getBlockchainInfo();
+            BlockchainInfo blockchainInfo = bitcoinNodeService.getBlockchainInfo();
             if (blockchainInfo.getNumBlocks() > 0) {
                 return Result.healthy(String.format("%d blocks in local best chain", blockchainInfo.getNumBlocks()));
             } else {
