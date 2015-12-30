@@ -22,7 +22,7 @@ import feign.okhttp.OkHttpClient;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoindRpcResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
 import org.drausin.bitflow.blockchain.health.BitcoindRpcHealthCheck;
 
@@ -38,8 +38,8 @@ public class BlockchainServer extends Application<ServerConfig> {
     public final void run(ServerConfig config, Environment env) throws Exception {
 
         BitcoinNodeService bitcoinNodeService = Feign.builder()
-                .encoder(new JacksonEncoder(BitcoindRpcResponseMapperProvider.getCommonMapper()))
-                .decoder(new JacksonDecoder(BitcoindRpcResponseMapperProvider.getCommonMapper()))
+                .encoder(new JacksonEncoder(BitcoinNodeMapperProvider.getCommonMapper()))
+                .decoder(new JacksonDecoder(BitcoinNodeMapperProvider.getCommonMapper()))
                 .contract(new JAXRSContract())
                 .client(new OkHttpClient())
                 .target(BitcoinNodeService.class, config.getBitcoinNodeUri());

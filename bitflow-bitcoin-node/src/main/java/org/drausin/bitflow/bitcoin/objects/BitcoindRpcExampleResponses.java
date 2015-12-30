@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.api.objects;
+package org.drausin.bitflow.bitcoin.objects;
 
 import java.io.IOException;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoindRpcResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
+import org.drausin.bitflow.bitcoin.providers.BlockHeaderResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.providers.BlockchainInfoResponseMapperProvider;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
@@ -92,11 +92,11 @@ public final class BitcoindRpcExampleResponses {
     }
 
     public static String getErrorJson() throws IOException {
-        return BitcoindRpcResponseMapperProvider.getCommonMapper().writeValueAsString(getError());
+        return BitcoinNodeMapperProvider.getCommonMapper().writeValueAsString(getError());
     }
 
     public static BitcoindRpcResponse getErrorResponse() throws IOException {
-        return BitcoindRpcResponseMapperProvider.getCommonMapper().readValue(getErrorJsonResponse(),
+        return BitcoinNodeMapperProvider.getCommonMapper().readValue(getErrorJsonResponse(),
                 ImmutableBitcoindRpcResponse.class);
     }
 

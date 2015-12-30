@@ -21,7 +21,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcExampleResponses;
+import org.drausin.bitflow.bitcoin.objects.BitcoindRpcExampleResponses;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.junit.Before;
 import org.junit.Test;
