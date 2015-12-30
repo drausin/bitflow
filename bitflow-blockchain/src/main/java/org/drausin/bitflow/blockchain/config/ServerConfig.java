@@ -32,20 +32,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import io.dropwizard.Configuration;
 import javax.validation.constraints.NotNull;
-import org.drausin.bitflow.bitcoin.config.BitcoindRpcServiceConfig;
 
 public class ServerConfig extends Configuration {
 
     private final String instance;
-    private final BitcoindRpcServiceConfig bitcoindRpc;
+    private final String bitcoinNodeUri;
     private final Optional<Boolean> includeStackTraceInErrors;
 
     public ServerConfig(
             @JsonProperty("instance") @NotNull String instance,
-            @JsonProperty("bitcoindRpc") @NotNull BitcoindRpcServiceConfig bitcoindRpc,
+            @JsonProperty("bitcoinNodeUri") @NotNull String bitcoinNodeUri,
             @JsonProperty("includeStackTraceInErrors") @NotNull Optional<Boolean> includeStackTraceInErrors) {
         this.instance = instance;
-        this.bitcoindRpc = bitcoindRpc;
+        this.bitcoinNodeUri = bitcoinNodeUri;
         this.includeStackTraceInErrors = includeStackTraceInErrors;
     }
 
@@ -53,8 +52,8 @@ public class ServerConfig extends Configuration {
         return instance;
     }
 
-    public final BitcoindRpcServiceConfig getBitcoindRpc() {
-        return bitcoindRpc;
+    public final String getBitcoinNodeUri() {
+        return bitcoinNodeUri;
     }
 
     public final Optional<Boolean> getIncludeStackTraceInErrors() {

@@ -1,13 +1,8 @@
 # the unique identifier for this blockchain instances
 instance: main
 
-# Bitcoind RPC Service configuration
-# bitcoindRpc:
-#   uris:       the URI(s) of the bitcoind node RPC services
-bitcoindRpc:
-  uri: http://localhost:8332
-  rpcUser: rpcuser
-  rpcPassword: bitflow
+# bitcoinNodeUri:  the URI of the bitcoin-node service
+bitcoinNodeUri: http://localhost:8332/api
 
 # Set to false to disable showing stack traces in http error responses
 includeStackTraceInErrors: true

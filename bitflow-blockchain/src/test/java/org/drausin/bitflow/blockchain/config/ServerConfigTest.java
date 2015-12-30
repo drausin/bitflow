@@ -58,38 +58,8 @@ public class ServerConfigTest {
     }
 
     @Test
-    public final void testGetBitcoindRpc() throws Exception {
-        Map<String, Object> bitcoinRpcConfigMap = (HashMap<String, Object>) configMap.get("bitcoindRpc");
-        BitcoindRpcServiceConfig expected = new BitcoindRpcServiceConfig(
-                bitcoinRpcConfigMap.get("uri").toString(),
-                bitcoinRpcConfigMap.get("rpcUser").toString(),
-                bitcoinRpcConfigMap.get("rpcPassword").toString());
-        assertThat(serverConfig.getBitcoindRpc(), is(expected));
-    }
-
-    @Test
-    public final void testGetBitcoindRpcNotEquals() throws Exception {
-        Map<String, Object> bitcoinRpcConfigMap = (HashMap<String, Object>) configMap.get("bitcoindRpc");
-        BitcoindRpcServiceConfig notExpected1 = new BitcoindRpcServiceConfig(
-                "dummy",
-                bitcoinRpcConfigMap.get("rpcUser").toString(),
-                bitcoinRpcConfigMap.get("rpcPassword").toString());
-        assertThat(serverConfig.getBitcoindRpc(), not(notExpected1));
-
-        BitcoindRpcServiceConfig notExpected2 = new BitcoindRpcServiceConfig(
-                bitcoinRpcConfigMap.get("uri").toString(),
-                "dummy",
-                bitcoinRpcConfigMap.get("rpcPassword").toString());
-        assertThat(serverConfig.getBitcoindRpc(), not(notExpected2));
-
-        BitcoindRpcServiceConfig notExpected3 = new BitcoindRpcServiceConfig(
-                bitcoinRpcConfigMap.get("uri").toString(),
-                bitcoinRpcConfigMap.get("rpcUser").toString(),
-                "dummy");
-        assertThat(serverConfig.getBitcoindRpc(), not(notExpected3));
-
-        assertThat(serverConfig.getBitcoindRpc(), not("dummy"));
-        assertFalse(serverConfig.getBitcoindRpc().equals(null));
+    public final void testGetBitcoindNodeUri() throws Exception {
+        assertThat(serverConfig.getBitcoinNodeUri(), is(configMap.get("bitcoinNodeUri")));
     }
 
     @Test

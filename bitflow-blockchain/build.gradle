@@ -10,38 +10,29 @@ project(':bitflow-blockchain') {
 
         // TODO(dwulsin): remove this once we have feign
         compile project(':bitflow-bitcoin-node')
-        
-		// Logging
-        compile "ch.qos.logback:logback-classic:${logbackVersion}"
 
-        // Commons
+        compile "ch.qos.logback:logback-classic:${logbackVersion}"
         compile "org.apache.commons:commons-lang3:3.0"
         compile "commons-io:commons-io:2.4"
-
-        // Google
-        compile "com.google.guava:guava:$guavaVersion"
-        compile "com.google.code.findbugs:jsr305:3.0.0"
-
-        // Jackson and serialization
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
         compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
-        compile "org.apache.avro:avro:1.7.7"
-
-        // Bitcoin
-        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
-
-        // Sourceforge
-        compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
-
-        // ReST stuff
+        compile "com.google.guava:guava:$guavaVersion"
+        compile "com.google.code.findbugs:jsr305:3.0.0"
+        compile "com.netflix.feign:feign-core:${feignVersion}"
+        compile "com.netflix.feign:feign-jackson:${feignVersion}"
+        compile "com.netflix.feign:feign-jaxrs:${feignVersion}"
+        compile "com.netflix.feign:feign-okhttp:${feignVersion}"
         compile "io.dropwizard:dropwizard-client:$dropwizardVersion"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
         compile "io.dropwizard:dropwizard-jetty:${dropwizardVersion}"
         compile "io.dropwizard:dropwizard-jersey:${dropwizardVersion}"
+        compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
+        compile "org.apache.avro:avro:1.7.7"
+        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
         compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
         compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}"
         compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:${jerseyVersion}"

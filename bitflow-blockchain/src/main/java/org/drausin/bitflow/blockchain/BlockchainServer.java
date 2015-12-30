@@ -14,12 +14,18 @@
 
 package org.drausin.bitflow.blockchain;
 
+import feign.Feign;
+import feign.jackson.JacksonDecoder;
+import feign.jackson.JacksonEncoder;
+import feign.jaxrs.JAXRSContract;
+import feign.okhttp.OkHttpClient;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import org.drausin.bitflow.bitcoin.BitcoindRpcResource;
 import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoindRpcResponseMapperProvider;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
 import org.drausin.bitflow.blockchain.health.BitcoindRpcHealthCheck;
+
 
 /**
  * Server for blockchain data, relying under the hood on on bitcoin node RPCs.
@@ -31,12 +37,18 @@ public class BlockchainServer extends Application<ServerConfig> {
     @Override
     public final void run(ServerConfig config, Environment env) throws Exception {
 
-        BitcoindRpcService bitcoindRpcResource = new BitcoindRpcResource(config.getBitcoindRpc());
-        BlockchainResource blockchainResource = new BlockchainResource(bitcoindRpcResource);
+        BitcoindRpcService bitcoindRpcService = Feign.builder()
+                .encoder(new JacksonEncoder(BitcoindRpcResponseMapperProvider.getCommonMapper()))
+                .decoder(new JacksonDecoder(BitcoindRpcResponseMapperProvider.getCommonMapper()))
+                .contract(new JAXRSContract())
+                .client(new OkHttpClient())
+                .target(BitcoindRpcService.class, config.getBitcoinNodeUri());
+
+        BlockchainResource blockchainResource = new BlockchainResource(bitcoindRpcService);
 
         env.jersey().register(blockchainResource);
 
-        env.healthChecks().register("bitcoindRpc", new BitcoindRpcHealthCheck(bitcoindRpcResource));
+        env.healthChecks().register("bitcoindRpc", new BitcoindRpcHealthCheck(bitcoindRpcService));
 
         //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
         // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)
