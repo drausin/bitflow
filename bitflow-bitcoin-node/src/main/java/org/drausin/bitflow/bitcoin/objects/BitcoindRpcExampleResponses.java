@@ -18,8 +18,6 @@ import java.io.IOException;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.bitcoin.providers.BlockHeaderResponseMapperProvider;
 import org.drausin.bitflow.bitcoin.providers.BlockchainInfoResponseMapperProvider;
-import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 
 public final class BitcoindRpcExampleResponses {
 
@@ -42,10 +40,6 @@ public final class BitcoindRpcExampleResponses {
     public static BitcoindRpcResponse getBlockchainInfoResponse() throws IOException {
         return BlockchainInfoResponseMapperProvider.getBlockchainInfoMapper().readValue(getBlockchainInfoJsonResponse(),
                 ImmutableBitcoindRpcResponse.class);
-    }
-
-    public static BlockchainInfo getBlockchainInfoResult() throws IOException {
-        return (BlockchainInfo) getBlockchainInfoResponse().getResult().get();
     }
 
     public static String getBlockHeaderJsonResponse() {
@@ -77,10 +71,6 @@ public final class BitcoindRpcExampleResponses {
     public static BitcoindRpcResponse getBlockHeaderResponse() throws IOException {
         return BlockHeaderResponseMapperProvider.getBlockHeaderMapper().readValue(getBlockHeaderJsonResponse(),
                 ImmutableBitcoindRpcResponse.class);
-    }
-
-    public static BlockHeader getBlockHeaderResult() throws IOException {
-        return (BlockHeader) getBlockHeaderResponse().getResult().get();
     }
 
     public static String getErrorJsonResponse() {

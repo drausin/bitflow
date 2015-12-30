@@ -21,8 +21,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.objects.BitcoindRpcExampleResponses;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.blockchain.api.objects.ExampleResults;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class BitcoindRpcHealthCheckTest {
     @Test
     public final void testCheckHealthy() throws Exception {
         when(bitcoinNodeService.getBlockchainInfo())
-                .thenReturn(BitcoindRpcExampleResponses.getBlockchainInfoResult());
+                .thenReturn(ExampleResults.getBlockchainInfo());
         assertTrue(bitcoindRpcHealthCheck.check().isHealthy());
     }
 
