@@ -16,16 +16,22 @@ package org.drausin.bitflow.blockchain;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
-import org.drausin.bitflow.blockchain.client.BitcoindRpcResource;
+import org.drausin.bitflow.bitcoin.BitcoindRpcResource;
+import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
 import org.drausin.bitflow.blockchain.health.BitcoindRpcHealthCheck;
 
+/**
+ * Server for blockchain data, relying under the hood on on bitcoin node RPCs.
+ *
+ * @author dwulsin
+ */
 public class BlockchainServer extends Application<ServerConfig> {
 
     @Override
     public final void run(ServerConfig config, Environment env) throws Exception {
 
-        BitcoindRpcResource bitcoindRpcResource = new BitcoindRpcResource(config.getBitcoindRpc());
+        BitcoindRpcService bitcoindRpcResource = new BitcoindRpcResource(config.getBitcoindRpc());
         BlockchainResource blockchainResource = new BlockchainResource(bitcoindRpcResource);
 
         env.jersey().register(blockchainResource);

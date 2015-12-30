@@ -15,8 +15,8 @@
 package org.drausin.bitflow.blockchain.health;
 
 import com.codahale.metrics.health.HealthCheck;
+import org.drausin.bitflow.bitcoin.api.BitcoindRpcService;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
-import org.drausin.bitflow.blockchain.client.BitcoindRpcService;
 
 public class BitcoindRpcHealthCheck extends HealthCheck {
 

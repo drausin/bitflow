@@ -32,7 +32,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
 import io.dropwizard.Configuration;
 import javax.validation.constraints.NotNull;
-import org.drausin.bitflow.blockchain.client.config.BitcoindRpcServiceConfig;
+import org.drausin.bitflow.bitcoin.config.BitcoindRpcServiceConfig;
 
 public class ServerConfig extends Configuration {
 
