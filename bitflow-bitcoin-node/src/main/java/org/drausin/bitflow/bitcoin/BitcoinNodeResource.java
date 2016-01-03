@@ -30,10 +30,11 @@ import org.drausin.bitflow.bitcoin.providers.BlockHeaderResponseMapperProvider;
 import org.drausin.bitflow.bitcoin.providers.BlockchainInfoResponseMapperProvider;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.service.utils.BitflowResource;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
 
-public final class BitcoinNodeResource implements BitcoinNodeService {
+public final class BitcoinNodeResource extends BitflowResource implements BitcoinNodeService {
 
     public static final String BLOCKCHAIN_INFO_RPC_METHOD = "getinfo";
     public static final String BLOCK_HEADER_RPC_METHOD = "getblock";

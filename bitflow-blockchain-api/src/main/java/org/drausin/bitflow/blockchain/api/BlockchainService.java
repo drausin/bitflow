@@ -29,11 +29,12 @@ import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.service.utils.BitflowService;
 
 @Path("/blockchain")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public interface BlockchainService {
+public interface BlockchainService extends BitflowService {
 
     /**
      * Gets current information about the blockchain.

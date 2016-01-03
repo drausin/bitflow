@@ -21,8 +21,9 @@ import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.service.utils.BitflowResource;
 
-public class BlockchainResource implements BlockchainService {
+public class BlockchainResource extends BitflowResource implements BlockchainService {
 
     private BitcoinNodeService bitcoinNodeService;
 
