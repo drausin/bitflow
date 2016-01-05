@@ -77,7 +77,8 @@ import javax.annotation.concurrent.Immutable;
 import org.bitcoinj.core.Sha256Hash;
 
 /**
- * Immutable implementation of {@link BlockchainInfo}.
+ * Immutable implementation of {@link BlockchainInfo}. This is implemented manually because we need a @JsonCreator
+ * constructor in order to work with {@link org.drausin.bitflow.blockchain.api.objects.mixin.BlockchainInfoRpcMixIn}.
  *
  * @author dwulsin
  */
