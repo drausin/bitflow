@@ -32,15 +32,17 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.drausin.bitflow.bitcoin.BitcoinNodeServer;
 import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Test;
 
-public class BitcoinNodeServerConfigTest {
+public class ServerConfigTest {
 
-    private ServerConfig config;
-    private String uri;
-    private String rpcUser;
-    private String rpcPassword;
+    @ClassRule
+    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
+            "src/test/resources/bitflow-bitcoin-test.yml");
 
     @Before
     public final void setUp() throws Exception {
@@ -54,7 +56,7 @@ public class BitcoinNodeServerConfigTest {
 
     @Test
     public final void testGetUri() throws Exception {
-        assertEquals(uri, config.getUri());
+        assertEquals(uri, config.getRpcUri());
     }
 
     @Test

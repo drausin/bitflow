@@ -12,12 +12,11 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.providers;
+package org.drausin.bitflow.bitcoin.api.providers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import javax.ws.rs.ext.Provider;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;

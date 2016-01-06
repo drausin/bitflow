@@ -12,12 +12,12 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.objects;
+package org.drausin.bitflow.bitcoin.api.objects;
 
 import java.io.IOException;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
-import org.drausin.bitflow.bitcoin.providers.BlockHeaderResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.providers.BlockchainInfoResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
 
 public final class BitcoindRpcExampleResponses {
 
