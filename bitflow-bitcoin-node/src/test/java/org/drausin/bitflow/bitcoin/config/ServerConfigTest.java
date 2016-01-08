@@ -28,54 +28,39 @@
 
 package org.drausin.bitflow.bitcoin.config;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import java.io.IOException;
 import org.drausin.bitflow.bitcoin.BitcoinNodeServer;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+// TODO(dwulsin): remove this once we decide what to do with this test
+@SuppressFBWarnings(value = "URF_UNREAD_FIELD")
 public class ServerConfigTest {
 
     @ClassRule
     public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
             "src/test/resources/bitflow-bitcoin-test.yml");
 
+    private ServerConfig serverConfig;
+
     @Before
-    public final void setUp() throws Exception {
-
-        uri = "http://localhost:0000";
-        rpcUser = "auser";
-        rpcPassword = "apassword";
-
-        config = new ServerConfig(uri, rpcUser, rpcPassword);
+    public final void setUp() throws IOException {
+        serverConfig = APP.getConfiguration();
     }
 
     @Test
-    public final void testGetUri() throws Exception {
-        assertEquals(uri, config.getRpcUri());
-    }
+    public final void testToString() {
+        assertTrue(serverConfig.toString().contains(serverConfig.getInstance()));
+        assertTrue(serverConfig.toString().contains(serverConfig.getRpcUri()));
+        assertTrue(serverConfig.toString().contains(serverConfig.getMode().toString()));
+        assertTrue(serverConfig.toString().contains(serverConfig.getBitcoinNode().toString()));
+        assertTrue(serverConfig.toString().contains(serverConfig.getLoggingFactory().toString()));
+        assertTrue(serverConfig.toString().contains(serverConfig.getServerFactory().toString()));
 
-    @Test
-    public final void testGetRpcUser() throws Exception {
-        assertEquals(rpcUser, config.getRpcUser());
-    }
-
-    @Test
-    public final void testGetRpcPassword() throws Exception {
-        assertEquals(rpcPassword, config.getRpcPassword());
-    }
-
-    @Test
-    public final void testEquals() throws Exception {
-        assertThat(config, is(new ServerConfig(uri, rpcUser, rpcPassword)));
-    }
-
-    @Test
-    public final void testHashCode() throws Exception {
-        assertEquals((new ServerConfig(uri, rpcUser, rpcPassword)).hashCode(), config.hashCode());
     }
 }

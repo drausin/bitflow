@@ -29,66 +29,44 @@
 package org.drausin.bitflow.bitcoin.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.commons.lang3.Validate;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.MoreObjects;
+import io.dropwizard.Configuration;
+import org.immutables.value.Value;
 
 /**
  * Bitcoin node configuration.
  *
  * @author dwulsin
  */
-public final class ServerConfig {
+@Value.Immutable
+@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
+@JsonSerialize(as = ImmutableServerConfig.class)
+@JsonDeserialize(as = ImmutableServerConfig.class)
+public abstract class ServerConfig extends Configuration {
 
-    private final String uri;
-    private final String rpcUser;
-    private final String rpcPassword;
+    @JsonProperty
+    public abstract String getInstance();
 
-    public ServerConfig(
-            @JsonProperty("uri") String uri,
-            @JsonProperty("rpcUser") String rpcUser,
-            @JsonProperty("rpcPassword") String rpcPassword) {
-        this.uri = Validate.notEmpty(uri, "Must specify an RPC service URI");
-        this.rpcUser = Validate.notEmpty(rpcUser, "Must specify a non-empty RPC user");
-        this.rpcPassword = rpcPassword;
-    }
+    @JsonProperty
+    public abstract String getRpcUri();
 
-    public String getUri() {
-        return uri;
-    }
+    @JsonProperty
+    public abstract NodeType getMode();
 
-    public String getRpcUser() {
-        return rpcUser;
-    }
-
-    public String getRpcPassword() {
-        return rpcPassword;
-    }
+    @JsonProperty
+    public abstract BitcoinNodeConfig getBitcoinNode();
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-
-        ServerConfig that = (ServerConfig) obj;
-
-        if (!getUri().equals(that.getUri())) {
-            return false;
-        }
-        if (!getRpcUser().equals(that.getRpcUser())) {
-            return false;
-        }
-        return getRpcPassword().equals(that.getRpcPassword());
-
-    }
-
-    @Override
-    public int hashCode() {
-        int result = getUri().hashCode();
-        result = 31 * result + getRpcUser().hashCode();
-        result = 31 * result + getRpcPassword().hashCode();
-        return result;
+    public final String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("instance", getInstance())
+                .add("rpcUri", getRpcUri())
+                .add("mode", getMode())
+                .add("bitcoinNode", getBitcoinNode())
+                .add("server", getServerFactory())
+                .add("logging", getLoggingFactory())
+                .toString();
     }
 }

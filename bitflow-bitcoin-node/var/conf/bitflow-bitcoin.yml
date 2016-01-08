@@ -1,0 +1,64 @@
+instance: main
+
+rpcUri: http://localhost:8332
+
+# the mode to run the node in [pull|pruned]
+mode: pruned
+
+bitcoinNode:
+
+  # where the bitcoin data lives
+  datadir: /data/bitcoin
+
+  # the configuration file location
+  conf: /data/bitcoin/bitcoin.conf
+
+  # the RPC user
+  rpcuser: someuser
+
+  # the RPC password
+  rpcpassword: somepasswordtochange
+
+  # listen for connections on this port
+  port: 8333
+
+  # listen to RPC connections on this port
+  rpcport: 8332
+
+  # whether to disable wallet
+  disablewallet: true
+
+  # whether to send trace/debug info to the console (versus debug.log)
+  printtoconsole: false
+
+  # whether to include timestamps in debut output
+  logtimestamps: true
+
+  # whether to shrink the debug.log file when client starts
+  shrinkdebugfile: false
+
+  # whether to accept command line and JSON-RPC commands
+  server: true
+
+  checkblocks:
+    pruned: 3
+    full: 0 # check all blocks
+
+  checklevel:
+    pruned: 1
+    full: 1
+
+  # whether to maintain a full transaction index
+  txindex:
+    pruned: false
+    full: true
+
+  # size (MiB) of blocks to keep on disk
+  prune:
+    pruned: 600 # usually about 4 blocks
+    full: 0 # no pruning
+
+  # whether to rebuild the index from the block*.dat files on startup
+  reindex:
+    pruned: false
+    full: false
