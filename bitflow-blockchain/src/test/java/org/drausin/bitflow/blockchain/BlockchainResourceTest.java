@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.blockchain.api.objects.ExampleResults;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcExampleResponses;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,8 +34,10 @@ public class BlockchainResourceTest {
     public final void setUp() throws Exception {
         BitcoinNodeService bitcoinNodeService = mock(BitcoinNodeService.class);
 
-        when(bitcoinNodeService.getBlockchainInfo()).thenReturn(ExampleResults.getBlockchainInfo());
-        when(bitcoinNodeService.getBlockHeader(any(Sha256Hash.class))).thenReturn(ExampleResults.getBlockHeader());
+        when(bitcoinNodeService.getBlockchainInfo()).thenReturn(
+                BitcoindRpcExampleResponses.getBlockchainInfoResponse());
+        when(bitcoinNodeService.getBlockHeader(any(Sha256Hash.class))).thenReturn(
+                BitcoindRpcExampleResponses.getBlockHeaderResponse());
 
         blockchainResource = new BlockchainResource(bitcoinNodeService);
     }
@@ -44,13 +46,13 @@ public class BlockchainResourceTest {
     public final void testGetBlockchainInfo() throws Exception {
         assertThat(
                 blockchainResource.getBlockchainInfo("dummy auth header"),
-                is(ExampleResults.getBlockchainInfo()));
+                is(BitcoindRpcExampleResponses.getBlockchainInfoResponse().getResult().get()));
     }
 
     @Test
     public final void testGetBlockHeader() throws Exception {
         assertThat(
                 blockchainResource.getBlockHeader("dummy auth header", any(Sha256Hash.class)),
-                is(ExampleResults.getBlockHeader()));
+                is(BitcoindRpcExampleResponses.getBlockHeaderResponse().getResult().get()));
     }
 }

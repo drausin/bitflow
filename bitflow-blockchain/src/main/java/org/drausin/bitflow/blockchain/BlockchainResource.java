@@ -34,13 +34,13 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
     @Override
     public final BlockchainInfo getBlockchainInfo(String authHeader) {
         // TODO(dwulsin): what to do with authHeader?
-        return bitcoinNodeService.getBlockchainInfo();
+        return (BlockchainInfo) bitcoinNodeService.getBlockchainInfo().getResult().get();
     }
 
     @Override
     public final BlockHeader getBlockHeader(String authHeader, Sha256Hash hash) {
         // TODO(dwulsin): what to do with authHeader?
-        return bitcoinNodeService.getBlockHeader(hash);
+        return (BlockHeader) bitcoinNodeService.getBlockHeader(hash).getResult().get();
     }
 
     @Override
