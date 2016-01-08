@@ -1,0 +1,8 @@
+project(':bitflow-docker-base') {
+
+	apply plugin: 'com.palantir.docker'
+    docker {
+        name 'docker.io/daedalus2718/bitflow-base'
+        dockerfile 'Dockerfile'
+    }
+}
