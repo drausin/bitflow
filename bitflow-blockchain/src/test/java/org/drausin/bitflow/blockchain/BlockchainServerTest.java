@@ -25,7 +25,7 @@ public class BlockchainServerTest {
 
     @ClassRule
     public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BlockchainServer.class,
-            "src/test/resources/bitflow-bitcoin-test.yml");
+            "src/test/resources/bitflow-blockchain-test.yml");
 
     @Test
     public final void testServerStart() {
