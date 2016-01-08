@@ -23,11 +23,11 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcResponse;
+import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
-import org.drausin.bitflow.bitcoin.objects.BitcoindRpcRequest;
-import org.drausin.bitflow.bitcoin.objects.BitcoindRpcResponse;
-import org.drausin.bitflow.bitcoin.providers.BlockHeaderResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.providers.BlockchainInfoResponseMapperProvider;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.drausin.bitflow.service.utils.BitflowResource;
@@ -47,9 +47,10 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
 
     public BitcoinNodeResource(@JsonProperty ServerConfig config) {
         this.config = config;
-        this.rpcAuth = HttpAuthenticationFeature.basic(config.getRpcUser(), config.getRpcPassword());
-        this.blockchainInfoTarget = getBlockchainInfoClient().target(config.getUri());
-        this.blockHeaderTarget = getBlockHeaderClient().target(config.getUri());
+        this.rpcAuth = HttpAuthenticationFeature.basic(config.getBitcoinNode().getRpcUser(),
+                config.getBitcoinNode().getRpcPassword());
+        this.blockchainInfoTarget = getBlockchainInfoClient().target(config.getRpcUri());
+        this.blockHeaderTarget = getBlockHeaderClient().target(config.getRpcUri());
     }
 
     public ServerConfig getConfig() {
@@ -91,19 +92,19 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
     }
 
     @Override
-    public BlockchainInfo getBlockchainInfo() throws IllegalStateException {
+    public BitcoindRpcResponse getBlockchainInfo() throws IllegalStateException {
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
         BitcoindRpcResponse response = readResponse(getBlockchainInfoTarget(), request);
         response.validateResult(BlockchainInfo.class);
-        return (BlockchainInfo) response.getResult().get();
+        return response;
     }
 
     @Override
-    public BlockHeader getBlockHeader(Sha256Hash headerHash) throws IllegalStateException {
+    public BitcoindRpcResponse getBlockHeader(Sha256Hash headerHash) throws IllegalStateException {
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
         BitcoindRpcResponse response = readResponse(getBlockHeaderTarget(), request);
         response.validateResult(BlockHeader.class);
-        return (BlockHeader) response.getResult().get();
+        return response;
     }
 
     private static BitcoindRpcResponse readResponse(WebTarget target, BitcoindRpcRequest request) {
