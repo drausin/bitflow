@@ -12,7 +12,6 @@ project(':bitflow-blockchain-api') {
         compile "org.apache.commons:commons-lang3:3.0"
         compile "commons-io:commons-io:2.4"
         compile "com.google.guava:guava:$guavaVersion"
-        compile "com.google.code.findbugs:jsr305:3.0.0"
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
@@ -28,6 +27,7 @@ project(':bitflow-blockchain-api') {
         // Test
         testCompile "junit:junit:$junitVersion"
         compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "com.google.code.findbugs:annotations:${jsr305Version}"
         testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
         testCompile "org.mockito:mockito-all:$mockitoVersion"
         testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"

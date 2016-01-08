@@ -19,7 +19,6 @@ project(':bitflow-blockchain') {
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
         compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
         compile "com.google.guava:guava:$guavaVersion"
-        compile "com.google.code.findbugs:jsr305:3.0.0"
         compile "com.netflix.feign:feign-core:${feignVersion}"
         compile "com.netflix.feign:feign-jackson:${feignVersion}"
         compile "com.netflix.feign:feign-jaxrs:${feignVersion}"
@@ -36,6 +35,8 @@ project(':bitflow-blockchain') {
         compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:${jerseyVersion}"
 
         // Test
+        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "com.google.code.findbugs:annotations:${jsr305Version}"
         testCompile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
         testCompile "junit:junit:$junitVersion"
         testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
@@ -51,6 +52,6 @@ project(':bitflow-blockchain') {
     distribution {
         serviceName 'bitflow-bitcoin'
         mainClass 'org.drausin.bitflow.blockchain.BlockchainServer'
-        args 'server', 'var/conf/bitflow-bitcoin.yml'
+        args 'server', 'var/conf/bitflow-blockchain.yml'
     }
 }
