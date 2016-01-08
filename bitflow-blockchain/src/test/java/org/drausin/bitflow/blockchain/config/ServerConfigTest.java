@@ -33,7 +33,7 @@ public class ServerConfigTest {
 
     @ClassRule
     public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BlockchainServer.class,
-            "src/test/resources/bitflow-bitcoin-test.yml");
+            "src/test/resources/bitflow-blockchain-test.yml");
 
     private ServerConfig serverConfig;
     private Map<String, Object> configMap;
@@ -43,7 +43,7 @@ public class ServerConfigTest {
 
         serverConfig = APP.getConfiguration();
 
-        InputStream configInputStream = getClass().getResourceAsStream("/bitflow-bitcoin-test.yml");
+        InputStream configInputStream = getClass().getResourceAsStream("/bitflow-blockchain-test.yml");
         Yaml yaml = new Yaml();
         configMap = (HashMap<String, Object>) yaml.load(configInputStream);
         configInputStream.close();
@@ -55,7 +55,7 @@ public class ServerConfigTest {
     }
 
     @Test
-    public final void testGetBitcoindNodeUri() throws Exception {
+    public final void testGetBitcoinNodeUri() throws Exception {
         assertThat(serverConfig.getBitcoinNodeUri(), is(configMap.get("bitcoinNodeUri")));
     }
 
