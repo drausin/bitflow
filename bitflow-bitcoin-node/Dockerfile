@@ -1,40 +1,27 @@
-# based on Kyle Manna's https://hub.docker.com/r/kylemanna/bitcoind/
-
-FROM ubuntu:14.04
+FROM daedalus2718/bitflow-base
 MAINTAINER Drausin Wulsin <daedalus2718@gmail.com>
 
-# For some reason, docker.io (0.9.1~dfsg1-2) pkg in Ubuntu 14.04 has permission
-# denied issues when executing /bin/bash from trusted builds.  Building locally
-# works fine (strange).  Using the upstream docker (0.11.1) pkg from
-# http://get.docker.io/ubuntu works fine also and seems simpler.
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8842ce5e && \
-    echo "deb http://ppa.launchpad.net/bitcoin/bitcoin/ubuntu trusty main" > /etc/apt/sources.list.d/bitcoin.list
+# handy vars
+ENV BINARIES_DIR /opt/bitflow/binaries
+ENV SERVICES_DIR /opt/bitflow/services
+ENV SERVICE_NAME bitflow-bitcoin-node
 
-RUN apt-get update && \
-    apt-get install -y bitcoind && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+# filesystem
+RUN mkdir -p ${BINARIES_DIR} && \
+    mkdir -p ${SERVICES_DIR}
 
-# if this changes from /data/bitcoin, will need to update conf/bitcoind.logrotate as well
-ENV HOME /data/bitcoin
+# install
+ADD ${SERVICE_NAME}-*.tgz ${BINARIES_DIR}
+RUN mkdir -p ${SERVICES_DIR}/${SERVICE_NAME} && \
+    ln -s ${BINARIES_DIR}/${SERVICE_NAME}-*/service ${SERVICES_DIR}/${SERVICE_NAME} && \
+    cp -r ${BINARIES_DIR}/${SERVICE_NAME}-*/var ${SERVICES_DIR}/${SERVICE_NAME}/var && \
+    chown -R bitflow:bitflow /opt/bitflow
 
-# if this changes from bitflow, will need to update conf/bitcoind.logrotate as well
-ENV BITCOIN_USER bitflow
+# externals
+EXPOSE 8333 \
+       8332
 
-ENV BITCOIN_CONF ${HOME}/bitcoin.conf
-
-# (mainnet) ports
-ENV CONN_PORT 8333
-ENV RPC_PORT 8332
-
-VOLUME [${HOME}]
-
-RUN mkdir -p ${HOME}
-RUN mkdir -p ${HOME}/logs
-RUN useradd -s /bin/bash -d ${HOME} ${BITCOIN_USER}
-RUN chown ${BITCOIN_USER}:${BITCOIN_USER} -R ${HOME}
-
-ADD bitcoind.logrotate /etc/logrotate.d/bitcoind
-
-EXPOSE ${CONN_PORT} ${RPC_PORT}
-
-CMD bitcoind -conf=${BITCOIN_CONF} -rpcuser=${BITCOIND_RPCUSER} -rpcpassword=${BITCOIND_RPCPASSWORD}
+# run
+USER bitflow
+WORKDIR ${SERVICES_DIR}/${SERVICE_NAME}
+CMD service/bin/${SERVICE_NAME} server var/conf/${SERVICE_NAME}.yml

@@ -22,11 +22,13 @@ RUN apt-get update && \
 ENV JAVA_HOME /usr/lib/jvm/java-8-oracle
 
 # filesystem
+RUN mkdir -p /home/bitflow
 RUN mkdir -p /opt/bitflow
 RUN mkdir -p /data
 
 # user
 RUN useradd -s /bin/bash bitflow
+RUN chown bitflow:bitflow -R /home/bitflow
 RUN chown bitflow:bitflow -R /opt/bitflow
 RUN chown bitflow:bitflow -R /data
 
