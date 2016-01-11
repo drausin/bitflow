@@ -50,7 +50,7 @@ project(':bitflow-blockchain') {
     }
 
     distribution {
-        serviceName 'bitflow-bitcoin'
+        serviceName 'bitflow-blockchain'
         mainClass 'org.drausin.bitflow.blockchain.BlockchainServer'
         args 'server', 'var/conf/bitflow-blockchain.yml'
     }
