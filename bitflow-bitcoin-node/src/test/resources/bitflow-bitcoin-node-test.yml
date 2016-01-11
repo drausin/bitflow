@@ -1,6 +1,8 @@
 instance: main
 
-rpcUri: http://localhost:8332
+# the local RPC URI, the IP address comes from the DOCKER_HOST IP, i.e., the result of
+# 'docker-machine ip boot2docker-vm'
+rpcUri: http://192.168.99.100:8332
 
 # the mode to run the node in [pull|pruned]
 mode: pruned
@@ -25,7 +27,8 @@ bitcoinNode:
   # listen to RPC connections on this port
   rpcport: 8332
 
-  # allow RPC connections from this IP address (with possibly a CIDR range)
+  # allow RPC connections from this IP address (with possibly a CIDR range), which you can get via
+  # `docker-machine inspect boot2docker-vm | jq -r '.Driver.HostOnlyCIDR'`
   rpcallowip: 192.168.99.1/24
 
   # whether to disable wallet

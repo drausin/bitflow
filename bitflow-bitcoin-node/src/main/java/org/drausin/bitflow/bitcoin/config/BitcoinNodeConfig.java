@@ -28,6 +28,7 @@
 
 package org.drausin.bitflow.bitcoin.config;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -53,6 +54,7 @@ public abstract class BitcoinNodeConfig {
     @JsonProperty("conf")
     public abstract String getConfigFilePath();
 
+    @JsonIgnore
     public final File getConfigFile() {
         return new File(getConfigFilePath());
     }
@@ -62,6 +64,9 @@ public abstract class BitcoinNodeConfig {
 
     @JsonProperty("rpcport")
     public abstract long getRpcPort();
+
+    @JsonProperty("rpcallowip")
+    public abstract String rpcAllowIp();
 
     @JsonProperty("disablewallet")
     public abstract boolean isDisableWallet();

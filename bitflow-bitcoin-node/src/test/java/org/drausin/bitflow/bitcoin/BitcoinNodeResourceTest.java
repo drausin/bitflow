@@ -49,7 +49,7 @@ public class BitcoinNodeResourceTest extends JerseyTest {
 
     @ClassRule
     public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
-            "src/test/resources/bitflow-bitcoin-test.yml");
+            "src/test/resources/bitflow-bitcoin-node-test.yml");
 
     @Path("/")
     public static class BitcoindRpcTestResource {

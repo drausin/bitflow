@@ -44,7 +44,7 @@ public class ServerConfigTest {
 
     @ClassRule
     public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
-            "src/test/resources/bitflow-bitcoin-test.yml");
+            "src/test/resources/bitflow-bitcoin-node-test.yml");
 
     private ServerConfig serverConfig;
 
