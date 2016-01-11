@@ -1,6 +1,7 @@
 apply from: "${rootDir}/gradle/java.gradle"
 apply plugin: 'org.inferred.processors'
 apply plugin: 'com.palantir.java-distribution'
+apply plugin: 'com.palantir.docker'
 
 project(':bitflow-bitcoin-node') {
 
@@ -8,6 +9,9 @@ project(':bitflow-bitcoin-node') {
 
         compile project(':bitflow-bitcoin-node-api')
         compile project(':bitflow-service-utils')
+
+        // TODO(dwulsin) figure out how to fix this
+        //docker project(':bitflow-docker-base')
 
         // Logging
         compile "ch.qos.logback:logback-classic:${logbackVersion}"
@@ -59,10 +63,21 @@ project(':bitflow-bitcoin-node') {
 
     }
 
-	apply plugin: 'com.palantir.docker'
+    def snapshotDockerImage = "docker.io/daedalus2718/bitflow/${project.name}"
     docker {
-        name 'docker.io/daedalus2718/bitcoind'
-        dockerfile 'Dockerfile'
-        files 'bitcoind.logrotate'
+        name "${snapshotDockerImage}:${project.version}"
+        dependsOn distTar
+    }
+
+    tasks.docker.doLast {
+        exec {
+            commandLine "docker", "tag", "--force=true", docker.name, "${snapshotDockerImage}:latest"
+        }
+    }
+
+    distribution {
+        serviceName 'bitflow-bitcoin-node'
+        mainClass 'org.drausin.bitflow.bitcoin.BitcoinNodeServer'
+        args 'server', 'var/conf/bitflow-bitcoin-node.yml'
     }
 }
