@@ -25,6 +25,9 @@ bitcoinNode:
   # listen to RPC connections on this port
   rpcport: 8332
 
+  # allow RPC connections from this IP address (with possibly a CIDR range)
+  rpcallowip: 192.168.99.1/24
+
   # whether to disable wallet
   disablewallet: true
 
