@@ -26,12 +26,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Wrapper for bitcoin node (i.e., bitcoind) executable.
  */
+@SuppressWarnings("checkstyle:designforextension")
 public class BitcoindExecutable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BitcoindExecutable.class);
 
-    private static final List<String> bitcoindLocations = Arrays.asList("/usr/bin/bitcoind",
-            System.getenv("BITCOIND_LOCATION"));
+    private static final List<String> bitcoindLocations = Arrays.asList("/usr/bin/bitcoind");
 
     private final File bitcoindConfigurationFile;
 
@@ -39,11 +39,15 @@ public class BitcoindExecutable {
         this.bitcoindConfigurationFile = bitcoindConfigurationFile;
     }
 
-    public final void run() throws IOException, InterruptedException {
-        executeBitcoindCommand();
+    public File getBitcoindConfigurationFile() {
+        return bitcoindConfigurationFile;
     }
 
-    private void executeBitcoindCommand(String... commands) throws IOException,
+    public final int run() throws IOException, InterruptedException {
+        return executeBitcoindCommand();
+    }
+
+    protected int executeBitcoindCommand(String... commands) throws IOException,
             InterruptedException {
         List<String> args = Lists.newArrayList(getBitcoindPath(),
                 String.format("-conf=%s", bitcoindConfigurationFile.getAbsolutePath()));
@@ -51,18 +55,23 @@ public class BitcoindExecutable {
             args.add(command);
         }
         LOGGER.info(String.format("running process: %s", args.toString()));
-        Process bitcoind = new ProcessBuilder().command(args)
-                .redirectErrorStream(true)
-                .start();
-        bitcoind.waitFor();
+        return getProcess(args).waitFor();
     }
 
-    private String getBitcoindPath() {
+    protected String getBitcoindPath() {
         return bitcoindLocations.stream()
                 .filter(StringUtils::isNotBlank)
-                .filter(path -> new File(path).exists())
+                .filter(path -> pathExists(path))
                 .findAny()
                 .orElseThrow(() -> new IllegalStateException("Could not find bitcoind in: " + bitcoindLocations));
+    }
+
+    protected boolean pathExists(String path) {
+        return new File(path).exists();
+    }
+
+    protected Process getProcess(List<String> args) throws IOException {
+        return new ProcessBuilder().command(args).redirectErrorStream(true).start();
     }
 
 }

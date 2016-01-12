@@ -42,15 +42,19 @@ public class BitcoinNodeServerCommand<T extends ServerConfig> extends Environmen
 
     @Override
     protected final void run(Environment environment, Namespace namespace, T configuration) throws Exception {
-        final BitcoindExecutable bitcoind = new BitcoindExecutable(configuration.getBitcoinNode().getConfigFile());
         try {
-            bitcoind.run();
+            getBitcoindExecutable(configuration).run();
             cleanupAsynchronously();
         } catch (Exception e) {
             LOGGER.error("Unable to start server, shutting down", e);
             cleanup();
             throw e;
         }
+    }
+
+    @SuppressWarnings("checkstyle:designforextension")
+    protected BitcoindExecutable getBitcoindExecutable(T configuration) {
+        return new BitcoindExecutable(configuration.getBitcoinNode().getConfigFile());
     }
 
 }
