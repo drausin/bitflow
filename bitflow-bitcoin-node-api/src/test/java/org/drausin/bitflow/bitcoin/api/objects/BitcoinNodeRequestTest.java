@@ -25,10 +25,10 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BitcoindRpcRequestTest {
+public class BitcoinNodeRequestTest {
 
     private ObjectMapper rpcMapper;
-    private BitcoindRpcRequest request1;
+    private BitcoinNodeRequest request1;
     private String rpcRequestJson;
     private String request1Json;
 
@@ -46,7 +46,7 @@ public class BitcoindRpcRequestTest {
                 + "    \"id\": \"foo\"\n"
                 + "}";
 
-        request1 = rpcMapper.readValue(rpcRequestJson, ImmutableBitcoindRpcRequest.class);
+        request1 = rpcMapper.readValue(rpcRequestJson, ImmutableBitcoinNodeRequest.class);
         request1Json = rpcMapper.writeValueAsString(request1);
     }
 
@@ -70,9 +70,9 @@ public class BitcoindRpcRequestTest {
 
     @Test
     public final void testOf() throws Exception {
-        assertThat(BitcoindRpcRequest.of("foo", "getblockhash", ImmutableList.of(0)),
-                CoreMatchers.instanceOf(ImmutableBitcoindRpcRequest.class));
-        assertThat(BitcoindRpcRequest.of("getblockhash", ImmutableList.of(0)),
-                CoreMatchers.instanceOf(ImmutableBitcoindRpcRequest.class));
+        assertThat(BitcoinNodeRequest.of("foo", "getblockhash", ImmutableList.of(0)),
+                CoreMatchers.instanceOf(ImmutableBitcoinNodeRequest.class));
+        assertThat(BitcoinNodeRequest.of("getblockhash", ImmutableList.of(0)),
+                CoreMatchers.instanceOf(ImmutableBitcoinNodeRequest.class));
     }
 }

@@ -26,8 +26,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcExampleResponses;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeExampleResponses;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.bitcoin.config.ImmutableServerConfig;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
@@ -58,12 +58,12 @@ public class BitcoinNodeResourceTest extends JerseyTest {
         @Produces(MediaType.APPLICATION_JSON)
         @Consumes(MediaType.APPLICATION_JSON)
         @Path("")
-        public final String makeRpc(BitcoindRpcRequest request) throws IOException {
+        public final String makeRpc(BitcoinNodeRequest request) throws IOException {
 
             if (request.getMethod().equals(BitcoinNodeResource.BLOCKCHAIN_INFO_RPC_METHOD)) {
-                return BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse();
+                return BitcoinNodeExampleResponses.getBlockchainInfoJsonResponse();
             } else if (request.getMethod().equals(BitcoinNodeResource.BLOCK_HEADER_RPC_METHOD)) {
-                return BitcoindRpcExampleResponses.getBlockHeaderJsonResponse();
+                return BitcoinNodeExampleResponses.getBlockHeaderJsonResponse();
             } else {
                 throw new IllegalArgumentException("%s is not a valid RPC request method".format(
                         request.getMethod().toString()));
@@ -103,13 +103,13 @@ public class BitcoinNodeResourceTest extends JerseyTest {
 
         BlockchainInfo result = (BlockchainInfo) bitcoinNodeResource.getBlockchainInfo().getResult().get();
         assertEquals(
-                JsonPath.read(BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse(), "$.result.chain"),
+                JsonPath.read(BitcoinNodeExampleResponses.getBlockchainInfoJsonResponse(), "$.result.chain"),
                 result.getChain());
     }
 
     @Test
     public final void testGetBlockHeader() throws Exception {
-        Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoindRpcExampleResponses.getBlockHeaderJsonResponse(),
+        Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoinNodeExampleResponses.getBlockHeaderJsonResponse(),
                 "$.result.hash").toString());
         BlockHeader result = (BlockHeader) bitcoinNodeResource.getBlockHeader(headerHash).getResult().get();
         assertEquals(headerHash, result.getHeaderHash());

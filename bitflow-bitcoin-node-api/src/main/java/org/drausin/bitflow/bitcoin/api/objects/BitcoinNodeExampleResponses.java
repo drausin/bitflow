@@ -17,7 +17,7 @@ package org.drausin.bitflow.bitcoin.api.objects;
 import java.io.IOException;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 
-public final class BitcoindRpcExampleResponses {
+public final class BitcoinNodeExampleResponses {
 
     public static String getBlockchainInfoJsonResponse() {
         return "{\n"
@@ -93,10 +93,10 @@ public final class BitcoindRpcExampleResponses {
                 ImmutableBlockHeaderResponse.class);
     }
 
-    public static BitcoindRpcResponseError getError() throws IOException {
+    public static BitcoinNodeResponseError getError() throws IOException {
         return getBlockchainInfoErrorResponse().getError().get();
     }
 
-    private BitcoindRpcExampleResponses() {}
+    private BitcoinNodeExampleResponses() {}
 
 }

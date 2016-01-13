@@ -17,48 +17,29 @@ package org.drausin.bitflow.bitcoin.api.objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.base.Optional;
-import java.util.List;
 import org.immutables.value.Value;
 
 /**
- * The RPC request to the bitcoin daemon.
+ * The RPC response error from the bitcoind daemon.
  *
  * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  * @author dwulsin
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
-@JsonSerialize(as = ImmutableBitcoindRpcRequest.class)
-@JsonDeserialize(as = ImmutableBitcoindRpcRequest.class)
-public abstract class BitcoindRpcRequest {
+@JsonSerialize(as = ImmutableBitcoinNodeResponseError.class)
+@JsonDeserialize(as = ImmutableBitcoinNodeResponseError.class)
+public abstract class BitcoinNodeResponseError {
 
-    /**
-     * Get the arbitrary string that will be returned with the response.
-     */
     @Value.Parameter
-    @JsonProperty("id")
-    public abstract Optional<String> getId();
+    @JsonProperty("code")
+    public abstract long getCode();
 
-    /**
-     * Get the RPC method name.
-     */
     @Value.Parameter
-    @JsonProperty("method")
-    public abstract String getMethod();
+    @JsonProperty("message")
+    public abstract String getMessage();
 
-    /**
-     * Get the list of positional parameter values for the RPC.
-     */
-    @Value.Parameter
-    @JsonProperty("params")
-    public abstract List<Object> getParams();
-
-    public static BitcoindRpcRequest of(String method, List<Object> params) {
-        return ImmutableBitcoindRpcRequest.of(Optional.absent(), method, params);
-    }
-
-    public static BitcoindRpcRequest of(String id, String method, List<Object> params) {
-        return ImmutableBitcoindRpcRequest.of(Optional.of(id), method, params);
+    public static BitcoinNodeResponseError of(long code, String message) {
+        return ImmutableBitcoinNodeResponseError.of(code, message);
     }
 }

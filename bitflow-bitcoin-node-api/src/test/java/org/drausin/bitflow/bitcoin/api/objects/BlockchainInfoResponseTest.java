@@ -65,7 +65,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BitcoindRpcBlockchainInfoResponseTest {
+public class BlockchainInfoResponseTest {
 
     private String resultJsonResponse;
     private String errorJsonResponse;
@@ -75,10 +75,10 @@ public class BitcoindRpcBlockchainInfoResponseTest {
 
     @Before
     public final void setUp() throws Exception {
-        resultJsonResponse = BitcoindRpcExampleResponses.getBlockchainInfoJsonResponse();
-        errorJsonResponse = BitcoindRpcExampleResponses.getErrorJsonResponse();
-        resultResponse = BitcoindRpcExampleResponses.getBlockchainInfoResponse();
-        errorResponse = BitcoindRpcExampleResponses.getBlockchainInfoErrorResponse();
+        resultJsonResponse = BitcoinNodeExampleResponses.getBlockchainInfoJsonResponse();
+        errorJsonResponse = BitcoinNodeExampleResponses.getErrorJsonResponse();
+        resultResponse = BitcoinNodeExampleResponses.getBlockchainInfoResponse();
+        errorResponse = BitcoinNodeExampleResponses.getBlockchainInfoErrorResponse();
     }
 
     @Test
@@ -88,14 +88,14 @@ public class BitcoindRpcBlockchainInfoResponseTest {
 
     @Test(expected = IllegalStateException.class)
     public final void testValidateResultAbsentResultException() throws Exception {
-        BitcoindRpcResponse testResultResponse = BlockchainInfoResponse.of(Optional.absent(), Optional.absent(),
+        BitcoinNodeResponse testResultResponse = BlockchainInfoResponse.of(Optional.absent(), Optional.absent(),
                 resultResponse.getId());
         testResultResponse.validateResult();
     }
 
     @Test(expected = IllegalStateException.class)
     public final void testValidateErrorPresentErrorException() throws Exception {
-        BitcoindRpcResponse testResultResponse = BlockchainInfoResponse.of(resultResponse.getResult(),
+        BitcoinNodeResponse testResultResponse = BlockchainInfoResponse.of(resultResponse.getResult(),
                 errorResponse.getError(), resultResponse.getId());
         testResultResponse.validateResult();
     }
@@ -136,14 +136,14 @@ public class BitcoindRpcBlockchainInfoResponseTest {
 
     @Test(expected = IllegalStateException.class)
     public final void testValidateErrorAbsentErrorException() throws Exception {
-        BitcoindRpcResponse testErrorResponse = BlockchainInfoResponse.of(Optional.absent(), Optional.absent(),
+        BitcoinNodeResponse testErrorResponse = BlockchainInfoResponse.of(Optional.absent(), Optional.absent(),
                 resultResponse.getId());
         testErrorResponse.validateError();
     }
 
     @Test(expected = IllegalStateException.class)
     public final void testValidateErrorPresentResultException() throws Exception {
-        BitcoindRpcResponse testErrorResponse = BlockchainInfoResponse.of(resultResponse.getResult(),
+        BitcoinNodeResponse testErrorResponse = BlockchainInfoResponse.of(resultResponse.getResult(),
                 errorResponse.getError(), resultResponse.getId());
         testErrorResponse.validateError();
     }
@@ -172,7 +172,7 @@ public class BitcoindRpcBlockchainInfoResponseTest {
                 resultResponse.getError(), resultResponse.getId());
         assertEquals(resultResponse, testResultResponse);
 
-        BitcoindRpcResponse testErrorResponse = BlockchainInfoResponse.of(errorResponse.getResult(),
+        BitcoinNodeResponse testErrorResponse = BlockchainInfoResponse.of(errorResponse.getResult(),
                 errorResponse.getError(), errorResponse.getId());
         assertEquals(errorResponse, testErrorResponse);
     }

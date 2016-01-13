@@ -41,7 +41,7 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BitcoindRpcBlockHeaderResponseTest {
+public class BlockHeaderResponseTest {
 
     private ObjectMapper rpcMapper;
     private String resultJsonResponse;
@@ -54,10 +54,10 @@ public class BitcoindRpcBlockHeaderResponseTest {
     public final void setUp() throws Exception {
         rpcMapper = BitcoinNodeMapperProvider.getMapper();
 
-        resultJsonResponse = BitcoindRpcExampleResponses.getBlockHeaderJsonResponse();
-        errorJsonResponse = BitcoindRpcExampleResponses.getErrorJsonResponse();
-        resultResponse = BitcoindRpcExampleResponses.getBlockHeaderResponse();
-        errorResponse = BitcoindRpcExampleResponses.getBlockHeaderErrorResponse();
+        resultJsonResponse = BitcoinNodeExampleResponses.getBlockHeaderJsonResponse();
+        errorJsonResponse = BitcoinNodeExampleResponses.getErrorJsonResponse();
+        resultResponse = BitcoinNodeExampleResponses.getBlockHeaderResponse();
+        errorResponse = BitcoinNodeExampleResponses.getBlockHeaderErrorResponse();
     }
 
     @Test
@@ -140,15 +140,15 @@ public class BitcoindRpcBlockHeaderResponseTest {
 
     @Test
     public final void testOf() throws Exception {
-        BitcoindRpcResponse testResultResponse = BlockHeaderResponse.of(resultResponse.getResult(),
+        BitcoinNodeResponse testResultResponse = BlockHeaderResponse.of(resultResponse.getResult(),
                 resultResponse.getError(), resultResponse.getId());
         assertThat(testResultResponse, CoreMatchers.instanceOf(ImmutableBlockHeaderResponse.class));
         assertThat(testResultResponse.getResult().get(), CoreMatchers.instanceOf(ImmutableBlockHeader.class));
 
-        BitcoindRpcResponse testErrorResponse = BlockHeaderResponse.of(errorResponse.getResult(),
+        BitcoinNodeResponse testErrorResponse = BlockHeaderResponse.of(errorResponse.getResult(),
                 errorResponse.getError(), errorResponse.getId());
         assertThat(testErrorResponse, CoreMatchers.instanceOf(ImmutableBlockHeaderResponse.class));
         assertThat(testErrorResponse.getError().get(),
-                CoreMatchers.instanceOf(ImmutableBitcoindRpcResponseError.class));
+                CoreMatchers.instanceOf(ImmutableBitcoinNodeResponseError.class));
     }
 }

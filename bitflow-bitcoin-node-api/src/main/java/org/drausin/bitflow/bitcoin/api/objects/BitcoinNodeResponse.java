@@ -25,7 +25,7 @@ import org.immutables.value.Value;
  * @author dwulsin
  * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  */
-public abstract class BitcoindRpcResponse<T extends BlockchainResult> {
+public abstract class BitcoinNodeResponse<T extends BlockchainResult> {
 
     @Value.Parameter
     @JsonProperty("result")
@@ -33,7 +33,7 @@ public abstract class BitcoindRpcResponse<T extends BlockchainResult> {
 
     @Value.Parameter
     @JsonProperty("error")
-    public abstract Optional<BitcoindRpcResponseError> getError();
+    public abstract Optional<BitcoinNodeResponseError> getError();
 
     @Value.Parameter
     @JsonProperty("id")

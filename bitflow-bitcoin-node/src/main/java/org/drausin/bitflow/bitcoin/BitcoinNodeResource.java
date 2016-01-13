@@ -23,7 +23,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.objects.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.objects.BlockchainInfoResponse;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
@@ -76,7 +76,7 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
 
     @Override
     public BlockchainInfoResponse getBlockchainInfo() throws IllegalStateException {
-        BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
+        BitcoinNodeRequest request = BitcoinNodeRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
         BlockchainInfoResponse response = getBlockchainInfoTarget()
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), BlockchainInfoResponse.class);
@@ -86,7 +86,7 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
 
     @Override
     public BlockHeaderResponse getBlockHeader(Sha256Hash headerHash) throws IllegalStateException {
-        BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
+        BitcoinNodeRequest request = BitcoinNodeRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
         BlockHeaderResponse response = getBlockHeaderTarget()
                 .request(MediaType.APPLICATION_JSON_TYPE)
                 .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), BlockHeaderResponse.class);

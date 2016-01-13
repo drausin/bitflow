@@ -21,7 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcResponse;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeResponse;
 import org.drausin.bitflow.service.utils.BitflowService;
 
 @Path("/bitcoinnode")
@@ -36,7 +36,7 @@ public interface BitcoinNodeService extends BitflowService {
     @Path("/info")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    BitcoindRpcResponse getBlockchainInfo();
+    BitcoinNodeResponse getBlockchainInfo();
 
     /**
      * Gets the block header for a given block hash.
@@ -47,5 +47,5 @@ public interface BitcoinNodeService extends BitflowService {
     @Path("/block/header/{hash}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    BitcoindRpcResponse getBlockHeader(@PathParam("hash") Sha256Hash hash);
+    BitcoinNodeResponse getBlockHeader(@PathParam("hash") Sha256Hash hash);
 }

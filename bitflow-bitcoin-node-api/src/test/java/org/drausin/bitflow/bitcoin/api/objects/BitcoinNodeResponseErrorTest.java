@@ -38,11 +38,11 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BitcoindRpcResponseErrorTest {
+public class BitcoinNodeResponseErrorTest {
 
     private ObjectMapper rpcMapper;
     private String errorJson;
-    private BitcoindRpcResponseError responseError1;
+    private BitcoinNodeResponseError responseError1;
     private String responseError1Json;
 
     @Before
@@ -50,8 +50,8 @@ public class BitcoindRpcResponseErrorTest {
 
         rpcMapper = BitcoinNodeMapperProvider.getMapper();
 
-        errorJson = BitcoindRpcExampleResponses.getErrorJson();
-        responseError1 = BitcoindRpcExampleResponses.getError();
+        errorJson = BitcoinNodeExampleResponses.getErrorJson();
+        responseError1 = BitcoinNodeExampleResponses.getError();
         responseError1Json = rpcMapper.writeValueAsString(responseError1);
     }
 
@@ -71,7 +71,7 @@ public class BitcoindRpcResponseErrorTest {
 
     @Test
     public final void testOf() throws Exception {
-        assertThat(BitcoindRpcResponseError.of(-8, "Block height out of range"),
-                CoreMatchers.instanceOf(ImmutableBitcoindRpcResponseError.class));
+        assertThat(BitcoinNodeResponseError.of(-8, "Block height out of range"),
+                CoreMatchers.instanceOf(ImmutableBitcoinNodeResponseError.class));
     }
 }

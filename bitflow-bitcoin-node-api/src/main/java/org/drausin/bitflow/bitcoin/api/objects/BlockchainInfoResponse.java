@@ -27,9 +27,9 @@ import org.immutables.value.Value;
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
 @JsonSerialize(as = ImmutableBlockchainInfoResponse.class)
 @JsonDeserialize(as = ImmutableBlockchainInfoResponse.class)
-public abstract class BlockchainInfoResponse extends BitcoindRpcResponse<BlockchainInfo> {
+public abstract class BlockchainInfoResponse extends BitcoinNodeResponse<BlockchainInfo> {
 
-    public static BlockchainInfoResponse of(Optional<BlockchainInfo> result, Optional<BitcoindRpcResponseError> error,
+    public static BlockchainInfoResponse of(Optional<BlockchainInfo> result, Optional<BitcoinNodeResponseError> error,
             Optional<String> id) {
         return ImmutableBlockchainInfoResponse.of(result, error, id);
     }
