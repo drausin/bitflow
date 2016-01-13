@@ -7,14 +7,8 @@ project(':bitflow-service-utils') {
         
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
-        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
-        compile "io.dropwizard:dropwizard-client:$dropwizardVersion"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
-        compile "io.dropwizard:dropwizard-jetty:${dropwizardVersion}"
-        compile "io.dropwizard:dropwizard-jersey:${dropwizardVersion}"
         compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
 
 
@@ -22,12 +16,6 @@ project(':bitflow-service-utils') {
         testCompile "junit:junit:$junitVersion"
         compile "com.google.code.findbugs:jsr305:${jsr305Version}"
         compile "com.google.code.findbugs:annotations:${jsr305Version}"
-        testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
-        testCompile "org.mockito:mockito-all:$mockitoVersion"
-        testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"
-        testCompile "org.hsqldb:hsqldb:2.3.3"
-        testCompile "org.dbunit:dbunit:2.5.1"
-        testCompile "com.mockrunner:mockrunner-jdbc:1.1.0"
 
         processor "org.immutables:value:${immutablesVersion}"
     }
