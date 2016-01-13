@@ -22,8 +22,8 @@ import org.bitcoinj.core.Sha256Hash;
 import org.immutables.value.Value;
 
 /**
- * Current information about the blockchain as returned by the Bitcoind
- * <a href="https://bitcoin.org/en/developer-reference#getblockchaininfo">GetInfo() RPC</a>.
+ * Current information about the blockchain as returned by the Bitcoind <a href="https://bitcoin.org/en/developer-reference#getblockchaininfo">GetInfo()
+ * RPC</a>.
  *
  * @author dwulsin
  */
@@ -82,4 +82,10 @@ public abstract class BlockchainInfo implements BlockchainResult {
     @Value.Parameter
     @JsonProperty("chainwork")
     public abstract BigInteger getChainwork();
+
+    public static BlockchainInfo of(String chain, long numBlocks, long numHeaders, Sha256Hash bestBlockHash,
+            double difficulty, double verificationProgress, BigInteger chainwork) {
+        return ImmutableBlockchainInfo.of(chain, numBlocks, numHeaders, bestBlockHash, difficulty, verificationProgress,
+                chainwork);
+    }
 }
