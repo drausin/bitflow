@@ -1,0 +1,22 @@
+apply from: "${rootDir}/gradle/java.gradle"
+
+project(':bitflow-integration-tests') {
+
+    dependencies {
+
+        // project dependencies
+        compile project(':bitflow-bitcoin-node-api')
+        compile project(':bitflow-blockchain-api')
+
+        // external dependencies
+
+        // for tests
+        testCompile "junit:junit:$junitVersion"
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
+
+        // for checks
+        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "com.google.code.findbugs:annotations:${jsr305Version}"
+
+    }
+}
