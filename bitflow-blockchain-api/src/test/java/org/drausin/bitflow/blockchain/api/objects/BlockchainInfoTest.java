@@ -79,7 +79,6 @@ import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.objects.mixin.BlockchainInfoRpcMixIn;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
 import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
@@ -107,7 +106,6 @@ public class BlockchainInfoTest {
         // mapper from RPC json schema
         rpcMapper = new ObjectMapper();
         rpcMapper.registerModule(blockchainModule);
-        rpcMapper.addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
 
         // mapper from standard json properties
         standardMapper = new ObjectMapper();
@@ -143,9 +141,9 @@ public class BlockchainInfoTest {
                 blockchainInfo1.getNumBlocks());
         assertEquals(
                 blockchainInfo1.getNumBlocks(),
-                ((Integer) JsonPath.read(blockchainInfo1Json, "$.numBlocks")).longValue());
+                ((Integer) JsonPath.read(blockchainInfo1Json, "$.blocks")).longValue());
         assertEquals(
-                ((Integer) JsonPath.read(blockchainInfo1Json, "$.numBlocks")).longValue(),
+                ((Integer) JsonPath.read(blockchainInfo1Json, "$.blocks")).longValue(),
                 blockchainInfo2.getNumBlocks());
     }
 
@@ -156,10 +154,10 @@ public class BlockchainInfoTest {
                 blockchainInfo1.getNumHeaders());
         assertEquals(
                 blockchainInfo1.getNumHeaders(),
-                ((Integer) JsonPath.read(blockchainInfo1Json, "$.numHeaders")).longValue());
+                ((Integer) JsonPath.read(blockchainInfo1Json, "$.headers")).longValue());
         assertEquals(
                 blockchainInfo2.getNumHeaders(),
-                ((Integer) JsonPath.read(blockchainInfo1Json, "$.numHeaders")).longValue());
+                ((Integer) JsonPath.read(blockchainInfo1Json, "$.headers")).longValue());
     }
 
     @Test
@@ -168,9 +166,9 @@ public class BlockchainInfoTest {
                 blockchainInfo1.getBestBlockHash().toString());
         assertEquals(
                 blockchainInfo1.getBestBlockHash().toString(),
-                JsonPath.read(blockchainInfo1Json, "$.bestBlockHash"));
+                JsonPath.read(blockchainInfo1Json, "$.bestblockhash"));
         assertEquals(
-                JsonPath.read(blockchainInfo1Json, "$.bestBlockHash"),
+                JsonPath.read(blockchainInfo1Json, "$.bestblockhash"),
                 blockchainInfo2.getBestBlockHash().toString());
     }
 
@@ -194,9 +192,9 @@ public class BlockchainInfoTest {
                 blockchainInfo1.getVerificationProgress(), ASSERT_EQUALS_PRECISION);
         assertEquals(
                 blockchainInfo1.getVerificationProgress(),
-                JsonPath.read(blockchainInfo1Json, "$.verificationProgress"), ASSERT_EQUALS_PRECISION);
+                JsonPath.read(blockchainInfo1Json, "$.verificationprogress"), ASSERT_EQUALS_PRECISION);
         assertEquals(
-                (double) JsonPath.read(blockchainInfo1Json, "$.verificationProgress"),
+                (double) JsonPath.read(blockchainInfo1Json, "$.verificationprogress"),
                 blockchainInfo2.getVerificationProgress(), ASSERT_EQUALS_PRECISION);
     }
 

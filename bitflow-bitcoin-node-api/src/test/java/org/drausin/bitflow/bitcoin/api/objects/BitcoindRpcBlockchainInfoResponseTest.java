@@ -64,6 +64,7 @@ import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockchainInfo;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;

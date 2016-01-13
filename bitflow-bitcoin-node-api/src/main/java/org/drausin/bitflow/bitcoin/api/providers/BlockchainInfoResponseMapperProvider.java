@@ -19,8 +19,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import javax.ws.rs.ext.Provider;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
-import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockchainInfo;
-import org.drausin.bitflow.blockchain.api.objects.mixin.BlockchainInfoRpcMixIn;
 import org.drausin.bitflow.blockchain.api.serde.BlockchainInfoDeserializer;
 
 /**
@@ -44,8 +42,7 @@ public class BlockchainInfoResponseMapperProvider extends BitcoinNodeMapperProvi
 
     public static ObjectMapper getBlockchainInfoMapper() {
         return getCommonMapper()
-                .registerModule(getBlockchainInfoModule())
-                .addMixIn(ImmutableBlockchainInfo.class, BlockchainInfoRpcMixIn.class);
+                .registerModule(getBlockchainInfoModule());
     }
 
     private static SimpleModule getBlockchainInfoModule() {
