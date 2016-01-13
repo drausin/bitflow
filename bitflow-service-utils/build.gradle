@@ -11,9 +11,11 @@ project(':bitflow-service-utils') {
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
         compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
 
-
-        // Test
+        // for tests
         testCompile "junit:junit:$junitVersion"
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
+
+        // for checks
         compile "com.google.code.findbugs:jsr305:${jsr305Version}"
         compile "com.google.code.findbugs:annotations:${jsr305Version}"
 
