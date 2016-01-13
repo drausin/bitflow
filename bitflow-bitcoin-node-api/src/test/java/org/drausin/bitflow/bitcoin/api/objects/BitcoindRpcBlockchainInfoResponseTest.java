@@ -57,14 +57,11 @@
 package org.drausin.bitflow.bitcoin.api.objects;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import com.google.common.base.Optional;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
-import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockchainInfo;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -171,15 +168,12 @@ public class BitcoindRpcBlockchainInfoResponseTest {
 
     @Test
     public final void testOf() throws Exception {
-        BitcoindRpcResponse testResultResponse = BlockchainInfoResponse.of(resultResponse.getResult(),
+        BlockchainInfoResponse testResultResponse = BlockchainInfoResponse.of(resultResponse.getResult(),
                 resultResponse.getError(), resultResponse.getId());
-        assertThat(testResultResponse, CoreMatchers.instanceOf(ImmutableBlockchainInfoResponse.class));
-        assertThat(testResultResponse.getResult().get(), CoreMatchers.instanceOf(ImmutableBlockchainInfo.class));
+        assertEquals(resultResponse, testResultResponse);
 
         BitcoindRpcResponse testErrorResponse = BlockchainInfoResponse.of(errorResponse.getResult(),
                 errorResponse.getError(), errorResponse.getId());
-        assertThat(testErrorResponse, CoreMatchers.instanceOf(ImmutableBlockchainInfoResponse.class));
-        assertThat(testErrorResponse.getError().get(),
-                CoreMatchers.instanceOf(ImmutableBitcoindRpcResponseError.class));
+        assertEquals(errorResponse, testErrorResponse);
     }
 }
