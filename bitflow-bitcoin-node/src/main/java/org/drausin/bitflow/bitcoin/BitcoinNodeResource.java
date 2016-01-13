@@ -24,12 +24,11 @@ import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcResponse;
+import org.drausin.bitflow.bitcoin.api.objects.BlockHeaderResponse;
+import org.drausin.bitflow.bitcoin.api.objects.BlockchainInfoResponse;
 import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
 import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
-import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
 import org.drausin.bitflow.service.utils.BitflowResource;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -92,23 +91,22 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
     }
 
     @Override
-    public BitcoindRpcResponse getBlockchainInfo() throws IllegalStateException {
+    public BlockchainInfoResponse getBlockchainInfo() throws IllegalStateException {
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
-        BitcoindRpcResponse response = readResponse(getBlockchainInfoTarget(), request);
-        response.validateResult(BlockchainInfo.class);
+        BlockchainInfoResponse response = getBlockchainInfoTarget()
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), BlockchainInfoResponse.class);
+        response.validateResult();
         return response;
     }
 
     @Override
-    public BitcoindRpcResponse getBlockHeader(Sha256Hash headerHash) throws IllegalStateException {
+    public BlockHeaderResponse getBlockHeader(Sha256Hash headerHash) throws IllegalStateException {
         BitcoindRpcRequest request = BitcoindRpcRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
-        BitcoindRpcResponse response = readResponse(getBlockHeaderTarget(), request);
-        response.validateResult(BlockHeader.class);
+        BlockHeaderResponse response = getBlockHeaderTarget()
+                .request(MediaType.APPLICATION_JSON_TYPE)
+                .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), BlockHeaderResponse.class);
+        response.validateResult();
         return response;
-    }
-
-    private static BitcoindRpcResponse readResponse(WebTarget target, BitcoindRpcRequest request) {
-        return target.request(MediaType.APPLICATION_JSON_TYPE)
-                .post(Entity.entity(request, MediaType.APPLICATION_JSON_TYPE), BitcoindRpcResponse.class);
     }
 }

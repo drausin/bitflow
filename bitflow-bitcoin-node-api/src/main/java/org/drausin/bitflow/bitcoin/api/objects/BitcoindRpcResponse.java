@@ -15,8 +15,6 @@
 package org.drausin.bitflow.bitcoin.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.immutables.value.Value;
@@ -27,15 +25,11 @@ import org.immutables.value.Value;
  * @author dwulsin
  * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  */
-@Value.Immutable
-@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME)
-@JsonSerialize(as = ImmutableBitcoindRpcResponse.class)
-@JsonDeserialize(as = ImmutableBitcoindRpcResponse.class)
-public abstract class BitcoindRpcResponse {
+public abstract class BitcoindRpcResponse<T extends BlockchainResult> {
 
     @Value.Parameter
     @JsonProperty("result")
-    public abstract Optional<BlockchainResult> getResult();
+    public abstract Optional<T> getResult();
 
     @Value.Parameter
     @JsonProperty("error")
@@ -45,25 +39,12 @@ public abstract class BitcoindRpcResponse {
     @JsonProperty("id")
     public abstract Optional<String> getId();
 
-    public static BitcoindRpcResponse of(BlockchainResult result, BitcoindRpcResponseError error, String id) {
-        return ImmutableBitcoindRpcResponse.of(Optional.fromNullable(result), Optional.fromNullable(error),
-                Optional.fromNullable(id));
-    }
-
-    public static BitcoindRpcResponse of(Optional<BlockchainResult> result, Optional<BitcoindRpcResponseError> error,
-            Optional<String> id) {
-        return ImmutableBitcoindRpcResponse.of(result, error, id);
-    }
-
-    public final boolean validateResult(Class<? extends BlockchainResult> resultType) {
+    public final boolean validateResult() {
         if (!getResult().isPresent()) {
             throw new IllegalStateException("result value is absent");
         }
         if (getError().isPresent()) {
-            throw new IllegalStateException("error value is present: %s".format(getError().get().toString()));
-        }
-        if (!resultType.isAssignableFrom(getResult().get().getClass())) {
-            throw new IllegalStateException("result value is not of type %s".format(resultType.toString()));
+            throw new IllegalStateException(String.format("error value is present: %s", getError().get().toString()));
         }
         return true;
     }
@@ -73,7 +54,7 @@ public abstract class BitcoindRpcResponse {
             throw new IllegalStateException("error value is absent");
         }
         if (getResult().isPresent()) {
-            throw new IllegalStateException("result value is present: %s".format(getError().get().toString()));
+            throw new IllegalStateException(String.format("result value is present: %s", getError().get().toString()));
         }
         return true;
     }

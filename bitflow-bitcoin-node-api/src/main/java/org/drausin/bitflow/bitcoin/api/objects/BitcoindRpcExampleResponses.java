@@ -37,9 +37,9 @@ public final class BitcoindRpcExampleResponses {
                 + "}";
     }
 
-    public static BitcoindRpcResponse getBlockchainInfoResponse() throws IOException {
+    public static BlockchainInfoResponse getBlockchainInfoResponse() throws IOException {
         return BlockchainInfoResponseMapperProvider.getBlockchainInfoMapper().readValue(getBlockchainInfoJsonResponse(),
-                ImmutableBitcoindRpcResponse.class);
+                ImmutableBlockchainInfoResponse.class);
     }
 
     public static String getBlockHeaderJsonResponse() {
@@ -68,9 +68,9 @@ public final class BitcoindRpcExampleResponses {
                 + "}";
     }
 
-    public static BitcoindRpcResponse getBlockHeaderResponse() throws IOException {
+    public static BlockHeaderResponse getBlockHeaderResponse() throws IOException {
         return BlockHeaderResponseMapperProvider.getBlockHeaderMapper().readValue(getBlockHeaderJsonResponse(),
-                ImmutableBitcoindRpcResponse.class);
+                ImmutableBlockHeaderResponse.class);
     }
 
     public static String getErrorJsonResponse() {
@@ -85,13 +85,18 @@ public final class BitcoindRpcExampleResponses {
         return BitcoinNodeMapperProvider.getCommonMapper().writeValueAsString(getError());
     }
 
-    public static BitcoindRpcResponse getErrorResponse() throws IOException {
+    public static BlockchainInfoResponse getBlockchainInfoErrorResponse() throws IOException {
         return BitcoinNodeMapperProvider.getCommonMapper().readValue(getErrorJsonResponse(),
-                ImmutableBitcoindRpcResponse.class);
+                ImmutableBlockchainInfoResponse.class);
+    }
+
+    public static BlockHeaderResponse getBlockHeaderErrorResponse() throws IOException {
+        return BitcoinNodeMapperProvider.getCommonMapper().readValue(getErrorJsonResponse(),
+                ImmutableBlockHeaderResponse.class);
     }
 
     public static BitcoindRpcResponseError getError() throws IOException {
-        return getErrorResponse().getError().get();
+        return getBlockchainInfoErrorResponse().getError().get();
     }
 
     private BitcoindRpcExampleResponses() {}
