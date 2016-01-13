@@ -46,6 +46,7 @@ allprojects {
             force "com.fasterxml.jackson.core:jackson-databind:${jacksonVersion}"
             force "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${jacksonVersion}"
             force "com.fasterxml.jackson.datatype:jackson-datatype-guava:${jacksonVersion}"
+            force "com.fasterxml.jackson.datatype:jackson-datatype-jdk7:${jacksonVersion}"
             force "com.fasterxml.jackson.datatype:jackson-datatype-joda:${jacksonVersion}"
             force "com.fasterxml.jackson.module:jackson-module-scala_2.10:${jacksonVersion}"
             force "com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:${jacksonVersion}"
