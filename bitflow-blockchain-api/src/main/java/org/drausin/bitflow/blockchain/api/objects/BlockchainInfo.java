@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigInteger;
+import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
 import org.immutables.value.Value;
 
@@ -83,9 +84,33 @@ public abstract class BlockchainInfo implements BlockchainResult {
     @JsonProperty("chainwork")
     public abstract BigInteger getChainwork();
 
+    /**
+     * Get whether the blocks are subject to pruning.
+     */
+    @Value.Parameter
+    @JsonProperty("pruned")
+    public abstract boolean getPruned();
+
+    /**
+     * Get the highest pruned block.
+     */
+    @Value.Parameter
+    @JsonProperty("pruneheight")
+    public abstract long getPruneHeight();
+
+    /**
+     * Get the status of softforks in progress.
+     *
+     * @see <a href=https://en.bitcoin.it/wiki/Softfork>Softfork</a>
+     */
+    @Value.Parameter
+    @JsonProperty("softforks")
+    public abstract List<SoftFork> getSoftForks();
+
     public static BlockchainInfo of(String chain, long numBlocks, long numHeaders, Sha256Hash bestBlockHash,
-            double difficulty, double verificationProgress, BigInteger chainwork) {
+            double difficulty, double verificationProgress, BigInteger chainwork, boolean pruned, long pruneHeight,
+            List<SoftFork> softForks) {
         return ImmutableBlockchainInfo.of(chain, numBlocks, numHeaders, bestBlockHash, difficulty, verificationProgress,
-                chainwork);
+                chainwork, pruned, pruneHeight, (Iterable<? extends SoftFork>) softForks);
     }
 }

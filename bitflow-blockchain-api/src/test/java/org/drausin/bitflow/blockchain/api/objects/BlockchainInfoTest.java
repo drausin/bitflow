@@ -75,6 +75,7 @@ import static org.junit.Assert.assertEquals;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
@@ -102,18 +103,71 @@ public class BlockchainInfoTest {
         blockchainModule.addDeserializer(BigInteger.class, new BigIntegerDeserializer());
 
         // mapper from RPC json schema
-        mapper = new ObjectMapper();
-        mapper.registerModule(blockchainModule);
+        mapper = new ObjectMapper()
+                .registerModule(blockchainModule)
+                .registerModule(new GuavaModule());
 
         // from https://bitcoin.org/en/developer-reference#getblockchaininfo
         rpcGetInfoJson = "{\n"
-                + "    \"chain\" : \"test\",\n"
-                + "    \"blocks\" : 315280,\n"
-                + "    \"headers\" : 315280,\n"
-                + "    \"bestblockhash\" : \"000000000ebb17fb455e897b8f3e343eea1b07d926476d00bc66e2c0342ed50f\",\n"
-                + "    \"difficulty\" : 1.00000000,\n"
-                + "    \"verificationprogress\" : 1.00000778,\n"
-                + "    \"chainwork\" : \"0000000000000000000000000000000000000000000000015e984b4fb9f9b350\"\n"
+                + "    \"chain\" : \"main\",\n"
+                + "    \"blocks\" : 230815,\n"
+                + "    \"headers\" : 392851,\n"
+                + "    \"bestblockhash\" : \"0000000000000022df2e6aa2a391b09c13fcf26ad4d4de7ff89ff6f3d8b7e76e\",\n"
+                + "    \"difficulty\" : 7672999.92016414,\n"
+                + "    \"verificationprogress\" : 0.06962276,\n"
+                + "    \"chainwork\" : \"000000000000000000000000000000000000000000000035d5077fe0b77b6820\",\n"
+                + "    \"pruned\" : true,\n"
+                + "    \"softforks\" : [\n"
+                + "        {\n"
+                + "            \"id\" : \"bip34\",\n"
+                + "            \"version\" : 2,\n"
+                + "            \"enforce\" : {\n"
+                + "                \"status\" : true,\n"
+                + "                \"found\" : 1000,\n"
+                + "                \"required\" : 750,\n"
+                + "                \"window\" : 1000\n"
+                + "            },\n"
+                + "            \"reject\" : {\n"
+                + "                \"status\" : true,\n"
+                + "                \"found\" : 1000,\n"
+                + "                \"required\" : 950,\n"
+                + "                \"window\" : 1000\n"
+                + "            }\n"
+                + "        },\n"
+                + "        {\n"
+                + "            \"id\" : \"bip66\",\n"
+                + "            \"version\" : 3,\n"
+                + "            \"enforce\" : {\n"
+                + "                \"status\" : false,\n"
+                + "                \"found\" : 0,\n"
+                + "                \"required\" : 750,\n"
+                + "                \"window\" : 1000\n"
+                + "            },\n"
+                + "            \"reject\" : {\n"
+                + "                \"status\" : false,\n"
+                + "                \"found\" : 0,\n"
+                + "                \"required\" : 950,\n"
+                + "                \"window\" : 1000\n"
+                + "            }\n"
+                + "        },\n"
+                + "        {\n"
+                + "            \"id\" : \"bip65\",\n"
+                + "            \"version\" : 4,\n"
+                + "            \"enforce\" : {\n"
+                + "                \"status\" : false,\n"
+                + "                \"found\" : 0,\n"
+                + "                \"required\" : 750,\n"
+                + "                \"window\" : 1000\n"
+                + "            },\n"
+                + "            \"reject\" : {\n"
+                + "                \"status\" : false,\n"
+                + "                \"found\" : 0,\n"
+                + "                \"required\" : 950,\n"
+                + "                \"window\" : 1000\n"
+                + "            }\n"
+                + "        }\n"
+                + "    ],\n"
+                + "    \"pruneheight\" : 228183\n"
                 + "}";
 
         blockchainInfo = mapper.readValue(rpcGetInfoJson, ImmutableBlockchainInfo.class);
@@ -187,10 +241,37 @@ public class BlockchainInfoTest {
     }
 
     @Test
+    public final void testGetPruned() throws Exception {
+        assertEquals(JsonPath.read(rpcGetInfoJson, "$.pruned"), blockchainInfo.getPruned());
+        assertEquals(blockchainInfo.getPruned(), JsonPath.read(blockchainInfoJson, "$.pruned"));
+    }
+
+    @Test
+    public final void testGetPruneHeight() throws Exception {
+        assertEquals(
+                ((Integer) JsonPath.read(rpcGetInfoJson, "$.pruneheight")).longValue(),
+                blockchainInfo.getPruneHeight());
+        assertEquals(
+                blockchainInfo.getPruneHeight(),
+                ((Integer) JsonPath.read(blockchainInfoJson, "$.pruneheight")).longValue());
+    }
+
+    @Test
+    public final void testGetSoftForks() throws Exception {
+        assertEquals(
+                JsonPath.read(rpcGetInfoJson, "$.softforks").toString(),
+                mapper.writeValueAsString(blockchainInfo.getSoftForks()));
+        assertEquals(
+                mapper.writeValueAsString(blockchainInfo.getSoftForks()),
+                JsonPath.read(blockchainInfoJson, "$.softforks").toString());
+    }
+
+    @Test
     public final void testOf() {
         BlockchainInfo testBlockchainInfo = BlockchainInfo.of(blockchainInfo.getChain(), blockchainInfo.getNumBlocks(),
                 blockchainInfo.getNumHeaders(), blockchainInfo.getBestBlockHash(), blockchainInfo.getDifficulty(),
-                blockchainInfo.getVerificationProgress(), blockchainInfo.getChainwork());
+                blockchainInfo.getVerificationProgress(), blockchainInfo.getChainwork(), blockchainInfo.getPruned(),
+                blockchainInfo.getPruneHeight(), blockchainInfo.getSoftForks());
         assertEquals(blockchainInfo, testBlockchainInfo);
     }
 }

@@ -26,8 +26,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeExampleResponses;
+import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.bitcoin.config.ImmutableServerConfig;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
@@ -65,8 +65,8 @@ public class BitcoinNodeResourceTest extends JerseyTest {
             } else if (request.getMethod().equals(BitcoinNodeResource.BLOCK_HEADER_RPC_METHOD)) {
                 return BitcoinNodeExampleResponses.getBlockHeaderJsonResponse();
             } else {
-                throw new IllegalArgumentException("%s is not a valid RPC request method".format(
-                        request.getMethod().toString()));
+                throw new IllegalArgumentException(String.format("%s is not a valid RPC request method",
+                        request.getMethod()));
             }
         }
     }
@@ -101,7 +101,7 @@ public class BitcoinNodeResourceTest extends JerseyTest {
     @Test
     public final void testGetBlockchainInfo() throws Exception {
 
-        BlockchainInfo result = (BlockchainInfo) bitcoinNodeResource.getBlockchainInfo().getResult().get();
+        BlockchainInfo result = bitcoinNodeResource.getBlockchainInfo().getResult().get();
         assertEquals(
                 JsonPath.read(BitcoinNodeExampleResponses.getBlockchainInfoJsonResponse(), "$.result.chain"),
                 result.getChain());
@@ -111,7 +111,7 @@ public class BitcoinNodeResourceTest extends JerseyTest {
     public final void testGetBlockHeader() throws Exception {
         Sha256Hash headerHash = Sha256Hash.wrap(JsonPath.read(BitcoinNodeExampleResponses.getBlockHeaderJsonResponse(),
                 "$.result.hash").toString());
-        BlockHeader result = (BlockHeader) bitcoinNodeResource.getBlockHeader(headerHash).getResult().get();
+        BlockHeader result = bitcoinNodeResource.getBlockHeader(headerHash).getResult().get();
         assertEquals(headerHash, result.getHeaderHash());
     }
 }

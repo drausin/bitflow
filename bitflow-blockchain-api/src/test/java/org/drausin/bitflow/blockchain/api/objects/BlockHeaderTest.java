@@ -103,9 +103,9 @@ public class BlockHeaderTest {
         blockModule.addDeserializer(BigInteger.class, new BigIntegerDeserializer());
 
         // mapper from RPC json schema
-        mapper = new ObjectMapper();
-        mapper.registerModule(blockModule);
-        mapper.registerModule(new GuavaModule());
+        mapper = new ObjectMapper()
+                .registerModule(blockModule)
+                .registerModule(new GuavaModule());
 
 
         // from https://bitcoin.org/en/developer-reference#getblock
@@ -174,7 +174,6 @@ public class BlockHeaderTest {
 
     @Test
     public final void testGetTransactionIds() throws Exception {
-
         assertEquals(
                 JsonPath.read(rpcGetBlockJson, "$.tx").toString(),
                 mapper.writeValueAsString(blockHeader.getTransactionIds()));
