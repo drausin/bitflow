@@ -1,0 +1,13 @@
+# Bitflow services
+bitcoin-node:
+  container_name: bitcoin-node.bitflow.dev
+  image: 'docker.io/daedalus2718/bitflow/bitflow-bitcoin-node:latest'
+  ports:
+    - "8333:8333"
+    - "8332:8332"
+    - "5101:5101"
+  environment:
+    JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5101
+  volumes:
+    - /opt/bitflow
+    - /data
