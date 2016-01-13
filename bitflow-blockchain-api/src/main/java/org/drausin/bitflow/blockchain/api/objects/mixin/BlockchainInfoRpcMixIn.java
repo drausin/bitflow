@@ -69,7 +69,7 @@ import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
  *
  * @author dwulsin
  */
-public abstract class BlockchainInfoRpcMixIn implements BlockchainInfo {
+public abstract class BlockchainInfoRpcMixIn extends BlockchainInfo {
 
     @JsonCreator
     public BlockchainInfoRpcMixIn(

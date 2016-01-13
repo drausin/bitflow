@@ -15,8 +15,11 @@
 package org.drausin.bitflow.blockchain.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
+import org.immutables.value.Value;
 
 /**
  * Current information about the blockchain as returned by the Bitcoind
@@ -24,48 +27,59 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public interface BlockchainInfo extends BlockchainResult {
+@Value.Immutable
+@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
+@JsonSerialize(as = ImmutableBlockchainInfo.class)
+@JsonDeserialize(as = ImmutableBlockchainInfo.class)
+public abstract class BlockchainInfo implements BlockchainResult {
 
     /**
      * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.
      */
-    @JsonProperty
-    String getChain();
+    @Value.Parameter
+    @JsonProperty("chain")
+    public abstract String getChain();
 
     /**
      * Get the number of validated blocks in the local best block chain.
      */
-    @JsonProperty
-    long getNumBlocks();
+    @Value.Parameter
+    @JsonProperty("blocks")
+    public abstract long getNumBlocks();
 
     /**
      * Get the number of validated headers in the local best headers chain.
      */
-    @JsonProperty
-    long getNumHeaders();
+    @Value.Parameter
+    @JsonProperty("headers")
+    public abstract long getNumHeaders();
 
     /**
      * Get the hash of the header of the highest validated block in the best block chain.
      */
-    @JsonProperty
-    Sha256Hash getBestBlockHash();
+    @Value.Parameter
+    @JsonProperty("bestblockhash")
+    public abstract Sha256Hash getBestBlockHash();
 
     /**
      * Get the difficulty of the highest-height block in the best block chain.
      */
-    @JsonProperty
-    double getDifficulty();
+    @Value.Parameter
+    @JsonProperty("difficulty")
+    public abstract double getDifficulty();
 
     /**
      * Get the estimate of what percentage of the block chain transactions have been verified so far, starting at 0.0
      * and increasing to 1.0 for fully verified.
      */
-    @JsonProperty
-    double getVerificationProgress();
+    @Value.Parameter
+    @JsonProperty("verificationprogress")
+    public abstract double getVerificationProgress();
 
     /**
      * Get the estimated number of block header hashes checked from the genesis block to this block.
      */
-    @JsonProperty
-    BigInteger getChainwork();
+    @Value.Parameter
+    @JsonProperty("chainwork")
+    public abstract BigInteger getChainwork();
 }
