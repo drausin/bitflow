@@ -48,7 +48,7 @@ public class BitcoindRpcResponseErrorTest {
     @Before
     public final void setUp() throws Exception {
 
-        rpcMapper = BitcoinNodeMapperProvider.getCommonMapper();
+        rpcMapper = BitcoinNodeMapperProvider.getMapper();
 
         errorJson = BitcoindRpcExampleResponses.getErrorJson();
         responseError1 = BitcoindRpcExampleResponses.getError();

@@ -26,8 +26,7 @@ import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
 import org.drausin.bitflow.bitcoin.api.objects.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.objects.BlockchainInfoResponse;
-import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
 import org.drausin.bitflow.service.utils.BitflowResource;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -48,8 +47,8 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
         this.config = config;
         this.rpcAuth = HttpAuthenticationFeature.basic(config.getBitcoinNode().getRpcUser(),
                 config.getBitcoinNode().getRpcPassword());
-        this.blockchainInfoTarget = getBlockchainInfoClient().target(config.getRpcUri());
-        this.blockHeaderTarget = getBlockHeaderClient().target(config.getRpcUri());
+        this.blockchainInfoTarget = getCommonClient().target(config.getRpcUri());
+        this.blockHeaderTarget = getCommonClient().target(config.getRpcUri());
     }
 
     public ServerConfig getConfig() {
@@ -68,26 +67,11 @@ public final class BitcoinNodeResource extends BitflowResource implements Bitcoi
         return blockHeaderTarget;
     }
 
-    public Client getBlockchainInfoClient() {
-        return getBlockchainInfoClient(ClientBuilder.newClient());
-    }
-
-    public Client getBlockchainInfoClient(Client current) {
-        return getCommonClient(current).register(BlockchainInfoResponseMapperProvider.class);
-    }
-
-    public Client getBlockHeaderClient() {
-        return getBlockHeaderClient(ClientBuilder.newClient());
-    }
-
-    public Client getBlockHeaderClient(Client current) {
-        return getCommonClient(current).register(BlockHeaderResponseMapperProvider.class);
-    }
-
-    private Client getCommonClient(Client current) {
-        return current
+    private Client getCommonClient() {
+        return ClientBuilder.newClient()
                 .register(getRpcAuth())
-                .register(JacksonFeature.class);
+                .register(JacksonFeature.class)
+                .register(BitcoinNodeMapperProvider.class);
     }
 
     @Override

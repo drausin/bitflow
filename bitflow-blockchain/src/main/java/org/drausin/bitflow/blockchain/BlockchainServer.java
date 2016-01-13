@@ -38,8 +38,8 @@ public class BlockchainServer extends Application<ServerConfig> {
     public final void run(ServerConfig config, Environment env) throws Exception {
 
         BitcoinNodeService bitcoinNodeService = Feign.builder()
-                .encoder(new JacksonEncoder(BitcoinNodeMapperProvider.getCommonMapper()))
-                .decoder(new JacksonDecoder(BitcoinNodeMapperProvider.getCommonMapper()))
+                .encoder(new JacksonEncoder(BitcoinNodeMapperProvider.getMapper()))
+                .decoder(new JacksonDecoder(BitcoinNodeMapperProvider.getMapper()))
                 .contract(new JAXRSContract())
                 .client(new OkHttpClient())
                 .target(BitcoinNodeService.class, config.getBitcoinNodeUri());

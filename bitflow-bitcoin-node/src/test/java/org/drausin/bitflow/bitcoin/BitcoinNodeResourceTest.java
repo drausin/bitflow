@@ -28,7 +28,7 @@ import javax.ws.rs.core.MediaType;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcExampleResponses;
 import org.drausin.bitflow.bitcoin.api.objects.BitcoindRpcRequest;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoindRpcRequestMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.drausin.bitflow.bitcoin.config.ImmutableServerConfig;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
@@ -79,7 +79,7 @@ public class BitcoinNodeResourceTest extends JerseyTest {
     @Override
     protected final Application configure() {
         return new ResourceConfig(BitcoindRpcTestResource.class)
-                .register(BitcoindRpcRequestMapperProvider.class)
+                .register(BitcoinNodeMapperProvider.class)
                 .register(JacksonFeature.class);
     }
 

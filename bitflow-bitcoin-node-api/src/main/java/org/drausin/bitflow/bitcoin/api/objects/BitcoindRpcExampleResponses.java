@@ -16,8 +16,6 @@ package org.drausin.bitflow.bitcoin.api.objects;
 
 import java.io.IOException;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
-import org.drausin.bitflow.bitcoin.api.providers.BlockHeaderResponseMapperProvider;
-import org.drausin.bitflow.bitcoin.api.providers.BlockchainInfoResponseMapperProvider;
 
 public final class BitcoindRpcExampleResponses {
 
@@ -38,7 +36,7 @@ public final class BitcoindRpcExampleResponses {
     }
 
     public static BlockchainInfoResponse getBlockchainInfoResponse() throws IOException {
-        return BlockchainInfoResponseMapperProvider.getBlockchainInfoMapper().readValue(getBlockchainInfoJsonResponse(),
+        return BitcoinNodeMapperProvider.getMapper().readValue(getBlockchainInfoJsonResponse(),
                 ImmutableBlockchainInfoResponse.class);
     }
 
@@ -69,7 +67,7 @@ public final class BitcoindRpcExampleResponses {
     }
 
     public static BlockHeaderResponse getBlockHeaderResponse() throws IOException {
-        return BlockHeaderResponseMapperProvider.getBlockHeaderMapper().readValue(getBlockHeaderJsonResponse(),
+        return BitcoinNodeMapperProvider.getMapper().readValue(getBlockHeaderJsonResponse(),
                 ImmutableBlockHeaderResponse.class);
     }
 
@@ -82,16 +80,16 @@ public final class BitcoindRpcExampleResponses {
     }
 
     public static String getErrorJson() throws IOException {
-        return BitcoinNodeMapperProvider.getCommonMapper().writeValueAsString(getError());
+        return BitcoinNodeMapperProvider.getMapper().writeValueAsString(getError());
     }
 
     public static BlockchainInfoResponse getBlockchainInfoErrorResponse() throws IOException {
-        return BitcoinNodeMapperProvider.getCommonMapper().readValue(getErrorJsonResponse(),
+        return BitcoinNodeMapperProvider.getMapper().readValue(getErrorJsonResponse(),
                 ImmutableBlockchainInfoResponse.class);
     }
 
     public static BlockHeaderResponse getBlockHeaderErrorResponse() throws IOException {
-        return BitcoinNodeMapperProvider.getCommonMapper().readValue(getErrorJsonResponse(),
+        return BitcoinNodeMapperProvider.getMapper().readValue(getErrorJsonResponse(),
                 ImmutableBlockHeaderResponse.class);
     }
 
