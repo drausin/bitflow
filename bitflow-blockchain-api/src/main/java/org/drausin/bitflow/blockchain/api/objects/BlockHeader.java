@@ -15,9 +15,12 @@
 package org.drausin.bitflow.blockchain.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.math.BigInteger;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
+import org.immutables.value.Value;
 
 /**
  * Information about a block as returned by the Bitcoind
@@ -25,95 +28,99 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public interface BlockHeader extends BlockchainResult {
+@Value.Immutable
+@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
+@JsonSerialize(as = ImmutableBlockHeader.class)
+@JsonDeserialize(as = ImmutableBlockHeader.class)
+public abstract class BlockHeader implements BlockchainResult {
 
     /**
      * Get the hash of the block header.
      */
-    @JsonProperty
-    Sha256Hash getHeaderHash();
+    @JsonProperty("hash")
+    public abstract Sha256Hash getHeaderHash();
 
     /**
      * Get the number of confirmations the transactions in this block have. This value starts at 1 when this block is
      * at the tip of the best block chain. It will be -1 if the the block is not part of the best block chain.
      */
-    @JsonProperty
-    long getNumConfirmations();
+    @JsonProperty("confirmations")
+    public abstract long getNumConfirmations();
 
     /**
      * Get the number of bytes of this block in serialized block format.
      */
-    @JsonProperty
-    long getSizeBytes();
+    @JsonProperty("size")
+    public abstract long getSizeBytes();
 
     /**
      * Get the height of this block on its block chain.
      */
-    @JsonProperty
-    long getHeight();
+    @JsonProperty("height")
+    public abstract long getHeight();
 
     /**
      * Get this block’s version number.
      * @see <a href="https://bitcoin.org/en/developer-reference#block-versions">Block Versions</a>
      */
-    @JsonProperty
-    long getVersion();
+    @JsonProperty("version")
+    public abstract long getVersion();
 
     /**
      * Get the merkle root for this block.
      */
-    @JsonProperty
-    Sha256Hash getMerkleRoot();
+    @JsonProperty("merkleroot")
+    public abstract Sha256Hash getMerkleRoot();
 
     /**
      * Get a list of the IDs of the transactions in this block. The transactions appear in the array in the same
      * order they appear in the serialized block. While not technically part of the block header, this list is handy
      * and reasonably lightweight, so we include it.
      */
-    @JsonProperty
-    List<Sha256Hash> getTransactionIds();
+    @JsonProperty("tx")
+    public abstract List<Sha256Hash> getTransactionIds();
 
     /**
      * Get the approximate time when the block was created, store as seconds since the the 1970 epoch.
      */
-    @JsonProperty
-    long getCreatedTime();
+    @JsonProperty("time")
+    public abstract long getCreatedTime();
 
     /**
      * Get the nonce which was successful at turning this particular block into one that could be added to the best.
      * block chain.
      */
-    @JsonProperty
-    long getNonce();
+    @JsonProperty("nonce")
+    public abstract long getNonce();
 
     /**
      * Get the target threshhold (a.k.a., nBits) the block header had to pass.
      */
-    @JsonProperty
-    BigInteger getDifficultyTarget();
+    @JsonProperty("bits")
+    public abstract BigInteger getDifficultyTarget();
 
     /**
      * Get the estimated amount of work done to find this block relative to the estimated amount of work done to find
      * block 0.
      */
-    @JsonProperty
-    double getDifficulty();
+    @JsonProperty("difficulty")
+    public abstract double getDifficulty();
 
     /**
      * Get the estimated number of block header hashes miners had to check from the genesis block to this block.
      */
-    @JsonProperty
-    BigInteger getChainwork();
+    @JsonProperty("chainwork")
+    public abstract BigInteger getChainwork();
 
     /**
      * Get the header hash of the previous block.
      */
-    @JsonProperty
-    Sha256Hash getPreviousBlockHash();
+    @JsonProperty("previousblockhash")
+    public abstract Sha256Hash getPreviousBlockHash();
 
     /**
      * Get the header hash of the next block.
      */
-    @JsonProperty
-    Sha256Hash getNextBlockHash();
+    @JsonProperty("nextblockhash")
+    public abstract Sha256Hash getNextBlockHash();
 }

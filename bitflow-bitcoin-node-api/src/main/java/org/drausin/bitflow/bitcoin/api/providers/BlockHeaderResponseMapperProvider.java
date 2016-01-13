@@ -19,8 +19,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import javax.ws.rs.ext.Provider;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
-import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
-import org.drausin.bitflow.blockchain.api.objects.mixin.BlockHeaderRpcMixIn;
 import org.drausin.bitflow.blockchain.api.serde.BlockHeaderDeserializer;
 
 /**
@@ -43,8 +41,7 @@ public class BlockHeaderResponseMapperProvider extends BitcoinNodeMapperProvider
 
     public static ObjectMapper getBlockHeaderMapper() {
         return getCommonMapper()
-                .registerModule(getBlockHeaderModule())
-                .addMixIn(ImmutableBlockHeader.class, BlockHeaderRpcMixIn.class);
+                .registerModule(getBlockHeaderModule());
     }
 
     private static SimpleModule getBlockHeaderModule() {
