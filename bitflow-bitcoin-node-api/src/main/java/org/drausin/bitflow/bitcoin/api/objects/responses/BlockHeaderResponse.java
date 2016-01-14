@@ -12,34 +12,26 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.api.objects;
+package org.drausin.bitflow.bitcoin.api.objects.responses;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Optional;
+import org.drausin.bitflow.bitcoin.api.objects.ImmutableBlockHeaderResponse;
+import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.immutables.value.Value;
 
 /**
- * The RPC response error from the bitcoind daemon.
- *
- * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
- * @author dwulsin
+ * An RPC response with a BlockHeader result.
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
-@JsonSerialize(as = ImmutableBitcoinNodeResponseError.class)
-@JsonDeserialize(as = ImmutableBitcoinNodeResponseError.class)
-public abstract class BitcoinNodeResponseError {
+@JsonSerialize(as = ImmutableBlockHeaderResponse.class)
+@JsonDeserialize(as = ImmutableBlockHeaderResponse.class)
+public abstract class BlockHeaderResponse extends BitcoinNodeResponse<BlockHeader> {
 
-    @Value.Parameter
-    @JsonProperty("code")
-    public abstract long getCode();
-
-    @Value.Parameter
-    @JsonProperty("message")
-    public abstract String getMessage();
-
-    public static BitcoinNodeResponseError of(long code, String message) {
-        return ImmutableBitcoinNodeResponseError.of(code, message);
+    public static BlockHeaderResponse of(Optional<BlockHeader> result, Optional<BitcoinNodeResponseError> error,
+            Optional<String> id) {
+        return ImmutableBlockHeaderResponse.of(result, error, id);
     }
 }

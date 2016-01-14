@@ -12,13 +12,14 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.api.objects;
+package org.drausin.bitflow.bitcoin.api.objects.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
 import java.util.List;
+import org.drausin.bitflow.bitcoin.api.objects.ImmutableBitcoinNodeRequest;
 import org.immutables.value.Value;
 
 /**

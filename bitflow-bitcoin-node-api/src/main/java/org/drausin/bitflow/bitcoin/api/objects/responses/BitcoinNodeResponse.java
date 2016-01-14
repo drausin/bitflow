@@ -12,7 +12,8 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.api.objects;
+
+package org.drausin.bitflow.bitcoin.api.objects.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
