@@ -11,6 +11,7 @@ project(':bitflow-bitcoin-node-api') {
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+        compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
 
         // for tests
