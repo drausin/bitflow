@@ -1,0 +1,5 @@
+apply plugin: 'org.unbroken-dome.test-sets'
+
+testSets {
+    integrationTests { dirName = 'integrationTests' }
+}

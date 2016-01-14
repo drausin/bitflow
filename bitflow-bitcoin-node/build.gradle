@@ -1,4 +1,5 @@
 apply from: "${rootDir}/gradle/java.gradle"
+apply from: "${rootDir}/gradle/integration-test-set.gradle"
 apply plugin: 'org.inferred.processors'
 apply plugin: 'com.palantir.java-distribution'
 apply plugin: 'com.palantir.docker'
@@ -49,6 +50,8 @@ project(':bitflow-bitcoin-node') {
         compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}"
         compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:${jerseyVersion}"
 
+        processor "org.immutables:value:${immutablesVersion}"
+
         // Test
         testCompile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
         testCompile "junit:junit:$junitVersion"
@@ -59,8 +62,7 @@ project(':bitflow-bitcoin-node') {
         testCompile "org.dbunit:dbunit:2.5.1"
         testCompile "com.mockrunner:mockrunner-jdbc:1.1.0"
 
-        processor "org.immutables:value:${immutablesVersion}"
-
+        integrationTestsCompile project(':bitflow-integration-tests')
     }
 
     def snapshotDockerImage = "docker.io/daedalus2718/bitflow/${project.name}"

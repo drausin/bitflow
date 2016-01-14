@@ -12,7 +12,7 @@ buildscript {
         classpath "gradle.plugin.com.palantir.gradle.javadist:gradle-java-distribution:${gradleJavaDistVersion}"
         classpath "gradle.plugin.org.inferred:gradle-processors:${gradleProcessorsVersion}"
         classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:${gradleGitVersionVersion}"
-        classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:1.2.0"
+        classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:${gradleTestSetsVersion}"
     }
 }
 
