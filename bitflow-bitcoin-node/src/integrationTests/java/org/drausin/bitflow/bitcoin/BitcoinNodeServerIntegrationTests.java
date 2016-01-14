@@ -37,7 +37,7 @@ public final class BitcoinNodeServerIntegrationTests extends AbstractIntegration
     }
 
     @Test
-    public void testGetBlockHeader() {
+    public void testGetBlockHeaderUnpruned() {
 
         // first get blockchain info
         BitcoinNodeRequest blockchainInfoRequest = BitcoinNodeRequestFactory.createBlockchainInfoRequest();
@@ -52,5 +52,13 @@ public final class BitcoinNodeServerIntegrationTests extends AbstractIntegration
         assertTrue(blockHeaderResponse.validateResult());
         assertTrue(blockHeaderResponse.getResult().get().getTransactionIds().size() > 0);
 
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void testGetBlockHeaderPruned() {
+        // make request for block that's probably not available, which should result in a RuntimeException
+        Sha256Hash headerHash = Sha256Hash.wrap("000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39");
+        BitcoinNodeRequest blockHeaderRequest = BitcoinNodeRequestFactory.createBlockHeaderRequest(headerHash);
+        getBitcoinNode().getBlockHeader(blockHeaderRequest);
     }
 }
