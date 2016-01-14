@@ -17,7 +17,6 @@ package org.drausin.bitflow.bitcoin.api.responses;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
-import org.drausin.bitflow.bitcoin.api.objects.ImmutableBlockHeaderResponse;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.immutables.value.Value;
 

@@ -17,7 +17,6 @@ package org.drausin.bitflow.bitcoin.api.responses;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.drausin.bitflow.bitcoin.api.objects.ImmutableBitcoinNodeResponseError;
 import org.immutables.value.Value;
 
 /**

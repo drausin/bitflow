@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
 import java.util.List;
-import org.drausin.bitflow.bitcoin.api.objects.ImmutableBitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.responses.ImmutableBitcoinNodeRequest;
 import org.immutables.value.Value;
 
 /**

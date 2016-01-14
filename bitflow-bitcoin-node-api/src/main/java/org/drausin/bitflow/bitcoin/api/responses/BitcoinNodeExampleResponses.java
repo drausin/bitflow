@@ -15,8 +15,6 @@
 package org.drausin.bitflow.bitcoin.api.responses;
 
 import java.io.IOException;
-import org.drausin.bitflow.bitcoin.api.objects.ImmutableBlockHeaderResponse;
-import org.drausin.bitflow.bitcoin.api.objects.ImmutableBlockchainInfoResponse;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 
 public final class BitcoinNodeExampleResponses {
