@@ -12,6 +12,9 @@ project(':bitflow-blockchain') {
         compile project(':bitflow-bitcoin-node-api')
         compile project(':bitflow-service-utils')
 
+        // processors
+        processor "org.immutables:value:${immutablesVersion}"
+
         // external dependencies
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
@@ -26,17 +29,18 @@ project(':bitflow-blockchain') {
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
 
-        // tests
+        // checks
+        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "com.google.code.findbugs:annotations:${jsr305Version}"
+
+        // unit tests
         testCompile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
         testCompile "junit:junit:$junitVersion"
         testCompile "org.mockito:mockito-all:$mockitoVersion"
         testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"
 
-        // checks
-        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
-        compile "com.google.code.findbugs:annotations:${jsr305Version}"
-
-        processor "org.immutables:value:${immutablesVersion}"
+        // integration tests
+        integrationTestsCompile project(':bitflow-integration-tests')
     }
 
     distribution {
