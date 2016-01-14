@@ -56,7 +56,7 @@ public enum BitcoinNodeErrorDecoder implements ErrorDecoder {
 
         Collection<String> contentType = response.headers().get(HttpHeaders.CONTENT_TYPE);
         if (!contentType.contains(MediaType.APPLICATION_JSON)) {
-            return new RuntimeException("Response content type is not JSON, but that is expected");
+            throw new RuntimeException("Response content type is not JSON, but that is expected");
         }
 
         BitcoinNodeResponseError error = getErrorFromBody(response.body(), methodKey);
@@ -85,7 +85,7 @@ public enum BitcoinNodeErrorDecoder implements ErrorDecoder {
 
     private static Map<String, Class> getMethodReturnTypes(Class clazz) {
         Map<String, Class> returnTypes = Maps.newHashMap();
-        for (Method method: clazz.getMethods()) {
+        for (Method method : clazz.getMethods()) {
             String configKey = Feign.configKey(clazz, method);
             returnTypes.put(configKey, method.getReturnType());
         }
