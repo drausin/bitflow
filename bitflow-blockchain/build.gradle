@@ -5,46 +5,35 @@ apply plugin: 'com.palantir.java-distribution'
 project(':bitflow-blockchain') {
 
     dependencies {
+
+        // internal dependencies
         compile project(':bitflow-blockchain-api')
         compile project(':bitflow-bitcoin-node-api')
         compile project(':bitflow-service-utils')
 
-        compile "ch.qos.logback:logback-classic:${logbackVersion}"
-        compile "org.apache.commons:commons-lang3:3.0"
-        compile "commons-io:commons-io:2.4"
+        // external dependencies
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:$jacksonVersion"
-        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion"
         compile "com.google.guava:guava:$guavaVersion"
         compile "com.netflix.feign:feign-core:${feignVersion}"
         compile "com.netflix.feign:feign-jackson:${feignVersion}"
         compile "com.netflix.feign:feign-jaxrs:${feignVersion}"
         compile "com.netflix.feign:feign-okhttp:${feignVersion}"
-        compile "io.dropwizard:dropwizard-client:$dropwizardVersion"
+        compile "com.palantir.remoting:http-clients:${httpRemotingVersion}"
+        compile "com.palantir.remoting:error-handling:${httpRemotingVersion}"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
-        compile "io.dropwizard:dropwizard-jetty:${dropwizardVersion}"
-        compile "io.dropwizard:dropwizard-jersey:${dropwizardVersion}"
-        compile "net.sourceforge.argparse4j:argparse4j:$argparse4jVersion"
-        compile "org.apache.avro:avro:1.7.7"
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
-        compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
-        compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-jetty:${jerseyVersion}"
-        compile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:${jerseyVersion}"
 
-        // Test
-        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
-        compile "com.google.code.findbugs:annotations:${jsr305Version}"
+        // tests
         testCompile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
         testCompile "junit:junit:$junitVersion"
-        testCompile "org.hamcrest:hamcrest-core:$hamcrestVersion"
         testCompile "org.mockito:mockito-all:$mockitoVersion"
         testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"
-        testCompile "org.hsqldb:hsqldb:2.3.3"
-        testCompile "org.dbunit:dbunit:2.5.1"
-        testCompile "com.mockrunner:mockrunner-jdbc:1.1.0"
+
+        // checks
+        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "com.google.code.findbugs:annotations:${jsr305Version}"
 
         processor "org.immutables:value:${immutablesVersion}"
     }

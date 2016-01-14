@@ -4,8 +4,11 @@ project(':bitflow-blockchain-api') {
     apply plugin: 'org.inferred.processors'
 
     dependencies {
+
+        // internal dependencies
         compile project(':bitflow-service-utils')
 
+        // external dependencies
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
