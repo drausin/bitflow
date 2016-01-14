@@ -18,6 +18,8 @@ import io.dropwizard.jersey.params.DateTimeParam;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
+import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
@@ -34,13 +36,15 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
     @Override
     public final BlockchainInfo getBlockchainInfo(String authHeader) {
         // TODO(dwulsin): what to do with authHeader?
-        return (BlockchainInfo) bitcoinNodeService.getBlockchainInfo().getResult().get();
+        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockchainInfoRequest();
+        return bitcoinNodeService.getBlockchainInfo(request).getResult().get();
     }
 
     @Override
     public final BlockHeader getBlockHeader(String authHeader, Sha256Hash hash) {
         // TODO(dwulsin): what to do with authHeader?
-        return (BlockHeader) bitcoinNodeService.getBlockHeader(hash).getResult().get();
+        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderRequest(hash);
+        return bitcoinNodeService.getBlockHeader(request).getResult().get();
     }
 
     @Override

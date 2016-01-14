@@ -14,15 +14,15 @@
 
 package org.drausin.bitflow.blockchain;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeExampleResponses;
+import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeExampleResponses;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,9 +34,9 @@ public class BlockchainResourceTest {
     public final void setUp() throws Exception {
         BitcoinNodeService bitcoinNodeService = mock(BitcoinNodeService.class);
 
-        when(bitcoinNodeService.getBlockchainInfo()).thenReturn(
+        when(bitcoinNodeService.getBlockchainInfo(any(BitcoinNodeRequest.class))).thenReturn(
                 BitcoinNodeExampleResponses.getBlockchainInfoResponse());
-        when(bitcoinNodeService.getBlockHeader(any(Sha256Hash.class))).thenReturn(
+        when(bitcoinNodeService.getBlockHeader(any(BitcoinNodeRequest.class))).thenReturn(
                 BitcoinNodeExampleResponses.getBlockHeaderResponse());
 
         blockchainResource = new BlockchainResource(bitcoinNodeService);
@@ -44,15 +44,17 @@ public class BlockchainResourceTest {
 
     @Test
     public final void testGetBlockchainInfo() throws Exception {
-        assertThat(
-                blockchainResource.getBlockchainInfo("dummy auth header"),
-                is(BitcoinNodeExampleResponses.getBlockchainInfoResponse().getResult().get()));
+        assertEquals(
+                BitcoinNodeExampleResponses.getBlockchainInfoResponse().getResult().get(),
+                blockchainResource.getBlockchainInfo("dummy auth header"));
     }
 
     @Test
     public final void testGetBlockHeader() throws Exception {
-        assertThat(
-                blockchainResource.getBlockHeader("dummy auth header", any(Sha256Hash.class)),
-                is(BitcoinNodeExampleResponses.getBlockHeaderResponse().getResult().get()));
+
+        Sha256Hash headerHash = BitcoinNodeExampleResponses.getBlockHeaderResponse().getResult().get().getHeaderHash();
+        assertEquals(
+                BitcoinNodeExampleResponses.getBlockHeaderResponse().getResult().get(),
+                blockchainResource.getBlockHeader("dummy auth header", headerHash));
     }
 }

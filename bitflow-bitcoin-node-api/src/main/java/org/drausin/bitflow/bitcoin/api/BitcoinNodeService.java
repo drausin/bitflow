@@ -15,37 +15,32 @@
 package org.drausin.bitflow.bitcoin.api;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.bitcoin.api.objects.BitcoinNodeResponse;
-import org.drausin.bitflow.service.utils.BitflowService;
+import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
+import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 
-@Path("/bitcoinnode")
+@Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public interface BitcoinNodeService extends BitflowService {
+public interface BitcoinNodeService {
 
     /**
      * Gets current information about the blockchain.
      */
-    @GET
-    @Path("/info")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    BitcoinNodeResponse getBlockchainInfo();
+    BlockchainInfoResponse getBlockchainInfo(BitcoinNodeRequest request);
 
     /**
      * Gets the block header for a given block hash.
-     *
-     * @param hash the hash of the block
      */
-    @GET
-    @Path("/block/header/{hash}")
+    @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    BitcoinNodeResponse getBlockHeader(@PathParam("hash") Sha256Hash hash);
+    BlockHeaderResponse getBlockHeader(BitcoinNodeRequest request);
 }
