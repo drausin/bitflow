@@ -30,6 +30,9 @@ idea {
 
         excludeDirs -= file("${buildDir}")
         excludeDirs += file("${buildDir}/dependency-cache")
+        excludeDirs += file("${buildDir}/distributions")
+        excludeDirs += file("${buildDir}/integrationTests")
+        excludeDirs += file("${buildDir}/integrationTests-results")
         excludeDirs += file("${buildDir}/jacoco")
         excludeDirs += file("${buildDir}/libs")
         excludeDirs += file("${buildDir}/reports")

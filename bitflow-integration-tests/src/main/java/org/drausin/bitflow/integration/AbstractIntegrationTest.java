@@ -30,6 +30,7 @@ import feign.jaxrs.JAXRSContract;
 import javax.net.ssl.SSLSocketFactory;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
+import org.junit.Before;
 
 /**
  * Abstract class handling setup and configuration for all integration tests.
@@ -79,7 +80,7 @@ public abstract class AbstractIntegrationTest {
         return bitcoinNode;
     }
 
-    //@Before
+    @Before
     public final void setUp() {
 
         //TODO(dwulsin): confirm that docker-compose bitflow env is up and running

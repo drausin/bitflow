@@ -10,6 +10,7 @@ project(':bitflow-bitcoin-node') {
 
         compile project(':bitflow-bitcoin-node-api')
         compile project(':bitflow-service-utils')
+        compile project (':bitflow-integration-tests')
 
         // TODO(dwulsin) figure out how to fix this
         //docker project(':bitflow-docker-base')
