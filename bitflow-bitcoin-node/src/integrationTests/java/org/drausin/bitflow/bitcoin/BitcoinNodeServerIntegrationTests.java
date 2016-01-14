@@ -16,8 +16,10 @@ package org.drausin.bitflow.bitcoin;
 
 import static org.junit.Assert.assertTrue;
 
-import com.google.common.collect.ImmutableList;
+import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
+import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.drausin.bitflow.integration.AbstractIntegrationTest;
 import org.junit.Test;
@@ -27,10 +29,28 @@ public final class BitcoinNodeServerIntegrationTests extends AbstractIntegration
     @Test
     public void testGetBlockchainInfo() {
 
-        BitcoinNodeRequest request = BitcoinNodeRequest.of("getblockchaininfo", ImmutableList.of());
-        BlockchainInfoResponse response = getBitcoinNode().getBlockchainInfo(request);
+        BitcoinNodeRequest blockchainInfoRequest = BitcoinNodeRequestFactory.createBlockchainInfoRequest();
+        BlockchainInfoResponse blockchainInfoResponse = getBitcoinNode().getBlockchainInfo(blockchainInfoRequest);
 
-        assertTrue(response.validateResult());
-        assertTrue(response.getResult().get().getNumBlocks() > 0);
+        assertTrue(blockchainInfoResponse.validateResult());
+        assertTrue(blockchainInfoResponse.getResult().get().getNumBlocks() > 0);
+    }
+
+    @Test
+    public void testGetBlockHeader() {
+
+        // first get blockchain info
+        BitcoinNodeRequest blockchainInfoRequest = BitcoinNodeRequestFactory.createBlockchainInfoRequest();
+        BlockchainInfoResponse blockchainInfoResponse = getBitcoinNode().getBlockchainInfo(blockchainInfoRequest);
+        blockchainInfoResponse.validateResult();
+
+        // make request for best block
+        Sha256Hash headerHash = blockchainInfoResponse.getResult().get().getBestBlockHash();
+        BitcoinNodeRequest blockHeaderRequest = BitcoinNodeRequestFactory.createBlockHeaderRequest(headerHash);
+        BlockHeaderResponse blockHeaderResponse = getBitcoinNode().getBlockHeader(blockHeaderRequest);
+
+        assertTrue(blockHeaderResponse.validateResult());
+        assertTrue(blockHeaderResponse.getResult().get().getTransactionIds().size() > 0);
+
     }
 }
