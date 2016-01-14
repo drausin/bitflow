@@ -33,37 +33,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import java.math.BigInteger;
-import javax.ws.rs.ext.ContextResolver;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
 import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
 import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
 
 
-public class BitcoinNodeMapperProvider implements ContextResolver<ObjectMapper> {
+public final class BitcoinNodeMapperFactory {
 
-    private final ObjectMapper mapper;
+    private BitcoinNodeMapperFactory() {}
 
-    public BitcoinNodeMapperProvider() {
-        this.mapper = getMapper();
-    }
-
-    @Override
-    public final ObjectMapper getContext(Class<?> type) {
-        return this.mapper;
-    }
-
-
-    public static SimpleModule getModule() {
+    public static SimpleModule createModule() {
         return new SimpleModule("BitcoinNodeModule", Version.unknownVersion())
                 .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
                 .addSerializer(BigInteger.class, new BigIntegerSerializer())
                 .addDeserializer(BigInteger.class, new BigIntegerDeserializer());
     }
 
-    public static ObjectMapper getMapper() {
+    public static ObjectMapper createMapper() {
         return new ObjectMapper()
                 .registerModule(new GuavaModule())
-                .registerModule(getModule());
+                .registerModule(createModule());
     }
 }

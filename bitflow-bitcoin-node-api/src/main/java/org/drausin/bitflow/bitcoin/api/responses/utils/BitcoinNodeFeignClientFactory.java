@@ -28,7 +28,7 @@ import feign.jackson.JacksonEncoder;
 import feign.jaxrs.JAXRSContract;
 import javax.net.ssl.SSLSocketFactory;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
 
 /**
  * Factory for creating {@link feign.Feign} {@link BitcoinNodeService} clients.
@@ -41,9 +41,9 @@ public final class BitcoinNodeFeignClientFactory {
         Function<Optional<SSLSocketFactory>, Client> clientSupplier = FeignClientFactory.okHttpClient();
         return Feign.builder()
                 .contract(new JAXRSContract())
-                .encoder(new JacksonEncoder(BitcoinNodeMapperProvider.getMapper()))
+                .encoder(new JacksonEncoder(BitcoinNodeMapperFactory.createMapper()))
                 .decoder(new OptionalAwareDecoder(new TextDelegateDecoder(
-                        new JacksonDecoder(BitcoinNodeMapperProvider.getMapper()))))
+                        new JacksonDecoder(BitcoinNodeMapperFactory.createMapper()))))
                 .errorDecoder(BitcoinNodeErrorDecoder.INSTANCE)
                 .client(clientSupplier.apply(Optional.absent()))
                 .options(new Request.Options())

@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
+import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
@@ -38,7 +38,7 @@ public class BlockHeaderResponseTest {
 
     @Before
     public final void setUp() throws Exception {
-        rpcMapper = BitcoinNodeMapperProvider.getMapper();
+        rpcMapper = BitcoinNodeMapperFactory.createMapper();
 
         resultJsonResponse = BitcoinNodeExampleResponses.getBlockHeaderJsonResponse();
         errorJsonResponse = BitcoinNodeExampleResponses.getErrorJsonResponse();
