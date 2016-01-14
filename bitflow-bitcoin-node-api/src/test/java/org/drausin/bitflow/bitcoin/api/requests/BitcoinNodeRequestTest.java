@@ -21,8 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.google.common.collect.ImmutableList;
 import com.jayway.jsonpath.JsonPath;
-import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
-import org.drausin.bitflow.bitcoin.api.responses.ImmutableBitcoinNodeRequest;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
