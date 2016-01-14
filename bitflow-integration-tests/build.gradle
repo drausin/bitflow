@@ -9,6 +9,8 @@ project(':bitflow-integration-tests') {
         compile project(':bitflow-blockchain-api')
 
         // external dependencies
+        compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
+        compile "org.immutables:value:${immutablesVersion}"
 
         // for tests
         testCompile "junit:junit:$junitVersion"
