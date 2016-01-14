@@ -14,23 +14,8 @@
 
 package org.drausin.bitflow.integration;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
-import com.palantir.remoting.http.FeignClientFactory;
-import com.palantir.remoting.http.errors.SerializableErrorErrorDecoder;
-import feign.Client;
-import feign.Feign;
-import feign.OptionalAwareDecoder;
-import feign.Request;
-import feign.TextDelegateDecoder;
-import feign.auth.BasicAuthRequestInterceptor;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
-import feign.jaxrs.JAXRSContract;
-import javax.net.ssl.SSLSocketFactory;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
-import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeErrorDecoder;
+import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeFeignClientFactory;
 import org.junit.Before;
 
 /**
@@ -51,26 +36,10 @@ public abstract class AbstractIntegrationTest {
     private static final String BITCOIN_NODE_USER = "someuser";
     private static final String BITCOIN_NODE_PASSWORD = "somepasswordtochange";
 
-    //private static final FeignClientFactory CLIENT_FACTORY = FeignClients.withMapper(
-    //        BitcoinNodeMapperProvider.getMapper());
-
     private final BitcoinNodeService bitcoinNode;
 
     public AbstractIntegrationTest() {
-        //this(CLIENT_FACTORY.createProxy(Optional.absent(), BITCOIN_NODE_URI, BitcoinNodeService.class));
-
-        // TODO(dwulsin): abstract this away
-        Function<Optional<SSLSocketFactory>, Client> clientSupplier = FeignClientFactory.okHttpClient();
-        this.bitcoinNode = Feign.builder()
-                .contract(new JAXRSContract())
-                .encoder(new JacksonEncoder(BitcoinNodeMapperProvider.getMapper()))
-                .decoder(new OptionalAwareDecoder(new TextDelegateDecoder(
-                        new JacksonDecoder(BitcoinNodeMapperProvider.getMapper()))))
-                .errorDecoder(BitcoinNodeErrorDecoder.INSTANCE)
-                .client(clientSupplier.apply(Optional.absent()))
-                .options(new Request.Options())
-                .requestInterceptor(new BasicAuthRequestInterceptor(BITCOIN_NODE_USER, BITCOIN_NODE_PASSWORD))
-                .target(BitcoinNodeService.class, BITCOIN_NODE_URI);
+        this(BitcoinNodeFeignClientFactory.createClient(BITCOIN_NODE_URI, BITCOIN_NODE_USER, BITCOIN_NODE_PASSWORD));
     }
 
     public AbstractIntegrationTest(BitcoinNodeService bitcoinNode) {
