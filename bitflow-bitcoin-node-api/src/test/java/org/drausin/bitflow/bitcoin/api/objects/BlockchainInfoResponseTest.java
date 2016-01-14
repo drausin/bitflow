@@ -62,9 +62,9 @@ import static org.junit.Assert.assertTrue;
 import com.google.common.base.Optional;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
-import org.drausin.bitflow.bitcoin.api.objects.responses.BitcoinNodeExampleResponses;
-import org.drausin.bitflow.bitcoin.api.objects.responses.BitcoinNodeResponse;
-import org.drausin.bitflow.bitcoin.api.objects.responses.BlockchainInfoResponse;
+import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeExampleResponses;
+import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponse;
+import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.junit.Before;
 import org.junit.Test;
 

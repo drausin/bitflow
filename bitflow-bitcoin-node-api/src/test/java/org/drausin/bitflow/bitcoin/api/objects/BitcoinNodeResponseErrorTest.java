@@ -33,8 +33,8 @@ import static org.junit.Assert.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.drausin.bitflow.bitcoin.api.objects.responses.BitcoinNodeExampleResponses;
-import org.drausin.bitflow.bitcoin.api.objects.responses.BitcoinNodeResponseError;
+import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeExampleResponses;
+import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponseError;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;

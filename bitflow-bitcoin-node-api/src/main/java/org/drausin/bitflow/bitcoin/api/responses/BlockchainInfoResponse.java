@@ -12,7 +12,7 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.bitcoin.api.objects.responses;
+package org.drausin.bitflow.bitcoin.api.responses;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
