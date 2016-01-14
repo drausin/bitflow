@@ -30,6 +30,7 @@ import feign.jaxrs.JAXRSContract;
 import javax.net.ssl.SSLSocketFactory;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperProvider;
+import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeErrorDecoder;
 import org.junit.Before;
 
 /**
@@ -65,7 +66,7 @@ public abstract class AbstractIntegrationTest {
                 .encoder(new JacksonEncoder(BitcoinNodeMapperProvider.getMapper()))
                 .decoder(new OptionalAwareDecoder(new TextDelegateDecoder(
                         new JacksonDecoder(BitcoinNodeMapperProvider.getMapper()))))
-                .errorDecoder(SerializableErrorErrorDecoder.INSTANCE)
+                .errorDecoder(BitcoinNodeErrorDecoder.INSTANCE)
                 .client(clientSupplier.apply(Optional.absent()))
                 .options(new Request.Options())
                 .requestInterceptor(new BasicAuthRequestInterceptor(BITCOIN_NODE_USER, BITCOIN_NODE_PASSWORD))
