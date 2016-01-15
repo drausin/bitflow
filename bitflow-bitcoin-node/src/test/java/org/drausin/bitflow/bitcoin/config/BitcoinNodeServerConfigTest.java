@@ -40,27 +40,27 @@ import org.junit.Test;
 
 // TODO(dwulsin): remove this once we decide what to do with this test
 @SuppressFBWarnings(value = "URF_UNREAD_FIELD")
-public class ServerConfigTest {
+public class BitcoinNodeServerConfigTest {
 
     @ClassRule
-    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
-            "src/test/resources/bitflow-bitcoin-node-test.yml");
+    public static final DropwizardAppRule<BitcoinNodeServerConfig> APP = new DropwizardAppRule<>(
+            BitcoinNodeServer.class, "src/test/resources/bitflow-bitcoin-node-test.yml");
 
-    private ServerConfig serverConfig;
+    private BitcoinNodeServerConfig bitcoinNodeServerConfig;
 
     @Before
     public final void setUp() throws IOException {
-        serverConfig = APP.getConfiguration();
+        bitcoinNodeServerConfig = APP.getConfiguration();
     }
 
     @Test
     public final void testToString() {
-        assertTrue(serverConfig.toString().contains(serverConfig.getInstance()));
-        assertTrue(serverConfig.toString().contains(serverConfig.getRpcUri()));
-        assertTrue(serverConfig.toString().contains(serverConfig.getMode().toString()));
-        assertTrue(serverConfig.toString().contains(serverConfig.getBitcoinNode().toString()));
-        assertTrue(serverConfig.toString().contains(serverConfig.getLoggingFactory().toString()));
-        assertTrue(serverConfig.toString().contains(serverConfig.getServerFactory().toString()));
+        assertTrue(bitcoinNodeServerConfig.toString().contains(bitcoinNodeServerConfig.getInstance()));
+        assertTrue(bitcoinNodeServerConfig.toString().contains(bitcoinNodeServerConfig.getRpcUri()));
+        assertTrue(bitcoinNodeServerConfig.toString().contains(bitcoinNodeServerConfig.getMode().toString()));
+        assertTrue(bitcoinNodeServerConfig.toString().contains(bitcoinNodeServerConfig.getBitcoinNode().toString()));
+        assertTrue(bitcoinNodeServerConfig.toString().contains(bitcoinNodeServerConfig.getLoggingFactory().toString()));
+        assertTrue(bitcoinNodeServerConfig.toString().contains(bitcoinNodeServerConfig.getServerFactory().toString()));
 
     }
 }

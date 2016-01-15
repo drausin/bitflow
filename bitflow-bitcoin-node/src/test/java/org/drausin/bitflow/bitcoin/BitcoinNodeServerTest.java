@@ -27,7 +27,7 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.io.File;
 import java.io.IOException;
-import org.drausin.bitflow.bitcoin.config.ServerConfig;
+import org.drausin.bitflow.bitcoin.config.BitcoinNodeServerConfig;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
@@ -41,8 +41,8 @@ public class BitcoinNodeServerTest {
     public ExpectedException expectedException = ExpectedException.none();
 
     @ClassRule
-    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
-            "src/test/resources/bitflow-bitcoin-node-test.yml");
+    public static final DropwizardAppRule<BitcoinNodeServerConfig> APP = new DropwizardAppRule<>(
+            BitcoinNodeServer.class, "src/test/resources/bitflow-bitcoin-node-test.yml");
 
     private BitcoinNodeServer bitcoinNodeServer;
     private BitcoinNodeServer bitcoinNodeServerSpy;
@@ -75,7 +75,7 @@ public class BitcoinNodeServerTest {
         bitcoinNodeServerSpy = spy(bitcoinNodeServer);
         File dataDirMock = mock(File.class);
         when(dataDirMock.mkdirs()).thenReturn(false);
-        doReturn(dataDirMock).when(bitcoinNodeServerSpy).getDataDirectory(any(ServerConfig.class));
+        doReturn(dataDirMock).when(bitcoinNodeServerSpy).getDataDirectory(any(BitcoinNodeServerConfig.class));
 
         bitcoinNodeServerSpy.createDataDirectory(APP.getConfiguration());
     }
@@ -86,7 +86,7 @@ public class BitcoinNodeServerTest {
         bitcoinNodeServerSpy = spy(bitcoinNodeServer);
         Cli cliMock = mock(Cli.class);
         doReturn(true).when(cliMock).run(Matchers.<String>anyVararg());
-        doReturn(cliMock).when(bitcoinNodeServerSpy).getCli(Matchers.<Bootstrap<ServerConfig>>any());
+        doReturn(cliMock).when(bitcoinNodeServerSpy).getCli(Matchers.<Bootstrap<BitcoinNodeServerConfig>>any());
 
         assertTrue(cliMock.run());
         bitcoinNodeServerSpy.run();
@@ -100,7 +100,7 @@ public class BitcoinNodeServerTest {
         bitcoinNodeServerSpy = spy(bitcoinNodeServer);
         Cli cliMock = mock(Cli.class);
         doReturn(false).when(cliMock).run(Matchers.<String>anyVararg());
-        doReturn(cliMock).when(bitcoinNodeServerSpy).getCli(Matchers.<Bootstrap<ServerConfig>>any());
+        doReturn(cliMock).when(bitcoinNodeServerSpy).getCli(Matchers.<Bootstrap<BitcoinNodeServerConfig>>any());
 
         assertFalse(cliMock.run());
         bitcoinNodeServerSpy.run();

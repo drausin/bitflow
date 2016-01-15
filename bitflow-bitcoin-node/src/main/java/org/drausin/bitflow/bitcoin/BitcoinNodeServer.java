@@ -28,8 +28,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import org.drausin.bitflow.bitcoin.commands.BitcoinNodeServerCommand;
+import org.drausin.bitflow.bitcoin.config.BitcoinNodeServerConfig;
 import org.drausin.bitflow.bitcoin.config.BitcoindExecutableConfig;
-import org.drausin.bitflow.bitcoin.config.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * Server for external bitcoin node (i.e., bitcoind) process.
  */
 @SuppressWarnings("checkstyle:designforextension")
-public class BitcoinNodeServer extends Application<ServerConfig> {
+public class BitcoinNodeServer extends Application<BitcoinNodeServerConfig> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BitcoinNodeServerCommand.class);
 
@@ -47,7 +47,7 @@ public class BitcoinNodeServer extends Application<ServerConfig> {
 
     @Override
     public final void run(String... arguments) throws Exception {
-        final Bootstrap<ServerConfig> bootstrap = new Bootstrap<>(this);
+        final Bootstrap<BitcoinNodeServerConfig> bootstrap = new Bootstrap<>(this);
         bootstrap.addCommand(new BitcoinNodeServerCommand<>(this));
         bootstrap.addCommand(new CheckCommand<>(this));
         initialize(bootstrap);
@@ -60,16 +60,16 @@ public class BitcoinNodeServer extends Application<ServerConfig> {
         }
     }
 
-    public final void run(ServerConfig config, Environment env) throws Exception {
+    public final void run(BitcoinNodeServerConfig config, Environment env) throws Exception {
         createDataDirectory(config);
         writeBitcoindConf(config, env);
     }
 
-    protected Cli getCli(Bootstrap<ServerConfig> bootstrap) {
+    protected Cli getCli(Bootstrap<BitcoinNodeServerConfig> bootstrap) {
         return new Cli(new JarLocation(getClass()), bootstrap, System.out, System.err);
     }
 
-    protected boolean createDataDirectory(ServerConfig config) throws IOException {
+    protected boolean createDataDirectory(BitcoinNodeServerConfig config) throws IOException {
         File dataDirectory = getDataDirectory(config);
         if (!dataDirectory.exists()) {
             if (!dataDirectory.mkdirs()) {
@@ -79,11 +79,11 @@ public class BitcoinNodeServer extends Application<ServerConfig> {
         return true;
     }
 
-    protected File getDataDirectory(ServerConfig config) {
+    protected File getDataDirectory(BitcoinNodeServerConfig config) {
         return new File(config.getBitcoinNode().getDataDirectory());
     }
 
-    private static void writeBitcoindConf(ServerConfig config, Environment env) throws IOException {
+    private static void writeBitcoindConf(BitcoinNodeServerConfig config, Environment env) throws IOException {
         BitcoindExecutableConfig bitcoindExecutableConfig = config.getBitcoinNode();
         PrintWriter writer = new PrintWriter(bitcoindExecutableConfig.getConfigFilePath(), "UTF-8");
         Iterator<Map.Entry<String, JsonNode>> configFields = env.getObjectMapper().valueToTree(

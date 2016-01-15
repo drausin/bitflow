@@ -42,9 +42,9 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
-@JsonSerialize(as = ImmutableServerConfig.class)
-@JsonDeserialize(as = ImmutableServerConfig.class)
-public abstract class ServerConfig extends Configuration {
+@JsonSerialize(as = ImmutableBitcoinNodeServerConfig.class)
+@JsonDeserialize(as = ImmutableBitcoinNodeServerConfig.class)
+public abstract class BitcoinNodeServerConfig extends Configuration {
 
     @JsonProperty
     public abstract String getInstance();

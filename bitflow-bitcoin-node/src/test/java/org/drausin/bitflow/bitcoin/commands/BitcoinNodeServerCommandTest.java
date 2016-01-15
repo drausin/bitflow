@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.io.IOException;
 import org.drausin.bitflow.bitcoin.BitcoinNodeServer;
-import org.drausin.bitflow.bitcoin.config.ServerConfig;
+import org.drausin.bitflow.bitcoin.config.BitcoinNodeServerConfig;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -37,8 +37,8 @@ public class BitcoinNodeServerCommandTest {
     private BitcoinNodeServerCommand bitcoinNodeServerCommandSpy;
 
     @ClassRule
-    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
-            "src/test/resources/bitflow-bitcoin-node-test.yml");
+    public static final DropwizardAppRule<BitcoinNodeServerConfig> APP = new DropwizardAppRule<>(
+            BitcoinNodeServer.class, "src/test/resources/bitflow-bitcoin-node-test.yml");
 
     @Before
     public final void setUp() throws IOException, InterruptedException {
@@ -47,12 +47,13 @@ public class BitcoinNodeServerCommandTest {
 
         BitcoindExecutable bitcoindExecutable = mock(BitcoindExecutable.class);
         when(bitcoindExecutable.run()).thenReturn(0);
-        doReturn(bitcoindExecutable).when(bitcoinNodeServerCommandSpy).getBitcoindExecutable(any(ServerConfig.class));
+        doReturn(bitcoindExecutable).when(bitcoinNodeServerCommandSpy).getBitcoindExecutable(
+                any(BitcoinNodeServerConfig.class));
     }
 
     @Test
     public final void testGetConfigurationClass() throws Exception {
-        assertEquals(ServerConfig.class, bitcoinNodeServerCommand.getConfigurationClass());
+        assertEquals(BitcoinNodeServerConfig.class, bitcoinNodeServerCommand.getConfigurationClass());
     }
 
     @Test

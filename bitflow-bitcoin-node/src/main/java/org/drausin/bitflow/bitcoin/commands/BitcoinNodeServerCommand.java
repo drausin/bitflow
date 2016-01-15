@@ -18,14 +18,14 @@ import io.dropwizard.Application;
 import io.dropwizard.cli.EnvironmentCommand;
 import io.dropwizard.setup.Environment;
 import net.sourceforge.argparse4j.inf.Namespace;
-import org.drausin.bitflow.bitcoin.config.ServerConfig;
+import org.drausin.bitflow.bitcoin.config.BitcoinNodeServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Runs a bitcoin node via the bitcoind executable.
  */
-public class BitcoinNodeServerCommand<T extends ServerConfig> extends EnvironmentCommand<T> {
+public class BitcoinNodeServerCommand<T extends BitcoinNodeServerConfig> extends EnvironmentCommand<T> {
     private static final Logger LOGGER = LoggerFactory.getLogger(BitcoinNodeServerCommand.class);
 
     private final Class<T> configurationClass;

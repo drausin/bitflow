@@ -27,7 +27,7 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import java.io.File;
 import java.io.IOException;
 import org.drausin.bitflow.bitcoin.BitcoinNodeServer;
-import org.drausin.bitflow.bitcoin.config.ServerConfig;
+import org.drausin.bitflow.bitcoin.config.BitcoinNodeServerConfig;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -35,8 +35,8 @@ import org.junit.Test;
 public class BitcoindExecutableTest {
 
     @ClassRule
-    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BitcoinNodeServer.class,
-            "src/test/resources/bitflow-bitcoin-node-test.yml");
+    public static final DropwizardAppRule<BitcoinNodeServerConfig> APP = new DropwizardAppRule<>(
+            BitcoinNodeServer.class, "src/test/resources/bitflow-bitcoin-node-test.yml");
 
     private BitcoindExecutable bitcoindExecutable;
     private BitcoindExecutable bitcoindExecutableSpy;
