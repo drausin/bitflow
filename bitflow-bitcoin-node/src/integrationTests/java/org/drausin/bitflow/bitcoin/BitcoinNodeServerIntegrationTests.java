@@ -21,6 +21,7 @@ import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
+import org.drausin.bitflow.bitcoin.api.responses.StopResponse;
 import org.drausin.bitflow.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
@@ -60,5 +61,14 @@ public final class BitcoinNodeServerIntegrationTests extends AbstractIntegration
         Sha256Hash headerHash = Sha256Hash.wrap("000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39");
         BitcoinNodeRequest blockHeaderRequest = BitcoinNodeRequestFactory.createBlockHeaderRequest(headerHash);
         getBitcoinNode().getBlockHeader(blockHeaderRequest);
+    }
+
+    @Test
+    public void testStop() {
+
+        BitcoinNodeRequest stopRequest = BitcoinNodeRequestFactory.createStopRequest();
+        StopResponse stopResponse = getBitcoinNode().stop(stopRequest);
+
+        assertTrue(stopResponse.validateResult());
     }
 }
