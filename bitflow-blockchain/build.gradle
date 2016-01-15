@@ -27,6 +27,7 @@ project(':bitflow-blockchain') {
         compile "com.palantir.remoting:http-clients:${httpRemotingVersion}"
         compile "com.palantir.remoting:error-handling:${httpRemotingVersion}"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+        compile "io.dropwizard:dropwizard-testing:${dropwizardVersion}"
         compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
 
         // checks

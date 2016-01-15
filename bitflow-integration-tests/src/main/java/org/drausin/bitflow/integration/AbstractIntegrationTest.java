@@ -15,6 +15,7 @@
 package org.drausin.bitflow.integration;
 
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
+import org.drausin.bitflow.bitcoin.api.config.BitcoinNodeClientConfig;
 import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeFeignClientFactory;
 import org.junit.Before;
 
@@ -32,14 +33,13 @@ import org.junit.Before;
 public abstract class AbstractIntegrationTest {
 
     // can get IP via `docker-machine ip boot2docker-vm`
-    private static final String BITCOIN_NODE_URI = "http://192.168.99.100:8332";
-    private static final String BITCOIN_NODE_USER = "someuser";
-    private static final String BITCOIN_NODE_PASSWORD = "somepasswordtochange";
+    private static final BitcoinNodeClientConfig bitcoinNodeConfig =
+            BitcoinNodeClientConfig.of("http://192.168.99.100:8332", "someuser", "somepasswordtochange");
 
     private final BitcoinNodeService bitcoinNode;
 
     public AbstractIntegrationTest() {
-        this(BitcoinNodeFeignClientFactory.createClient(BITCOIN_NODE_URI, BITCOIN_NODE_USER, BITCOIN_NODE_PASSWORD));
+        this(BitcoinNodeFeignClientFactory.createClient(bitcoinNodeConfig));
     }
 
     public AbstractIntegrationTest(BitcoinNodeService bitcoinNode) {

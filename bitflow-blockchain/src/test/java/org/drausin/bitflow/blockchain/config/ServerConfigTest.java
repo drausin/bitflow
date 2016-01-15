@@ -55,8 +55,11 @@ public class ServerConfigTest {
     }
 
     @Test
-    public final void testGetBitcoinNodeUri() throws Exception {
-        assertThat(serverConfig.getBitcoinNodeUri(), is(configMap.get("bitcoinNodeUri")));
+    public final void testGetBitcoinNode() throws Exception {
+        Map<String, Object> bitcoinNode = (HashMap<String, Object>) configMap.get("bitcoinNode");
+        assertThat(serverConfig.getBitcoinNode().getUri(), is(bitcoinNode.get("uri")));
+        assertThat(serverConfig.getBitcoinNode().getUser(), is(bitcoinNode.get("user")));
+        assertThat(serverConfig.getBitcoinNode().getPassword(), is(bitcoinNode.get("password")));
     }
 
     @Test

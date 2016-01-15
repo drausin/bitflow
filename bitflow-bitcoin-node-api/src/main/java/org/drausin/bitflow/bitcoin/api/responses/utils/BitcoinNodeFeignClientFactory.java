@@ -28,6 +28,7 @@ import feign.jackson.JacksonEncoder;
 import feign.jaxrs.JAXRSContract;
 import javax.net.ssl.SSLSocketFactory;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
+import org.drausin.bitflow.bitcoin.api.config.BitcoinNodeClientConfig;
 import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
 
 /**
@@ -37,8 +38,10 @@ public final class BitcoinNodeFeignClientFactory {
 
     private BitcoinNodeFeignClientFactory() {}
 
-    public static BitcoinNodeService createClient(String uri, String user, String password) {
+    public static BitcoinNodeService createClient(BitcoinNodeClientConfig bitcoinNodeClientConfig) {
         Function<Optional<SSLSocketFactory>, Client> clientSupplier = FeignClientFactory.okHttpClient();
+        BasicAuthRequestInterceptor basicAuthInterceptor = new BasicAuthRequestInterceptor(
+                bitcoinNodeClientConfig.getUser(), bitcoinNodeClientConfig.getPassword());
         return Feign.builder()
                 .contract(new JAXRSContract())
                 .encoder(new JacksonEncoder(BitcoinNodeMapperFactory.createMapper()))
@@ -47,7 +50,7 @@ public final class BitcoinNodeFeignClientFactory {
                 .errorDecoder(BitcoinNodeErrorDecoder.INSTANCE)
                 .client(clientSupplier.apply(Optional.absent()))
                 .options(new Request.Options())
-                .requestInterceptor(new BasicAuthRequestInterceptor(user, password))
-                .target(BitcoinNodeService.class, uri);
+                .requestInterceptor(basicAuthInterceptor)
+                .target(BitcoinNodeService.class, bitcoinNodeClientConfig.getUri());
     }
 }

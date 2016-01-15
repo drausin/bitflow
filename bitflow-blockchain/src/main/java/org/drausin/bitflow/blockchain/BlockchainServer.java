@@ -14,15 +14,12 @@
 
 package org.drausin.bitflow.blockchain;
 
-import feign.Feign;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
-import feign.jaxrs.JAXRSContract;
-import feign.okhttp.OkHttpClient;
+import com.codahale.metrics.health.HealthCheck;
 import io.dropwizard.Application;
 import io.dropwizard.setup.Environment;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
+import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
+import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeFeignClientFactory;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
 
 
@@ -36,19 +33,24 @@ public class BlockchainServer extends Application<ServerConfig> {
     @Override
     public final void run(ServerConfig config, Environment env) throws Exception {
 
-        BitcoinNodeService bitcoinNodeService = Feign.builder()
-                .encoder(new JacksonEncoder(BitcoinNodeMapperFactory.createMapper()))
-                .decoder(new JacksonDecoder(BitcoinNodeMapperFactory.createMapper()))
-                .contract(new JAXRSContract())
-                .client(new OkHttpClient())
-                .target(BitcoinNodeService.class, config.getBitcoinNodeUri());
+        BitcoinNodeService bitcoinNode = BitcoinNodeFeignClientFactory.createClient(config.getBitcoinNode());
 
-        BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
+        BlockchainResource blockchainResource = new BlockchainResource(bitcoinNode);
 
         env.jersey().register(blockchainResource);
 
-        // TODO(dwulsin): create health check from getBlockchainInfo() call
-        //env.healthChecks().register("bitcoinNode", new BitflowServiceHealthCheck(bitcoinNodeService));
+        env.healthChecks().register("bitcoinNode", new HealthCheck() {
+            @Override
+            protected Result check() throws Exception {
+                try {
+                    bitcoinNode.getBlockchainInfo(
+                            BitcoinNodeRequestFactory.createBlockchainInfoRequest()).validateResult();
+                    return Result.healthy();
+                } catch (RuntimeException e) {
+                    return Result.unhealthy(e.getMessage());
+                }
+            }
+        });
 
         //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
         // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)
