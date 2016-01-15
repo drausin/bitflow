@@ -44,9 +44,9 @@ import org.immutables.value.Value;
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
-@JsonSerialize(as = ImmutableBitcoinNodeConfig.class)
-@JsonDeserialize(as = ImmutableBitcoinNodeConfig.class)
-public abstract class BitcoinNodeConfig {
+@JsonSerialize(as = ImmutableBitcoinNodeServerConfig.class)
+@JsonDeserialize(as = ImmutableBitcoinNodeServerConfig.class)
+public abstract class BitcoinNodeServerConfig {
 
     @JsonProperty("datadir")
     public abstract String getDataDirectory();

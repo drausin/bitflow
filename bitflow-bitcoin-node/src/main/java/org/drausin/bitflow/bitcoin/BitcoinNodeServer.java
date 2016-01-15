@@ -28,7 +28,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import org.drausin.bitflow.bitcoin.commands.BitcoinNodeServerCommand;
-import org.drausin.bitflow.bitcoin.config.BitcoinNodeConfig;
+import org.drausin.bitflow.bitcoin.config.BitcoinNodeServerConfig;
 import org.drausin.bitflow.bitcoin.config.ServerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,15 +84,15 @@ public class BitcoinNodeServer extends Application<ServerConfig> {
     }
 
     private static void writeBitcoindConf(ServerConfig config, Environment env) throws IOException {
-        BitcoinNodeConfig bitcoinNodeConfig = config.getBitcoinNode();
-        PrintWriter writer = new PrintWriter(bitcoinNodeConfig.getConfigFilePath(), "UTF-8");
+        BitcoinNodeServerConfig bitcoinNodeServerConfig = config.getBitcoinNode();
+        PrintWriter writer = new PrintWriter(bitcoinNodeServerConfig.getConfigFilePath(), "UTF-8");
         Iterator<Map.Entry<String, JsonNode>> configFields = env.getObjectMapper().valueToTree(
-                bitcoinNodeConfig).fields();
+                bitcoinNodeServerConfig).fields();
 
         // print each field to the *.conf file for bitcoind process
         while (configFields.hasNext()) {
             Map.Entry<String, JsonNode> field = configFields.next();
-            String value = bitcoinNodeConfig.getConfFileValue(field.getValue(), config.getMode());
+            String value = bitcoinNodeServerConfig.getConfFileValue(field.getValue(), config.getMode());
             writer.write(String.format("%s=%s%n", field.getKey(), value));
         }
         writer.close();
