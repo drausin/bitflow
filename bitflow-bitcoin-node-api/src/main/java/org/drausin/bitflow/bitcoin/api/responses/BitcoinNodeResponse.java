@@ -25,6 +25,7 @@ import org.immutables.value.Value;
  * @author dwulsin
  * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  */
+@SuppressWarnings("checkstyle:designforextension")
 public abstract class BitcoinNodeResponse<T extends BlockchainResult> {
 
     @Value.Parameter
@@ -39,7 +40,7 @@ public abstract class BitcoinNodeResponse<T extends BlockchainResult> {
     @JsonProperty("id")
     public abstract Optional<String> getId();
 
-    public final boolean validateResult() {
+    public boolean validateResult() {
         if (!getResult().isPresent()) {
             throw new IllegalStateException("result value is absent");
         }
@@ -49,7 +50,7 @@ public abstract class BitcoinNodeResponse<T extends BlockchainResult> {
         return true;
     }
 
-    public final boolean validateError() {
+    public boolean validateError() {
         if (!getError().isPresent()) {
             throw new IllegalStateException("error value is absent");
         }

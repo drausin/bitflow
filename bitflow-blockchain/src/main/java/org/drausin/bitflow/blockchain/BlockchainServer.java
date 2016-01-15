@@ -28,18 +28,28 @@ import org.drausin.bitflow.blockchain.config.ServerConfig;
  *
  * @author dwulsin
  */
-public class BlockchainServer extends Application<ServerConfig> {
+public final class BlockchainServer extends Application<ServerConfig> {
 
     @Override
-    public final void run(ServerConfig config, Environment env) throws Exception {
+    public void run(ServerConfig config, Environment env) throws Exception {
 
         BitcoinNodeService bitcoinNode = BitcoinNodeFeignClientFactory.createClient(config.getBitcoinNode());
 
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNode);
-
         env.jersey().register(blockchainResource);
 
-        env.healthChecks().register("bitcoinNode", new HealthCheck() {
+        env.healthChecks().register("bitcoinNode", createBitcoinNodeHealthCheck(bitcoinNode));
+
+        //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
+        // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)
+    }
+
+    public static void main(String[] args) throws Exception {
+        new BlockchainServer().run(args);
+    }
+
+    protected static HealthCheck createBitcoinNodeHealthCheck(BitcoinNodeService bitcoinNode) {
+        return new HealthCheck() {
             @Override
             protected Result check() throws Exception {
                 try {
@@ -50,13 +60,6 @@ public class BlockchainServer extends Application<ServerConfig> {
                     return Result.unhealthy(e.getMessage());
                 }
             }
-        });
-
-        //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
-        // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)
-    }
-
-    public static void main(String[] args) throws Exception {
-        new BlockchainServer().run(args);
+        };
     }
 }
