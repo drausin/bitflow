@@ -60,4 +60,21 @@ public final class BitcoinNodeRequestFactoryTest {
         assertTrue(request.getId().isPresent());
         assertEquals(id, request.getId().get());
     }
+
+    @Test
+    public void testCreateStopRequest() throws Exception {
+        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createStopRequest();
+        assertFalse(request.getMethod().isEmpty());
+        assertTrue(request.getParams().isEmpty());
+        assertFalse(request.getId().isPresent());
+    }
+
+    @Test
+    public void testCreateStopRequestWithId() throws Exception {
+        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createStopRequest(id);
+        assertFalse(request.getMethod().isEmpty());
+        assertTrue(request.getParams().isEmpty());
+        assertTrue(request.getId().isPresent());
+        assertEquals(id, request.getId().get());
+    }
 }

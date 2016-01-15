@@ -26,6 +26,7 @@ public final class BitcoinNodeRequestFactory {
 
     private static final String BLOCKCHAIN_INFO_RPC_METHOD = "getblockchaininfo";
     private static final String BLOCK_HEADER_RPC_METHOD = "getblock";
+    private static final String STOP_RPC_METHOD = "stop";
 
     private BitcoinNodeRequestFactory() {}
 
@@ -68,4 +69,22 @@ public final class BitcoinNodeRequestFactory {
     public static BitcoinNodeRequest createBlockHeaderRequest(Sha256Hash headerHash, String id) {
         return BitcoinNodeRequest.of(id, BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
     }
+
+    /**
+     * Create a Stop request.
+     * @return the request
+     */
+    public static BitcoinNodeRequest createStopRequest() {
+        return BitcoinNodeRequest.of(STOP_RPC_METHOD, ImmutableList.of());
+    }
+
+    /**
+     * Create a Stop request with a supplied RPC call ID.
+     * @param id the RPC ID to use
+     * @return the request
+     */
+    public static BitcoinNodeRequest createStopRequest(String id) {
+        return BitcoinNodeRequest.of(id, STOP_RPC_METHOD, ImmutableList.of());
+    }
+
 }

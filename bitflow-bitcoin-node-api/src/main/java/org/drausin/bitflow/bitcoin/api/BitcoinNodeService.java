@@ -22,7 +22,13 @@ import javax.ws.rs.core.MediaType;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
+import org.drausin.bitflow.bitcoin.api.responses.StopResponse;
 
+/**
+ * BitcoinNode service for interacting with the underlying (external) bitcoind server.
+ *
+ * @author dwulsin
+ */
 @Path("/")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
@@ -30,6 +36,11 @@ public interface BitcoinNodeService {
 
     /**
      * Gets current information about the blockchain.
+     *
+     * @param request the request associated with the bitcoind RPC {@code getblockchaininfo} method
+     * @return the RPC response in {@link BlockchainInfoResponse}
+     *
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory}
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -38,9 +49,27 @@ public interface BitcoinNodeService {
 
     /**
      * Gets the block header for a given block hash.
+     *
+     * @param request the request associated with the bitcoind RPC {@code getblock} method
+     * @return the RPC response in {@link BlockchainInfoResponse}
+     *
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory}
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     BlockHeaderResponse getBlockHeader(BitcoinNodeRequest request);
+
+    /**
+     * Stops the bitcoind server gracefully.
+     *
+     * @param request the request associated with the bitcoind RPC {@code stop} method
+     * @return the RPC response in {@link org.drausin.bitflow.bitcoin.api.responses.StopResponse}
+     *
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory}
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    StopResponse stop(BitcoinNodeRequest request);
 }
