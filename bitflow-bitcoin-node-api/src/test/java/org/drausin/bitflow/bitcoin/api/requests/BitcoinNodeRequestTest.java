@@ -70,7 +70,7 @@ public class BitcoinNodeRequestTest {
 
     @Test
     public final void testOf() throws Exception {
-        assertThat(BitcoinNodeRequest.of("foo", "getblockhash", ImmutableList.of(0)),
+        assertThat(BitcoinNodeRequest.of("getblockhash", ImmutableList.of(0), "foo"),
                 CoreMatchers.instanceOf(ImmutableBitcoinNodeRequest.class));
         assertThat(BitcoinNodeRequest.of("getblockhash", ImmutableList.of(0)),
                 CoreMatchers.instanceOf(ImmutableBitcoinNodeRequest.class));

@@ -34,13 +34,6 @@ import org.immutables.value.Value;
 public abstract class BitcoinNodeRequest {
 
     /**
-     * Get the arbitrary string that will be returned with the response.
-     */
-    @Value.Parameter
-    @JsonProperty("id")
-    public abstract Optional<String> getId();
-
-    /**
      * Get the RPC method name.
      */
     @Value.Parameter
@@ -54,11 +47,18 @@ public abstract class BitcoinNodeRequest {
     @JsonProperty("params")
     public abstract List<Object> getParams();
 
+    /**
+     * Get the arbitrary string that will be returned with the response.
+     */
+    @Value.Parameter
+    @JsonProperty("id")
+    public abstract Optional<String> getId();
+
     public static BitcoinNodeRequest of(String method, List<Object> params) {
-        return ImmutableBitcoinNodeRequest.of(Optional.absent(), method, params);
+        return ImmutableBitcoinNodeRequest.of(method, params, Optional.absent());
     }
 
-    public static BitcoinNodeRequest of(String id, String method, List<Object> params) {
-        return ImmutableBitcoinNodeRequest.of(Optional.of(id), method, params);
+    public static BitcoinNodeRequest of(String method, List<Object> params, String id) {
+        return ImmutableBitcoinNodeRequest.of(method, params, Optional.of(id));
     }
 }

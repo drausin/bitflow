@@ -34,7 +34,7 @@ public final class BitcoinNodeRequestFactory {
     }
 
     public static BitcoinNodeRequest createBlockchainInfoRequest(String id) {
-        return BitcoinNodeRequest.of(id, BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of());
+        return BitcoinNodeRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of(), id);
     }
 
     public static BitcoinNodeRequest createBlockHeaderRequest(Sha256Hash headerHash) {
@@ -42,6 +42,6 @@ public final class BitcoinNodeRequestFactory {
     }
 
     public static BitcoinNodeRequest createBlockHeaderRequest(Sha256Hash headerHash, String id) {
-        return BitcoinNodeRequest.of(id, BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash));
+        return BitcoinNodeRequest.of(BLOCK_HEADER_RPC_METHOD, ImmutableList.of(headerHash), id);
     }
 }
