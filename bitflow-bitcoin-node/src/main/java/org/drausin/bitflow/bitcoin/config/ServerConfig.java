@@ -56,7 +56,7 @@ public abstract class ServerConfig extends Configuration {
     public abstract NodeType getMode();
 
     @JsonProperty
-    public abstract BitcoinNodeServerConfig getBitcoinNode();
+    public abstract BitcoindExecutableConfig getBitcoinNode();
 
     @Override
     public final String toString() {
