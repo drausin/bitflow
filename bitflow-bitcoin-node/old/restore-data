@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -eu
+set -o pipefail
+#set -x # for temporary debugging
+
+# set full path of the bitcoid root directory
+pushd $(dirname $0) > /dev/null
+cd ..
+ROOT_DIR=$(pwd -P)
+popd > /dev/null
+
+# load the properties
+source "${ROOT_DIR}/conf/bitcoind.properties"
+
+# confirm bitcoin-node container isn't running
+if [[ $(docker ps -a --filter='name=bitcoind-data' | grep -v NAMES | wc -l) -gt 0 && \
+    $(docker run --volumes-from=bitcoind-data --rm "${BITCOIND_IMAGE}" test -e "${CONTAINER_BITCOIN_HOME}/bitcoind.pid") ]]; then
+    echo "Aborting backup because bitcoind appears to be running"
+    exit 2
+fi
+
+mkdir -p "${LOCAL_DATA_VOLUME_DIR}"
+
+if [[ "${BACKUP_DIRECTORY}" =~ ^s3.* ]] ; then 
+    aws s3 sync "${BACKUP_DIRECTORY}" "${LOCAL_DATA_VOLUME_DIR}"
+else
+    rsync -a "${BACKUP_DIRECTORY}" "${LOCAL_DATA_VOLUME_DIR}"
+fi
+
+
