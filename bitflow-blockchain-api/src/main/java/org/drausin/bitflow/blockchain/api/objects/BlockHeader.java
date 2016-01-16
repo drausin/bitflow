@@ -17,6 +17,7 @@ package org.drausin.bitflow.blockchain.api.objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Optional;
 import java.math.BigInteger;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
@@ -130,19 +131,19 @@ public abstract class BlockHeader implements BlockchainResult {
      */
     @Value.Parameter
     @JsonProperty("previousblockhash")
-    public abstract Sha256Hash getPreviousBlockHash();
+    public abstract Optional<Sha256Hash> getPreviousBlockHash();
 
     /**
      * Get the header hash of the next block.
      */
     @Value.Parameter
     @JsonProperty("nextblockhash")
-    public abstract Sha256Hash getNextBlockHash();
+    public abstract Optional<Sha256Hash> getNextBlockHash();
 
     public static BlockHeader of(Sha256Hash headerHash, long numConfirmations, long sizeBytes, long height,
             long version, Sha256Hash merkleRoot, List<Sha256Hash> transactionIds, long createdTime, long nonce,
-            BigInteger difficultyTarget, double difficulty, BigInteger chainwork, Sha256Hash previousBlockHash,
-            Sha256Hash nextBlockHash) {
+            BigInteger difficultyTarget, double difficulty, BigInteger chainwork,
+            Optional<Sha256Hash> previousBlockHash, Optional<Sha256Hash> nextBlockHash) {
         return ImmutableBlockHeader.of(headerHash, numConfirmations, sizeBytes, height, version, merkleRoot,
                 (Iterable<? extends Sha256Hash>) transactionIds, createdTime, nonce, difficultyTarget, difficulty,
                 chainwork, previousBlockHash, nextBlockHash);

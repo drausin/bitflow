@@ -225,14 +225,18 @@ public class BlockHeaderTest {
     public final void testGetPreviousBlockHash() throws Exception {
         assertEquals(JsonPath.read(
                 rpcGetBlockJson, "$.previousblockhash"),
-                blockHeader.getPreviousBlockHash().toString());
-        assertEquals(blockHeader.getPreviousBlockHash().toString(), JsonPath.read(blockJson, "$.previousblockhash"));
+                blockHeader.getPreviousBlockHash().get().toString());
+        assertEquals(
+                blockHeader.getPreviousBlockHash().get().toString(),
+                JsonPath.read(blockJson, "$.previousblockhash"));
     }
 
     @Test
     public final void testGetNextBlockHash() throws Exception {
-        assertEquals(JsonPath.read(rpcGetBlockJson, "$.nextblockhash"), blockHeader.getNextBlockHash().toString());
-        assertEquals(blockHeader.getNextBlockHash().toString(), JsonPath.read(blockJson, "$.nextblockhash"));
+        assertEquals(
+                JsonPath.read(rpcGetBlockJson, "$.nextblockhash"),
+                blockHeader.getNextBlockHash().get().toString());
+        assertEquals(blockHeader.getNextBlockHash().get().toString(), JsonPath.read(blockJson, "$.nextblockhash"));
     }
 
     @Test

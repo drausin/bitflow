@@ -56,7 +56,8 @@ public enum BitcoinNodeErrorDecoder implements ErrorDecoder {
 
         Collection<String> contentType = response.headers().get(HttpHeaders.CONTENT_TYPE);
         if (!contentType.contains(MediaType.APPLICATION_JSON)) {
-            throw new RuntimeException("Response content type is not JSON, but that is expected");
+            return new RuntimeException(String.format("HTTP error: %s, reason: %s", response.status(),
+                    response.reason()));
         }
 
         BitcoinNodeResponseError error = getErrorFromBody(response.body(), methodKey);

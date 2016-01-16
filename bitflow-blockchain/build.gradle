@@ -2,6 +2,7 @@ apply from: "${rootDir}/gradle/java.gradle"
 apply from: "${rootDir}/gradle/integration-test-set.gradle"
 apply plugin: 'org.inferred.processors'
 apply plugin: 'com.palantir.java-distribution'
+apply plugin: 'com.palantir.docker'
 
 project(':bitflow-blockchain') {
 
@@ -11,6 +12,9 @@ project(':bitflow-blockchain') {
         compile project(':bitflow-blockchain-api')
         compile project(':bitflow-bitcoin-node-api')
         compile project(':bitflow-service-utils')
+
+        // TODO(dwulsin) figure out how to fix this
+        //docker project(':bitflow-docker-base')
 
         // processors
         processor "org.immutables:value:${immutablesVersion}"
@@ -43,6 +47,8 @@ project(':bitflow-blockchain') {
         // integration tests
         integrationTestsCompile project(':bitflow-integration-tests')
     }
+
+    apply from: "${rootDir}/gradle/docker.gradle"
 
     distribution {
         serviceName 'bitflow-blockchain'

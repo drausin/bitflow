@@ -2,7 +2,6 @@ apply from: "${rootDir}/gradle/java.gradle"
 apply from: "${rootDir}/gradle/integration-test-set.gradle"
 apply plugin: 'org.inferred.processors'
 apply plugin: 'com.palantir.java-distribution'
-apply plugin: 'com.palantir.docker'
 
 project(':bitflow-bitcoin-node') {
 
@@ -48,17 +47,7 @@ project(':bitflow-bitcoin-node') {
         integrationTestsCompile project(':bitflow-integration-tests')
     }
 
-    def snapshotDockerImage = "docker.io/daedalus2718/bitflow/${project.name}"
-    docker {
-        name "${snapshotDockerImage}:${project.version}"
-        dependsOn distTar
-    }
-
-    tasks.docker.doLast {
-        exec {
-            commandLine "docker", "tag", "--force=true", docker.name, "${snapshotDockerImage}:latest"
-        }
-    }
+    apply from: "${rootDir}/gradle/docker.gradle"
 
     distribution {
         serviceName 'bitflow-bitcoin-node'

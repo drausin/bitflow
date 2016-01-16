@@ -96,10 +96,10 @@ public class BlockHeaderResponseTest {
                 resultResponse.getResult().get().getChainwork().toString(16));
         assertEquals(
                 JsonPath.read(resultJsonResponse, "$.result.previousblockhash"),
-                resultResponse.getResult().get().getPreviousBlockHash().toString());
+                resultResponse.getResult().get().getPreviousBlockHash().get().toString());
         assertEquals(
                 JsonPath.read(resultJsonResponse, "$.result.nextblockhash"),
-                resultResponse.getResult().get().getNextBlockHash().toString());
+                resultResponse.getResult().get().getNextBlockHash().get().toString());
     }
 
     @Test

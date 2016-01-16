@@ -21,9 +21,14 @@ bitcoinNode:
   # the RPC password
   rpcpassword: somepasswordtochange
 
-  # allow RPC connections from this IP address (with possibly a CIDR range), which you can get via
-  # `docker-machine inspect boot2docker-vm | jq -r '.Driver.HostOnlyCIDR'`
-  rpcallowip: 192.168.99.1/24
+  # allow RPC connections from this IP address (with possibly a CIDR range)
+  #
+  # for docker-compose environments:
+  #   1) get the Gateway IP via
+  #     DOCKER_BITFLOW_GATEWAY=$(docker inspect bitcoin-node.bitflow.dev | jq -r '.[0].NetworkSettings.Networks.bitflow')
+  #   2) use a CIDR range to cover all containsers
+  #     rpcallowip="${BITFLOW_GATEWAY}/24"
+  rpcallowip: 172.18.0.1/24
 
   # listen for connections on this port
   port: 8333
