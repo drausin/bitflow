@@ -84,7 +84,7 @@ public final class BitcoinNodeRequestFactory {
      * @return the request
      */
     public static BitcoinNodeRequest createStopRequest(String id) {
-        return BitcoinNodeRequest.of(id, STOP_RPC_METHOD, ImmutableList.of());
+        return BitcoinNodeRequest.of(STOP_RPC_METHOD, ImmutableList.of(), id);
     }
 
 }
