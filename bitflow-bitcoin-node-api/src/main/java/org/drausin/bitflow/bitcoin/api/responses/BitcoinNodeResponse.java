@@ -16,7 +16,6 @@ package org.drausin.bitflow.bitcoin.api.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Optional;
-import org.drausin.bitflow.blockchain.api.objects.BlockchainResult;
 import org.immutables.value.Value;
 
 /**
@@ -26,7 +25,7 @@ import org.immutables.value.Value;
  * @see <a href="https://bitcoin.org/en/developer-reference#remote-procedure-calls-rpcs">Bitcoin RPCs</a>
  */
 @SuppressWarnings("checkstyle:designforextension")
-public abstract class BitcoinNodeResponse<T extends BlockchainResult> {
+public abstract class BitcoinNodeResponse<T> {
 
     @Value.Parameter
     @JsonProperty("result")

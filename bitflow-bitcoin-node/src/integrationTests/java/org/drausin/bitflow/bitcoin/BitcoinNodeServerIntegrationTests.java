@@ -21,6 +21,7 @@ import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
+import org.drausin.bitflow.bitcoin.api.responses.StopResponse;
 import org.drausin.bitflow.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
@@ -61,4 +62,16 @@ public final class BitcoinNodeServerIntegrationTests extends AbstractIntegration
         BitcoinNodeRequest blockHeaderRequest = BitcoinNodeRequestFactory.createBlockHeaderRequest(headerHash);
         getBitcoinNode().getBlockHeader(blockHeaderRequest);
     }
+
+    // This shuts down the BitcoinNode service, so commenting out for now as a) not sure how to run this without harming
+    // all tests that come after and b) it's a pretty simple test that we can manually run by itself if we want.
+    /*
+    @Test
+    public void testStop() {
+        BitcoinNodeRequest stopRequest = BitcoinNodeRequestFactory.createStopRequest();
+        StopResponse stopResponse = getBitcoinNode().stop(stopRequest);
+
+        assertTrue(stopResponse.validateResult());
+    }
+    */
 }
