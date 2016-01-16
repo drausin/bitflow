@@ -3,9 +3,9 @@ instance: main
 
 # bitcoinNode
 bitcoinNode:
-  uri: http://localhost:8332
-  user: testuser
-  password: testpassword
+  uri: http://192.168.99.100:8332
+  user: someuser
+  password: somepasswordtochange
 
 # Set to false to disable showing stack traces in http error responses
 includeStackTraceInErrors: true
