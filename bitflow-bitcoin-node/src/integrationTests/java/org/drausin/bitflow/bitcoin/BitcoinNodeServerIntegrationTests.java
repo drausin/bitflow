@@ -63,12 +63,15 @@ public final class BitcoinNodeServerIntegrationTests extends AbstractIntegration
         getBitcoinNode().getBlockHeader(blockHeaderRequest);
     }
 
+    // This shuts down the BitcoinNode service, so commenting out for now as a) not sure how to run this without harming
+    // all tests that come after and b) it's a pretty simple test that we can manually run by itself if we want.
+    /*
     @Test
     public void testStop() {
-
         BitcoinNodeRequest stopRequest = BitcoinNodeRequestFactory.createStopRequest();
         StopResponse stopResponse = getBitcoinNode().stop(stopRequest);
 
         assertTrue(stopResponse.validateResult());
     }
+    */
 }
