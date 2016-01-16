@@ -12,6 +12,7 @@ project(':bitflow-service-utils') {
         compile "com.palantir.remoting:error-handling:${httpRemotingVersion}"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
         compile "javax.ws.rs:javax.ws.rs-api:${jaxRsVersion}"
+        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
 
         // for tests
         testCompile "junit:junit:$junitVersion"

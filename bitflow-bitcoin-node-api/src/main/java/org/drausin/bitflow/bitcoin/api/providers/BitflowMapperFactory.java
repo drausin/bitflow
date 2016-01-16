@@ -34,9 +34,9 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerDeserializer;
-import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
-import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
+import org.drausin.bitflow.serde.BigIntegerDeserializer;
+import org.drausin.bitflow.serde.BigIntegerSerializer;
+import org.drausin.bitflow.serde.Sha256HashSerializer;
 
 
 public final class BitflowMapperFactory {

@@ -21,9 +21,9 @@ import org.junit.Before;
 
 /**
  * Abstract class handling setup and configuration for all integration tests.
- *
+ * <p>
  * This integration test framework assumes that docker-compose environment is up and running via something like
- *
+ * <p>
  * <pre>
  * docker-compose -f docker-compose.yml --x-networking -p bitflow up -d
  * </pre>
@@ -33,13 +33,15 @@ import org.junit.Before;
 public abstract class AbstractIntegrationTest {
 
     // can get IP via `docker-machine ip boot2docker-vm`
-    private static final BitcoinNodeClientConfig bitcoinNodeConfig =
-            BitcoinNodeClientConfig.of("http://192.168.99.100:8332", "someuser", "somepasswordtochange");
+    private static final String DOCKER_MACHINE_IP = "192.168.99.100";
+
+    private static final BitcoinNodeClientConfig BITCOIN_NODE_CONFIG = BitcoinNodeClientConfig.of(
+            String.format("http://%s:8332", DOCKER_MACHINE_IP), "someuser", "somepasswordtochange");
 
     private final BitcoinNodeService bitcoinNode;
 
     public AbstractIntegrationTest() {
-        this(BitcoinNodeFeignClientFactory.createClient(bitcoinNodeConfig));
+        this(BitcoinNodeFeignClientFactory.createClient(BITCOIN_NODE_CONFIG));
     }
 
     public AbstractIntegrationTest(BitcoinNodeService bitcoinNode) {
