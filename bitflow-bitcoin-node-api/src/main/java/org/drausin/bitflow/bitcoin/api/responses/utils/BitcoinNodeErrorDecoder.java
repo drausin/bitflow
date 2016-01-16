@@ -41,9 +41,9 @@ import java.util.Collection;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.serde.BitflowMapperFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponseError;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 
 /**
  * A feign {@link ErrorDecoder} that handles an error returned from a bitcoin RPC.

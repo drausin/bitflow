@@ -16,7 +16,7 @@ package org.drausin.bitflow.integration;
 
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.config.BitcoinNodeClientConfig;
-import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeFeignClientFactory;
+import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeClientFactory;
 import org.junit.Before;
 
 /**
@@ -41,7 +41,8 @@ public abstract class AbstractIntegrationTest {
     private final BitcoinNodeService bitcoinNode;
 
     public AbstractIntegrationTest() {
-        this(BitcoinNodeFeignClientFactory.createClient(BITCOIN_NODE_CONFIG));
+        this(
+                (new BitcoinNodeClientFactory()).createClient(BITCOIN_NODE_CONFIG));
     }
 
     public AbstractIntegrationTest(BitcoinNodeService bitcoinNode) {
