@@ -41,7 +41,7 @@ import java.util.Collection;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponseError;
 

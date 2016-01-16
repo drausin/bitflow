@@ -15,7 +15,7 @@
 package org.drausin.bitflow.bitcoin.api.responses;
 
 import java.io.IOException;
-import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 
 public final class BitcoinNodeExampleResponses {
 

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;

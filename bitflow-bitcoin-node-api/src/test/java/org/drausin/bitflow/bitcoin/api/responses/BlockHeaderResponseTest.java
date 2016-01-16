@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
-import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 import org.drausin.bitflow.blockchain.api.objects.ImmutableBlockHeader;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;

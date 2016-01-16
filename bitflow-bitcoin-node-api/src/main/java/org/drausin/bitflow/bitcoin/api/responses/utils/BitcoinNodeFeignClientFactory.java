@@ -29,7 +29,7 @@ import feign.jaxrs.JAXRSContract;
 import javax.net.ssl.SSLSocketFactory;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.config.BitcoinNodeClientConfig;
-import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 
 /**
  * Factory for creating {@link feign.Feign} {@link BitcoinNodeService} clients.
