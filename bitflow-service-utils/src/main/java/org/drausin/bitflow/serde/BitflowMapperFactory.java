@@ -30,7 +30,7 @@ public final class BitflowMapperFactory {
     private BitflowMapperFactory() {}
 
     public static SimpleModule createModule() {
-        return new SimpleModule("BitcoinNodeModule", Version.unknownVersion())
+        return new SimpleModule("BitflowModule", Version.unknownVersion())
                 .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
                 .addSerializer(BigInteger.class, new BigIntegerSerializer())
                 .addDeserializer(BigInteger.class, new BigIntegerDeserializer());
