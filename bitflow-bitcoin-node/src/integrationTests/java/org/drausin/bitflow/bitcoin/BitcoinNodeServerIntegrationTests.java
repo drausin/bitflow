@@ -21,7 +21,6 @@ import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
-import org.drausin.bitflow.bitcoin.api.responses.StopResponse;
 import org.drausin.bitflow.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
