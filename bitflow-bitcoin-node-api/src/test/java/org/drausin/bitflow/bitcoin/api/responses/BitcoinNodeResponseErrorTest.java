@@ -19,7 +19,7 @@ import static org.junit.Assert.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
+import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
 import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class BitcoinNodeResponseErrorTest {
     @Before
     public final void setUp() throws Exception {
 
-        rpcMapper = BitcoinNodeMapperFactory.createMapper();
+        rpcMapper = BitflowMapperFactory.createMapper();
 
         errorJson = BitcoinNodeExampleResponses.getErrorJson();
         responseError1 = BitcoinNodeExampleResponses.getError();

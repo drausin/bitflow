@@ -39,9 +39,9 @@ import org.drausin.bitflow.blockchain.api.serde.BigIntegerSerializer;
 import org.drausin.bitflow.blockchain.api.serde.Sha256HashSerializer;
 
 
-public final class BitcoinNodeMapperFactory {
+public final class BitflowMapperFactory {
 
-    private BitcoinNodeMapperFactory() {}
+    private BitflowMapperFactory() {}
 
     public static SimpleModule createModule() {
         return new SimpleModule("BitcoinNodeModule", Version.unknownVersion())

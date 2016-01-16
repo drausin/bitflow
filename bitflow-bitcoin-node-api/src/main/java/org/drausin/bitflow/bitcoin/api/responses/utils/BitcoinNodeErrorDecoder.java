@@ -41,7 +41,7 @@ import java.util.Collection;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
+import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeResponseError;
 
@@ -73,7 +73,7 @@ public enum BitcoinNodeErrorDecoder implements ErrorDecoder {
     }
 
     private static BitcoinNodeResponse getResponseFromBody(Response.Body body, Class methodReturnType) {
-        ObjectMapper mapper = BitcoinNodeMapperFactory.createMapper();
+        ObjectMapper mapper = BitflowMapperFactory.createMapper();
         try {
             BitcoinNodeResponse rpcResponse = (BitcoinNodeResponse) mapper.readValue(body.asInputStream(),
                     methodReturnType);

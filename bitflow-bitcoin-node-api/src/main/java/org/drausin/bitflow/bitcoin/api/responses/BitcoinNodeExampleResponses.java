@@ -15,7 +15,7 @@
 package org.drausin.bitflow.bitcoin.api.responses;
 
 import java.io.IOException;
-import org.drausin.bitflow.bitcoin.api.providers.BitcoinNodeMapperFactory;
+import org.drausin.bitflow.bitcoin.api.providers.BitflowMapperFactory;
 
 public final class BitcoinNodeExampleResponses {
 
@@ -88,7 +88,7 @@ public final class BitcoinNodeExampleResponses {
     }
 
     public static BlockchainInfoResponse getBlockchainInfoResponse() throws IOException {
-        return BitcoinNodeMapperFactory.createMapper().readValue(getBlockchainInfoJsonResponse(),
+        return BitflowMapperFactory.createMapper().readValue(getBlockchainInfoJsonResponse(),
                 ImmutableBlockchainInfoResponse.class);
     }
 
@@ -119,7 +119,7 @@ public final class BitcoinNodeExampleResponses {
     }
 
     public static BlockHeaderResponse getBlockHeaderResponse() throws IOException {
-        return BitcoinNodeMapperFactory.createMapper().readValue(getBlockHeaderJsonResponse(),
+        return BitflowMapperFactory.createMapper().readValue(getBlockHeaderJsonResponse(),
                 ImmutableBlockHeaderResponse.class);
     }
 
@@ -132,16 +132,16 @@ public final class BitcoinNodeExampleResponses {
     }
 
     public static String getErrorJson() throws IOException {
-        return BitcoinNodeMapperFactory.createMapper().writeValueAsString(getError());
+        return BitflowMapperFactory.createMapper().writeValueAsString(getError());
     }
 
     public static BlockchainInfoResponse getBlockchainInfoErrorResponse() throws IOException {
-        return BitcoinNodeMapperFactory.createMapper().readValue(getErrorJsonResponse(),
+        return BitflowMapperFactory.createMapper().readValue(getErrorJsonResponse(),
                 ImmutableBlockchainInfoResponse.class);
     }
 
     public static BlockHeaderResponse getBlockHeaderErrorResponse() throws IOException {
-        return BitcoinNodeMapperFactory.createMapper().readValue(getErrorJsonResponse(),
+        return BitflowMapperFactory.createMapper().readValue(getErrorJsonResponse(),
                 ImmutableBlockHeaderResponse.class);
     }
 
