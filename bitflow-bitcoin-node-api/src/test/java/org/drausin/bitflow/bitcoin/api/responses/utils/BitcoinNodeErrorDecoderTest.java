@@ -35,12 +35,12 @@ import org.junit.Test;
 public final class BitcoinNodeErrorDecoderTest {
 
     private final ErrorDecoder errorDecoder = BitcoinNodeErrorDecoder.INSTANCE;
-    private String getBlockchainInfoconfigKey;
+    private String getBlockchainInfoConfigKey;
     private String getBlockHeaderMethodKey;
 
     @Before
     public void setUp() throws NoSuchMethodException {
-        getBlockchainInfoconfigKey = Feign.configKey(BitcoinNodeService.class,
+        getBlockchainInfoConfigKey = Feign.configKey(BitcoinNodeService.class,
                 BitcoinNodeService.class.getMethod("getBlockchainInfo", BitcoinNodeRequest.class));
         getBlockHeaderMethodKey = Feign.configKey(BitcoinNodeService.class,
                 BitcoinNodeService.class.getMethod("getBlockHeader", BitcoinNodeRequest.class));
@@ -53,7 +53,7 @@ public final class BitcoinNodeErrorDecoderTest {
         String text = "{\"result\":null,\"error\":{\"code\":-28,\"message\":\"Activating best chain...\"},\"id\":null}";
         Response response = Response.create(500, "bad request", headers, text, Charset.forName("UTF-8"));
 
-        assertThat(errorDecoder.decode(getBlockchainInfoconfigKey, response), instanceOf(RuntimeException.class));
+        assertThat(errorDecoder.decode(getBlockchainInfoConfigKey, response), instanceOf(RuntimeException.class));
     }
 
     @Test
@@ -66,12 +66,12 @@ public final class BitcoinNodeErrorDecoderTest {
         assertThat(errorDecoder.decode(getBlockHeaderMethodKey, response), instanceOf(RuntimeException.class));
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testDecodeNonJsonError() throws Exception {
         Map<String, Collection<String>> headers = ImmutableMap.of(HttpHeaders.CONTENT_TYPE,
-                ImmutableList.of(MediaType.APPLICATION_XML));
+                ImmutableList.of(MediaType.TEXT_PLAIN));
         Response response = Response.create(500, "bad request", headers, "dummy text", Charset.forName("UTF-8"));
-        errorDecoder.decode(getBlockchainInfoconfigKey, response);
+        assertThat(errorDecoder.decode(getBlockchainInfoConfigKey, response), instanceOf(RuntimeException.class));
     }
 
     @Test(expected = IllegalStateException.class)
