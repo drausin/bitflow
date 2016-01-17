@@ -20,6 +20,8 @@ import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
+import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
+import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
@@ -37,14 +39,18 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
     public final BlockchainInfo getBlockchainInfo(String authHeader) {
         // TODO(dwulsin): what to do with authHeader?
         BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockchainInfoRequest();
-        return bitcoinNodeService.getBlockchainInfo(request).getResult().get();
+        BlockchainInfoResponse blockchainInfoResponse = bitcoinNodeService.getBlockchainInfo(request);
+        blockchainInfoResponse.validateResult();
+        return blockchainInfoResponse.getResult().get();
     }
 
     @Override
     public final BlockHeader getBlockHeader(String authHeader, Sha256Hash hash) {
         // TODO(dwulsin): what to do with authHeader?
         BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderRequest(hash);
-        return bitcoinNodeService.getBlockHeader(request).getResult().get();
+        BlockHeaderResponse blockHeaderResponse = bitcoinNodeService.getBlockHeader(request);
+        blockHeaderResponse.validateResult();
+        return blockHeaderResponse.getResult().get();
     }
 
     @Override
