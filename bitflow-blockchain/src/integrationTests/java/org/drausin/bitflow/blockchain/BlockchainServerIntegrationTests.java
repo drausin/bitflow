@@ -72,7 +72,8 @@ public final class BlockchainServerIntegrationTests extends AbstractIntegrationT
     @Test(expected = RuntimeException.class)
     public void testGetBlockHeaderPruned() {
 
+        // make request for block that's probably not available, which should result in a RuntimeException
         Sha256Hash headerHash = Sha256Hash.wrap("000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39");
-        BlockHeader blockHeader = getBlockchainService().getBlockHeader("dummer header", headerHash);
+        getBlockchainService().getBlockHeader("dummer header", headerHash);
     }
 }
