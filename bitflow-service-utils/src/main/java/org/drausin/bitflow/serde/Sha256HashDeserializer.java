@@ -33,7 +33,7 @@ public final class Sha256HashDeserializer extends JsonDeserializer<Sha256Hash> {
     }
 
     @Override
-    public final Class<Sha256Hash> handledType() {
+    public Class<Sha256Hash> handledType() {
         return Sha256Hash.class;
     }
 }

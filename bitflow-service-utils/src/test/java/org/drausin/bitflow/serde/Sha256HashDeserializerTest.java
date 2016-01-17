@@ -14,17 +14,16 @@
 
 package org.drausin.bitflow.serde;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonParser;
 import org.bitcoinj.core.Sha256Hash;
-import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public class Sha256HashDeserializerTest {
+public final class Sha256HashDeserializerTest {
 
     private static Sha256HashDeserializer deserializer = new Sha256HashDeserializer();
 
@@ -39,7 +38,7 @@ public class Sha256HashDeserializerTest {
     }
 
     @Test
-    public final void testHandledType() throws Exception {
+    public void testHandledType() throws Exception {
         assertEquals(Sha256Hash.class, deserializer.handledType());
     }
 }

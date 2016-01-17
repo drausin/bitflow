@@ -15,7 +15,6 @@
 package org.drausin.bitflow.serde;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
@@ -26,15 +25,15 @@ import java.math.BigInteger;
  *
  * @author dwulsin
  */
-public class BigIntegerDeserializer extends JsonDeserializer<BigInteger> {
+public final class BigIntegerDeserializer extends JsonDeserializer<BigInteger> {
     @Override
-    public final BigInteger deserialize(JsonParser parser, DeserializationContext ctxt)
+    public BigInteger deserialize(JsonParser parser, DeserializationContext ctxt)
             throws IOException {
         return new BigInteger(parser.getValueAsString(), 16);
     }
 
     @Override
-    public final Class<BigInteger> handledType() {
+    public Class<BigInteger> handledType() {
         return BigInteger.class;
     }
 }

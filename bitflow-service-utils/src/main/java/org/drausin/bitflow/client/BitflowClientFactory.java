@@ -14,7 +14,7 @@
 
 package org.drausin.bitflow.client;
 
-public class BitflowClientFactory extends AbstractBitflowClientFactory<String> {
+public final class BitflowClientFactory extends AbstractBitflowClientFactory<String> {
     @Override
     protected String getUri(String config) {
         return config;
