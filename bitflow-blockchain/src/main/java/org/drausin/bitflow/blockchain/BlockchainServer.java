@@ -16,11 +16,13 @@ package org.drausin.bitflow.blockchain;
 
 import com.codahale.metrics.health.HealthCheck;
 import io.dropwizard.Application;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeClientFactory;
 import org.drausin.bitflow.blockchain.config.ServerConfig;
+import org.drausin.bitflow.serde.BitflowMapperFactory;
 
 
 /**
@@ -31,6 +33,11 @@ import org.drausin.bitflow.blockchain.config.ServerConfig;
 public final class BlockchainServer extends Application<ServerConfig> {
 
     @Override
+    public void initialize(Bootstrap<ServerConfig> bootstrap) {
+        bootstrap.setObjectMapper(BitflowMapperFactory.createMapper());
+    }
+
+    @Override
     public void run(ServerConfig config, Environment env) throws Exception {
 
         BitcoinNodeService bitcoinNode = (new BitcoinNodeClientFactory()).createClient(config.getBitcoinNode());
@@ -39,6 +46,7 @@ public final class BlockchainServer extends Application<ServerConfig> {
         env.jersey().register(blockchainResource);
 
         env.healthChecks().register("bitcoinNode", createBitcoinNodeHealthCheck(bitcoinNode));
+
 
         //boolean includeStackTrace = config.getIncludeStackTraceInErrors().or(true);
         // TODO(dwulsin): need to figure out how to handle Exceptions (via ExceptionMappers?)
