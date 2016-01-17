@@ -17,6 +17,8 @@ package org.drausin.bitflow.integration;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.config.BitcoinNodeClientConfig;
 import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeClientFactory;
+import org.drausin.bitflow.blockchain.api.BlockchainService;
+import org.drausin.bitflow.client.BitflowClientFactory;
 import org.junit.Before;
 
 /**
@@ -34,23 +36,34 @@ public abstract class AbstractIntegrationTest {
 
     // can get IP via `docker-machine ip boot2docker-vm`
     private static final String DOCKER_MACHINE_IP = "192.168.99.100";
+    private static final String BITCOIN_NODE_URI = String.format("http://%s:8332", DOCKER_MACHINE_IP);
+    private static final String BLOCKCHAIN_URI = String.format("http://%s:8100/api/", DOCKER_MACHINE_IP);
 
     private static final BitcoinNodeClientConfig BITCOIN_NODE_CONFIG = BitcoinNodeClientConfig.of(
-            String.format("http://%s:8332", DOCKER_MACHINE_IP), "someuser", "somepasswordtochange");
+            BITCOIN_NODE_URI, "someuser", "somepasswordtochange");
+    private static final BitcoinNodeClientFactory BITCOIN_NODE_CLIENT_FACTORY = new BitcoinNodeClientFactory();
+    private static final BitflowClientFactory BITFLOW_CLIENT_FACTORY = new BitflowClientFactory();
 
     private final BitcoinNodeService bitcoinNode;
+    private final BlockchainService blockchainService;
 
     public AbstractIntegrationTest() {
         this(
-                (new BitcoinNodeClientFactory()).createClient(BITCOIN_NODE_CONFIG));
+                BITCOIN_NODE_CLIENT_FACTORY.createClient(BITCOIN_NODE_CONFIG),
+                BITFLOW_CLIENT_FACTORY.createClient(BlockchainService.class, BLOCKCHAIN_URI));
     }
 
-    public AbstractIntegrationTest(BitcoinNodeService bitcoinNode) {
+    public AbstractIntegrationTest(BitcoinNodeService bitcoinNode, BlockchainService blockchainService) {
         this.bitcoinNode = bitcoinNode;
+        this.blockchainService = blockchainService;
     }
 
     public final BitcoinNodeService getBitcoinNode() {
         return bitcoinNode;
+    }
+
+    public final BlockchainService getBlockchainService() {
+        return blockchainService;
     }
 
     @Before
