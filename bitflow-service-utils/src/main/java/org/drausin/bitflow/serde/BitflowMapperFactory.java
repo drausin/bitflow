@@ -17,7 +17,7 @@ package org.drausin.bitflow.serde;
 import com.fasterxml.jackson.core.Version;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
+import io.dropwizard.jackson.Jackson;
 import java.math.BigInteger;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -30,12 +30,14 @@ public final class BitflowMapperFactory {
         return new SimpleModule("BitflowModule", Version.unknownVersion())
                 .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
                 .addSerializer(BigInteger.class, new BigIntegerSerializer())
+                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
                 .addDeserializer(BigInteger.class, new BigIntegerDeserializer());
     }
 
     public static ObjectMapper createMapper() {
-        return new ObjectMapper()
-                .registerModule(new GuavaModule())
+        return Jackson.newObjectMapper()
                 .registerModule(createModule());
     }
+
+
 }
