@@ -15,26 +15,25 @@
 package org.drausin.bitflow.serde;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import java.io.IOException;
-import java.math.BigInteger;
+import org.bitcoinj.core.Sha256Hash;
 
 /**
- * Deserialize BigIntegers from their hex string values.
+ * Deserialize {@link org.bitcoinj.core.Sha256Hash} values from their hex string values.
  *
  * @author dwulsin
  */
-public class BigIntegerDeserializer extends JsonDeserializer<BigInteger> {
+public final class Sha256HashDeserializer extends JsonDeserializer<Sha256Hash> {
     @Override
-    public final BigInteger deserialize(JsonParser parser, DeserializationContext ctxt)
+    public Sha256Hash deserialize(JsonParser parser, DeserializationContext ctxt)
             throws IOException {
-        return new BigInteger(parser.getValueAsString(), 16);
+        return Sha256Hash.wrap(parser.getValueAsString());
     }
 
     @Override
-    public final Class<BigInteger> handledType() {
-        return BigInteger.class;
+    public final Class<Sha256Hash> handledType() {
+        return Sha256Hash.class;
     }
 }
