@@ -32,7 +32,7 @@ import org.immutables.value.Value;
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
 @JsonSerialize(as = ImmutableBlockchainInfo.class)
 @JsonDeserialize(as = ImmutableBlockchainInfo.class)
-public abstract class BlockchainInfo implements BlockchainResult {
+public abstract class BlockchainInfo {
 
     /**
      * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.

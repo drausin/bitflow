@@ -33,7 +33,7 @@ import org.immutables.value.Value;
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
 @JsonSerialize(as = ImmutableBlockHeader.class)
 @JsonDeserialize(as = ImmutableBlockHeader.class)
-public abstract class BlockHeader implements BlockchainResult {
+public abstract class BlockHeader {
 
     /**
      * Get the hash of the block header.
