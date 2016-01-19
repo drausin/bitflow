@@ -89,7 +89,7 @@ public final class BitcoinNodeExampleResponses {
 
     public static BlockchainInfoResponse getBlockchainInfoResponse() throws IOException {
         return BitflowMapperFactory.createMapper().readValue(getBlockchainInfoJsonResponse(),
-                ImmutableBlockchainInfoResponse.class);
+                BlockchainInfoResponse.class);
     }
 
     public static String getBlockHeaderJsonResponse() {
@@ -120,7 +120,20 @@ public final class BitcoinNodeExampleResponses {
 
     public static BlockHeaderResponse getBlockHeaderResponse() throws IOException {
         return BitflowMapperFactory.createMapper().readValue(getBlockHeaderJsonResponse(),
-                ImmutableBlockHeaderResponse.class);
+                BlockHeaderResponse.class);
+    }
+
+    public static String getBlockHeaderHashJsonResponse() {
+        return "{\n"
+                + "    \"result\": \"000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39\",\n"
+                + "    \"error\": null,\n"
+                + "    \"id\": \"foo\"\n"
+                + "}";
+    }
+
+    public static BlockHeaderHashResponse getBlockHeaderHashResponse() throws IOException {
+        return BitflowMapperFactory.createMapper().readValue(getBlockHeaderHashJsonResponse(),
+                BlockHeaderHashResponse.class);
     }
 
     public static String getErrorJsonResponse() {
@@ -137,12 +150,17 @@ public final class BitcoinNodeExampleResponses {
 
     public static BlockchainInfoResponse getBlockchainInfoErrorResponse() throws IOException {
         return BitflowMapperFactory.createMapper().readValue(getErrorJsonResponse(),
-                ImmutableBlockchainInfoResponse.class);
+                BlockchainInfoResponse.class);
     }
 
     public static BlockHeaderResponse getBlockHeaderErrorResponse() throws IOException {
         return BitflowMapperFactory.createMapper().readValue(getErrorJsonResponse(),
-                ImmutableBlockHeaderResponse.class);
+                BlockHeaderResponse.class);
+    }
+
+    public static BlockHeaderHashResponse getBlockHeaderHashErrorResponse() throws IOException {
+        return BitflowMapperFactory.createMapper().readValue(getErrorJsonResponse(),
+                BlockHeaderHashResponse.class);
     }
 
     public static BitcoinNodeResponseError getError() throws IOException {
