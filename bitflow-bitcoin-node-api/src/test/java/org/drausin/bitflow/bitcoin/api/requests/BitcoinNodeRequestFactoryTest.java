@@ -18,6 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import com.google.common.collect.ImmutableList;
 import org.bitcoinj.core.Sha256Hash;
 import org.junit.Test;
 
@@ -26,6 +27,7 @@ public final class BitcoinNodeRequestFactoryTest {
     private static String id = "foo";
     private static Sha256Hash headerHash =
             Sha256Hash.wrap("000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39");
+    private static long blockHeight = 0;
 
     @Test
     public void testCreateBlockchainInfoRequest() throws Exception {
@@ -45,10 +47,27 @@ public final class BitcoinNodeRequestFactoryTest {
     }
 
     @Test
+    public void testCreateBlockHeaderHashRequest() throws Exception {
+        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderHashRequest(blockHeight);
+        assertFalse(request.getMethod().isEmpty());
+        assertEquals(ImmutableList.of(blockHeight), request.getParams());
+        assertFalse(request.getId().isPresent());
+    }
+
+    @Test
+    public void testCreateBlockHeaderHashRequestWithId() throws Exception {
+        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderHashRequest(blockHeight, id);
+        assertFalse(request.getMethod().isEmpty());
+        assertEquals(ImmutableList.of(blockHeight), request.getParams());
+        assertTrue(request.getId().isPresent());
+        assertEquals(id, request.getId().get());
+    }
+
+    @Test
     public void testCreateBlockHeaderRequest() throws Exception {
         BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderRequest(headerHash);
         assertFalse(request.getMethod().isEmpty());
-        assertTrue(request.getParams().contains(headerHash));
+        assertEquals(ImmutableList.of(headerHash), request.getParams());
         assertFalse(request.getId().isPresent());
     }
 
@@ -56,7 +75,7 @@ public final class BitcoinNodeRequestFactoryTest {
     public void testCreateBlockHeaderRequestWithId() throws Exception {
         BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderRequest(headerHash, id);
         assertFalse(request.getMethod().isEmpty());
-        assertTrue(request.getParams().contains(headerHash));
+        assertEquals(ImmutableList.of(headerHash), request.getParams());
         assertTrue(request.getId().isPresent());
         assertEquals(id, request.getId().get());
     }

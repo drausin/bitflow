@@ -25,6 +25,7 @@ import org.bitcoinj.core.Sha256Hash;
 public final class BitcoinNodeRequestFactory {
 
     private static final String BLOCKCHAIN_INFO_RPC_METHOD = "getblockchaininfo";
+    private static final String BLOCK_HEADER_HASH_RPC_METHOD = "getblockhash";
     private static final String BLOCK_HEADER_RPC_METHOD = "getblock";
     private static final String STOP_RPC_METHOD = "stop";
 
@@ -47,6 +48,25 @@ public final class BitcoinNodeRequestFactory {
      */
     public static BitcoinNodeRequest createBlockchainInfoRequest(String id) {
         return BitcoinNodeRequest.of(BLOCKCHAIN_INFO_RPC_METHOD, ImmutableList.of(), id);
+    }
+
+    /**
+     * Create a BlockHeaderHash request.
+     * @param blockHeight the height of the block
+     * @return the request
+     */
+    public static BitcoinNodeRequest createBlockHeaderHashRequest(long blockHeight) {
+        return BitcoinNodeRequest.of(BLOCK_HEADER_HASH_RPC_METHOD, ImmutableList.of(blockHeight));
+    }
+
+    /**
+     * Create a BlockHeaderHash request.
+     * @param blockHeight the height of the block
+     * @param id the RPC ID to use
+     * @return the request
+     */
+    public static BitcoinNodeRequest createBlockHeaderHashRequest(long blockHeight, String id) {
+        return BitcoinNodeRequest.of(BLOCK_HEADER_HASH_RPC_METHOD, ImmutableList.of(blockHeight), id);
     }
 
     /**
@@ -86,5 +106,4 @@ public final class BitcoinNodeRequestFactory {
     public static BitcoinNodeRequest createStopRequest(String id) {
         return BitcoinNodeRequest.of(STOP_RPC_METHOD, ImmutableList.of(), id);
     }
-
 }

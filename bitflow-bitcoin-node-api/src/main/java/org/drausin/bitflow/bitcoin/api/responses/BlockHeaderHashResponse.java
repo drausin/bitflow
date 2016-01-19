@@ -22,6 +22,9 @@ import org.immutables.value.Value;
 
 /**
  * An RPC response with a {@link org.bitcoinj.core.Sha256Hash} block header hash result.
+ *
+ * @see <a href="https://bitcoin.org/en/developer-reference#getblockhash">GetBlockHash RPC</a>
+ * @author dwulsin
  */
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
