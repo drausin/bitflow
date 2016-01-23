@@ -14,8 +14,10 @@
 
 package org.drausin.bitflow.blockchain;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
@@ -23,6 +25,8 @@ import org.drausin.bitflow.integration.AbstractIntegrationTest;
 import org.junit.Test;
 
 public final class BlockchainServerIntegrationTests extends AbstractIntegrationTest {
+
+    private static final String authHeader = "dummy authHeader";
 
     @Test
     public void testGetBlockchainInfo() {
@@ -41,7 +45,7 @@ public final class BlockchainServerIntegrationTests extends AbstractIntegrationT
         */
 
         // get from the Blockchain endpoint
-        BlockchainInfo blockchainBlockchainInfo = getBlockchainService().getBlockchainInfo("dummy header");
+        BlockchainInfo blockchainBlockchainInfo = getBlockchain().getBlockchainInfo(authHeader);
         assertTrue(blockchainBlockchainInfo.getNumBlocks() > 0);
 
         /*
@@ -61,9 +65,8 @@ public final class BlockchainServerIntegrationTests extends AbstractIntegrationT
     @Test
     public void testGetBlockHeaderUnpruned() {
 
-        BlockchainInfo blockchainInfo = getBlockchainService().getBlockchainInfo("dummy header");
-        BlockHeader blockHeader = getBlockchainService().getBlockHeader("dummer header",
-                blockchainInfo.getBestBlockHash());
+        BlockchainInfo blockchainInfo = getBlockchain().getBlockchainInfo(authHeader);
+        BlockHeader blockHeader = getBlockchain().getBlockHeader(authHeader, blockchainInfo.getBestBlockHash());
 
         assertTrue(blockHeader.getTransactionIds().size() > 0);
 
@@ -74,6 +77,21 @@ public final class BlockchainServerIntegrationTests extends AbstractIntegrationT
 
         // make request for block that's probably not available, which should result in a RuntimeException
         Sha256Hash headerHash = Sha256Hash.wrap("000000000fe549a89848c76070d4132872cfb6efe5315d01d7ef77e4900f2d39");
-        getBlockchainService().getBlockHeader("dummer header", headerHash);
+        getBlockchain().getBlockHeader(authHeader, headerHash);
+    }
+
+    @Test
+    public void testGetBlockHeaderHeightSubchain() {
+
+        BlockchainInfo blockchainInfo = getBlockchain().getBlockchainInfo(authHeader);
+        long toBlockHeight = blockchainInfo.getNumBlocks();
+        long fromBlockHeight = toBlockHeight - 5;
+        List<BlockHeader> subchain = getBlockchain().getBlockHeaderHeightSubchain(authHeader, fromBlockHeight,
+                toBlockHeight);
+
+        assertEquals(toBlockHeight - fromBlockHeight + 1, subchain.size());
+        for (int c = 1; c < subchain.size(); c++) {
+            assertEquals(subchain.get(c - 1).getNextBlockHash().get(), subchain.get(c).getHeaderHash());
+        }
     }
 }
