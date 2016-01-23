@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
+import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderHashResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.drausin.bitflow.bitcoin.api.responses.StopResponse;
@@ -39,12 +40,9 @@ public interface BitcoinNodeService {
      *
      * @param request the request associated with the bitcoind RPC {@code getblockchaininfo} method
      * @return the RPC response in {@link BlockchainInfoResponse}
-     *
-     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory}
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory#createBlockchainInfoRequest()}
      */
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     BlockchainInfoResponse getBlockchainInfo(BitcoinNodeRequest request);
 
     /**
@@ -52,24 +50,29 @@ public interface BitcoinNodeService {
      *
      * @param request the request associated with the bitcoind RPC {@code getblock} method
      * @return the RPC response in {@link BlockchainInfoResponse}
-     *
-     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory}
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory#
+     * createBlockHeaderRequest(Sha256Hash)}
      */
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     BlockHeaderResponse getBlockHeader(BitcoinNodeRequest request);
+
+    /**
+     * Gets the block header hash for the block at a given height.
+     *
+     * @param request the request associated with the bitcoind RPC {@code getblockhash} method
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory#
+     * createBlockHeaderHashRequest(long)}
+     */
+    @POST
+    BlockHeaderHashResponse getBlockHeaderHash(BitcoinNodeRequest request);
 
     /**
      * Stops the bitcoind server gracefully.
      *
      * @param request the request associated with the bitcoind RPC {@code stop} method
      * @return the RPC response in {@link org.drausin.bitflow.bitcoin.api.responses.StopResponse}
-     *
-     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory}
+     * @see {@link org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory#createStopRequest()}
      */
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     StopResponse stop(BitcoinNodeRequest request);
 }
