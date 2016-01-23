@@ -79,7 +79,7 @@ public interface BlockchainService extends BitflowService {
      * Gets the block header subchain of blocks created within a given height range, relative to the current best block.
      *
      * @param from the height above (inclusive) which to get the first block
-     * @param to the height below (exclusive) which to get the last block
+     * @param to the height below (inclusive) which to get the last block
      */
     @GET
     @Path("/block/header/subchain/height")
