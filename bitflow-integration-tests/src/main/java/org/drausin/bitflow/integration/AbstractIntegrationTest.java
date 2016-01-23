@@ -44,8 +44,8 @@ public abstract class AbstractIntegrationTest {
     private static final BitcoinNodeClientFactory BITCOIN_NODE_CLIENT_FACTORY = new BitcoinNodeClientFactory();
     private static final BitflowClientFactory BITFLOW_CLIENT_FACTORY = new BitflowClientFactory();
 
-    private final BitcoinNodeService bitcoinNode;
-    private final BlockchainService blockchainService;
+    protected final BitcoinNodeService bitcoinNode;
+    protected final BlockchainService blockchain;
 
     public AbstractIntegrationTest() {
         this(
@@ -53,17 +53,17 @@ public abstract class AbstractIntegrationTest {
                 BITFLOW_CLIENT_FACTORY.createClient(BlockchainService.class, BLOCKCHAIN_URI));
     }
 
-    public AbstractIntegrationTest(BitcoinNodeService bitcoinNode, BlockchainService blockchainService) {
+    public AbstractIntegrationTest(BitcoinNodeService bitcoinNode, BlockchainService blockchain) {
         this.bitcoinNode = bitcoinNode;
-        this.blockchainService = blockchainService;
+        this.blockchain = blockchain;
     }
 
     public final BitcoinNodeService getBitcoinNode() {
         return bitcoinNode;
     }
 
-    public final BlockchainService getBlockchainService() {
-        return blockchainService;
+    public final BlockchainService getBlockchain() {
+        return blockchain;
     }
 
     @Before
