@@ -49,7 +49,10 @@ project(':bitflow-blockchain') {
         integrationTestsCompile project(':bitflow-integration-tests')
     }
 
-    apply from: "${rootDir}/gradle/docker.gradle"
+    docker {
+        name "daedalus2718/bitflow/${project.name}"
+        dependsOn distTar
+    }
 
     distribution {
         serviceName 'bitflow-blockchain'
