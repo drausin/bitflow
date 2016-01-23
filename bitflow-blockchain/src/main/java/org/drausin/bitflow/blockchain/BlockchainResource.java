@@ -14,12 +14,14 @@
 
 package org.drausin.bitflow.blockchain;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import io.dropwizard.jersey.params.DateTimeParam;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
-import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
+import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderHashResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
@@ -38,8 +40,8 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
     @Override
     public final BlockchainInfo getBlockchainInfo(String authHeader) {
         // TODO(dwulsin): what to do with authHeader?
-        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockchainInfoRequest();
-        BlockchainInfoResponse blockchainInfoResponse = bitcoinNodeService.getBlockchainInfo(request);
+        BlockchainInfoResponse blockchainInfoResponse = bitcoinNodeService.getBlockchainInfo(
+                BitcoinNodeRequestFactory.createBlockchainInfoRequest());
         blockchainInfoResponse.validateResult();
         return blockchainInfoResponse.getResult().get();
     }
@@ -47,8 +49,8 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
     @Override
     public final BlockHeader getBlockHeader(String authHeader, Sha256Hash hash) {
         // TODO(dwulsin): what to do with authHeader?
-        BitcoinNodeRequest request = BitcoinNodeRequestFactory.createBlockHeaderRequest(hash);
-        BlockHeaderResponse blockHeaderResponse = bitcoinNodeService.getBlockHeader(request);
+        BlockHeaderResponse blockHeaderResponse = bitcoinNodeService.getBlockHeader(
+                BitcoinNodeRequestFactory.createBlockHeaderRequest(hash));
         blockHeaderResponse.validateResult();
         return blockHeaderResponse.getResult().get();
     }
@@ -61,7 +63,50 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
 
     @Override
     public final List<BlockHeader> getBlockHeaderHeightSubchain(String authHeader, long from, long to) {
-        // TODO(dwulsin)
-        return null;
+        // TODO(dwulsin): what to do with authHeader?
+
+        BlockchainInfo blockchainInfo = getBlockchainInfo(authHeader);
+        if (to > blockchainInfo.getNumBlocks()) {
+            throw new RuntimeException(
+                    String.format("height to=%s is greater than highest available block at height %s", to,
+                            blockchainInfo.getNumBlocks()));
+        }
+        if (from < blockchainInfo.getPruneHeight()) {
+            throw new RuntimeException(
+                    String.format("height from=%s is smaller than lowest available (non-pruned) block at height %s",
+                            from, blockchainInfo.getPruneHeight()));
+        }
+
+        // get the block header hashes at the starting and ending heights
+        Sha256Hash fromHash = getBlockHeaderHashAtHeight(from);
+        Sha256Hash toHash = getBlockHeaderHashAtHeight(to);
+
+        List<BlockHeader> subchain = Lists.newArrayList();
+        Sha256Hash nextHash = fromHash;
+        for (int c = 0; c <= to - from; c++) {
+            BlockHeaderResponse currentResponse = bitcoinNodeService.getBlockHeader(
+                    BitcoinNodeRequestFactory.createBlockHeaderRequest(nextHash));
+            currentResponse.validateResult();
+            BlockHeader currentBlockHeader = currentResponse.getResult().get();
+            subchain.add(currentBlockHeader);
+            nextHash = currentBlockHeader.getNextBlockHash().get();
+        }
+
+        // check that the subchain hasn't changed during the call
+        Sha256Hash lastHash = subchain.get(subchain.size() - 1).getHeaderHash();
+        if (!lastHash.equals(toHash)) {
+            throw new IllegalStateException(
+                    String.format("'to' header hash changed from %s to %s during call", lastHash.toString(),
+                            toHash.toString()));
+        }
+
+        return ImmutableList.copyOf(subchain);
+    }
+
+    private Sha256Hash getBlockHeaderHashAtHeight(long height) {
+        BlockHeaderHashResponse response = bitcoinNodeService.getBlockHeaderHash(
+                BitcoinNodeRequestFactory.createBlockHeaderHashRequest(height));
+        response.validateResult();
+        return response.getResult().get();
     }
 }
