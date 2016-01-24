@@ -1,7 +1,7 @@
 # Bitflow services
 bitcoin-node:
   container_name: bitcoin-node.bitflow.dev
-  image: 'daedalus2718/bitflow/bitflow-bitcoin-node:latest'
+  image: 'daedalus2718/bitflow-bitcoin-node:latest'
   ports:
     - "8333:8333"
     - "8332:8332"
@@ -14,7 +14,7 @@ bitcoin-node:
     - /data
 blockchain:
   container_name: blockchain.bitflow.dev
-  image: 'daedalus2718/bitflow/bitflow-blockchain:latest'
+  image: 'daedalus2718/bitflow-blockchain:latest'
   ports:
     - "8100:8100"
     - "8101:8101"
