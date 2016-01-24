@@ -15,12 +15,14 @@
 package org.drausin.bitflow.blockchain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
+import io.dropwizard.jersey.params.DateTimeParam;
 import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,12 @@ import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.bitcoin.api.responses.BitcoinNodeExampleResponses;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderHashResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
+import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
+import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,86 +81,127 @@ public final class BlockchainResourceTest {
     @Test
     public void testGetBlockHeaderHeightSubchain() throws Exception {
 
-        // available blocks [228183, 230815]
         long from = 228185;
         long to = 228195;
-        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServce(from, to);
+        long buffer = 15;
+        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServceForSubchain(from - buffer, to + buffer);
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
 
         List<BlockHeader> subchain = blockchainResource.getBlockHeaderHeightSubchain(authHeader, from, to);
-        assertEquals(to - from + 1, subchain.size());
-        for (int c = 1; c < subchain.size(); c++) {
-            assertEquals(subchain.get(c).getHeaderHash(), subchain.get(c - 1).getNextBlockHash().get());
-        }
+        validateSubchain(subchain, to - from + 1);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetBlockHeaderHeightSubchainUnavailableStart() throws Exception {
 
-        // available blocks [228183, 230815]
-        long from = 228180;
-        long to = 228190;
-        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServce(from, to);
+        long from = 228185;
+        long to = 228195;
+        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServceForSubchain(from, to);
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
-        blockchainResource.getBlockHeaderHeightSubchain(authHeader, from, to);
+        blockchainResource.getBlockHeaderHeightSubchain(authHeader, from - 5, to);
     }
 
-    @Test(expected = RuntimeException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testGetBlockHeaderHeightSubchainUnavailableEnd() throws Exception {
 
-        // available blocks [228183, 230815]
-        long from = 230810;
-        long to = 230820;
-        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServce(from, to);
+        long from = 228185;
+        long to = 228195;
+        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServceForSubchain(from, to);
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
-        blockchainResource.getBlockHeaderHeightSubchain(authHeader, from, to);
+        blockchainResource.getBlockHeaderHeightSubchain(authHeader, from, to + 5);
     }
 
     @Test(expected = IllegalStateException.class)
     public void testGetBlockHeaderHeightSubchainChanged() throws Exception {
 
-        // available blocks [228183, 230815]
         long from = 228185;
         long to = 228195;
-        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServce(from, to, true);
+        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServceForSubchain(from, to, true);
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
         blockchainResource.getBlockHeaderHeightSubchain(authHeader, from, to);
     }
 
-    private BitcoinNodeService mockBitcoinNodeServce(long from, long to) throws Exception {
-        return mockBitcoinNodeServce(from, to, false);
+    @Test
+    public void testGetBlockHeaderTimeSubchain() throws Exception {
+
+        long from = 228185;
+        long to = 228195;
+        long buffer = 15;
+        BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServceForSubchain(from - buffer, to + buffer);
+        BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
+
+        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC),
+                new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC), 11, blockchainResource);
+
+        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC),
+                new DateTime(to * 10 * 60 * 1000 + 500, DateTimeZone.UTC), 12, blockchainResource);
+
+        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 - 500, DateTimeZone.UTC),
+                new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC), 12, blockchainResource);
+
+        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000, DateTimeZone.UTC),
+                new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC), 11, blockchainResource);
+
+        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC),
+                new DateTime(to * 10 * 60 * 1000, DateTimeZone.UTC), 12, blockchainResource);
     }
 
-    private BitcoinNodeService mockBitcoinNodeServce(long from, long to, boolean useDifferentToHash)
+    private void testGetBlockHeaderTimeSubchain(DateTime fromTime, DateTime toTime, long numBlocks,
+            BlockchainResource blockchainResource) {
+        DateTimeParam fromTimeParam = new DateTimeParam(fromTime.toString(ISODateTimeFormat.dateTime()));
+        DateTimeParam toTimeParam = new DateTimeParam(toTime.toString(ISODateTimeFormat.dateTime()));
+        List<BlockHeader> subchain = blockchainResource.getBlockHeaderTimeSubchain(authHeader, fromTimeParam,
+                toTimeParam);
+        validateSubchain(subchain, numBlocks);
+        assertFalse(subchain.get(0).getCreatedDateTime().isAfter(fromTime.toInstant()));
+        assertFalse(subchain.get(subchain.size() - 1).getCreatedDateTime().isBefore(toTime.toInstant()));
+    }
+
+    private void validateSubchain(List<BlockHeader> subchain, long numBlocks) {
+        assertEquals(numBlocks, subchain.size());
+        for (int c = 1; c < subchain.size(); c++) {
+            assertEquals(subchain.get(c).getHeaderHash(), subchain.get(c - 1).getNextBlockHash().get());
+        }
+    }
+
+    private BitcoinNodeService mockBitcoinNodeServceForSubchain(long from, long to) throws Exception {
+        return mockBitcoinNodeServceForSubchain(from, to, false);
+    }
+
+    private BitcoinNodeService mockBitcoinNodeServceForSubchain(long from, long to, boolean useDifferentToHash)
             throws Exception {
 
         Map<Long, Sha256Hash> blockHeightHashes = getTestBlockHeightHashes(from, to);
         BitcoinNodeService bitcoinNodeService = mock(BitcoinNodeService.class);
 
         // mock getBlockchainInfo() call
+        BlockchainInfo blockchainInfo = mock(BlockchainInfo.class);
+        when(blockchainInfo.getNumBlocks()).thenReturn(to);
+        when(blockchainInfo.getPruneHeight()).thenReturn(from);
         when(bitcoinNodeService.getBlockchainInfo(any(BitcoinNodeRequest.class))).thenReturn(
-                BitcoinNodeExampleResponses.getBlockchainInfoResponse());
-
-        // mock getBlockHeaderHash() calls for to & from
-        when(bitcoinNodeService.getBlockHeaderHash(BitcoinNodeRequestFactory.createBlockHeaderHashRequest(from)))
-                .thenReturn(BlockHeaderHashResponse.of(Optional.of(blockHeightHashes.get(from)), Optional.absent(),
-                        Optional.absent()));
-        Sha256Hash toHash = blockHeightHashes.get(to);
-        if (useDifferentToHash) {
-            toHash = blockHeightHashes.get(from); // not important what we're getting, just that it's different
-        }
-        when(bitcoinNodeService.getBlockHeaderHash(BitcoinNodeRequestFactory.createBlockHeaderHashRequest(to)))
-                .thenReturn(BlockHeaderHashResponse.of(Optional.of(toHash), Optional.absent(),
-                        Optional.absent()));
+                BlockchainInfoResponse.of(Optional.of(blockchainInfo), Optional.absent(), Optional.absent()));
 
         // mock getBlockHeader() calls for every block hash in subchain
         for (long h = from; h <= to; h++) {
+
             BlockHeader blockHeader = mock(BlockHeader.class);
             when(blockHeader.getNextBlockHash()).thenReturn(Optional.of(blockHeightHashes.get(h + 1)));
             when(blockHeader.getHeaderHash()).thenReturn(blockHeightHashes.get(h));
+            when(blockHeader.getHeight()).thenReturn(h);
+            when(blockHeader.getCreatedTime()).thenReturn(h * 10 * 60); // each block is ~10 mins
+
             Sha256Hash blockHash = blockHeightHashes.get(h);
             when(bitcoinNodeService.getBlockHeader(BitcoinNodeRequestFactory.createBlockHeaderRequest(blockHash)))
-                    .thenReturn(BlockHeaderResponse.of(Optional.of(blockHeader), Optional.absent(), Optional.absent()));
+                    .thenReturn(BlockHeaderResponse.of(blockHeader));
+
+            if (h == to && useDifferentToHash) {
+                // not important what we're getting, just that it's different
+                when(bitcoinNodeService.getBlockHeaderHash(BitcoinNodeRequestFactory.createBlockHeaderHashRequest(to)))
+                        .thenReturn(BlockHeaderHashResponse.of(blockHeightHashes.get(from)));
+            } else {
+                when(bitcoinNodeService.getBlockHeaderHash(BitcoinNodeRequestFactory.createBlockHeaderHashRequest(h)))
+                        .thenReturn(BlockHeaderHashResponse.of(blockHeightHashes.get(h)));
+            }
         }
 
         return bitcoinNodeService;
