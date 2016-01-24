@@ -36,4 +36,12 @@ public abstract class BlockHeaderHashResponse extends BitcoinNodeResponse<Sha256
             Optional<String> id) {
         return ImmutableBlockHeaderHashResponse.of(result, error, id);
     }
+
+    public static BlockHeaderHashResponse of(Optional<Sha256Hash> result) {
+        return of(result, Optional.absent(), Optional.absent());
+    }
+
+    public static BlockHeaderHashResponse of(Sha256Hash result) {
+        return of(Optional.of(result));
+    }
 }

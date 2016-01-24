@@ -33,4 +33,12 @@ public abstract class BlockHeaderResponse extends BitcoinNodeResponse<BlockHeade
             Optional<String> id) {
         return ImmutableBlockHeaderResponse.of(result, error, id);
     }
+
+    public static BlockHeaderResponse of(Optional<BlockHeader> result) {
+        return of(result, Optional.absent(), Optional.absent());
+    }
+
+    public static BlockHeaderResponse of(BlockHeader result) {
+        return of(Optional.of(result));
+    }
 }

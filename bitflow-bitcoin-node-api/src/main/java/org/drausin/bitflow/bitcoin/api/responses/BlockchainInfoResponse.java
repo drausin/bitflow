@@ -33,4 +33,12 @@ public abstract class BlockchainInfoResponse extends BitcoinNodeResponse<Blockch
             Optional<String> id) {
         return ImmutableBlockchainInfoResponse.of(result, error, id);
     }
+
+    public static BlockchainInfoResponse of(Optional<BlockchainInfo> result) {
+        return of(result, Optional.absent(), Optional.absent());
+    }
+
+    public static BlockchainInfoResponse of(BlockchainInfo result) {
+        return of(Optional.of(result));
+    }
 }
