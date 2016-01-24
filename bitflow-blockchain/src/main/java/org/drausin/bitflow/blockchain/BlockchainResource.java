@@ -78,8 +78,7 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
                 latest.getCreatedDateTime().toString());
 
         BlockHeader fromBlock = findBlockHeaderAtTime(from.get(), earliest, latest, true);
-        BlockHeader toBlock = findBlockHeaderAtTime(to.get(),
-                getBlockHeader(authHeader, fromBlock.getPreviousBlockHash().get()), latest, false);
+        BlockHeader toBlock = findBlockHeaderAtTime(to.get(), fromBlock, latest, false);
         long numBlocks = toBlock.getHeight() - fromBlock.getHeight() + 1;
 
         return getBlockHeaderSubchain(fromBlock.getHeaderHash(), toBlock.getHeaderHash(), numBlocks);
