@@ -41,8 +41,6 @@ public interface BlockchainService extends BitflowService {
      */
     @GET
     @Path("/info")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     BlockchainInfo getBlockchainInfo(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader);
 
@@ -52,12 +50,21 @@ public interface BlockchainService extends BitflowService {
      * @param hash the hash of the block
      */
     @GET
-    @Path("/block/header/{hash}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/block/header/hash/{hash}")
     BlockHeader getBlockHeader(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
-            @PathParam("hash") Sha256Hash hash);
+            @CheckForNull @PathParam("hash") Sha256Hash hash);
+
+    /**
+     * Gets the block header at a given block height.
+     *
+     * @param height the height of the block in the blockchain
+     */
+    @GET
+    @Path("/block/header/height/{height}")
+    BlockHeader getBlockHeader(
+            @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
+            @CheckForNull @PathParam("height") long height);
 
     /**
      * Gets the block header subchain of blocks created within a given time window.
@@ -68,8 +75,6 @@ public interface BlockchainService extends BitflowService {
      */
     @GET
     @Path("/block/header/subchain/time")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     List<BlockHeader> getBlockHeaderTimeSubchain(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
             @CheckForNull @QueryParam("from") DateTimeParam from,
@@ -83,8 +88,6 @@ public interface BlockchainService extends BitflowService {
      */
     @GET
     @Path("/block/header/subchain/height")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
     List<BlockHeader> getBlockHeaderHeightSubchain(
             @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
             @CheckForNull @QueryParam("from") long from,
