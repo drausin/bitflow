@@ -3,6 +3,6 @@ apply plugin: 'com.palantir.docker'
 project(':bitflow-docker-base') {
 
     docker {
-        name 'daedalus2718/bitflow/bitflow-base'
+        name 'daedalus2718/bitflow-base'
     }
 }

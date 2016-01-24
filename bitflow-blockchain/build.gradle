@@ -50,7 +50,7 @@ project(':bitflow-blockchain') {
     }
 
     docker {
-        name "daedalus2718/bitflow/${project.name}"
+        name "daedalus2718/${project.name}"
         dependsOn distTar
     }
 
