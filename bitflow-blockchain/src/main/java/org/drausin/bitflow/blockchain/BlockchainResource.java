@@ -58,22 +58,28 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
     }
 
     @Override
+    public final BlockHeader getBlockHeader(String authHeader, long height) {
+        return getBlockHeader(authHeader, getBlockHeaderHashAtHeight(height));
+    }
+
+    @Override
     public final List<BlockHeader> getBlockHeaderTimeSubchain(String authHeader, DateTimeParam from, DateTimeParam to) {
         // TODO(dwulsin): what to do with authHeader?
 
         BlockchainInfo blockchainInfo = getBlockchainInfo(authHeader);
-        BlockHeader earliest = getBlockHeaderAtHeight(blockchainInfo.getPruneHeight());
-        BlockHeader latest = getBlockHeaderAtHeight(blockchainInfo.getNumBlocks());
+        BlockHeader earliest = getBlockHeader(authHeader, blockchainInfo.getPruneHeight());
+        BlockHeader latest = getBlockHeader(authHeader, blockchainInfo.getNumBlocks());
 
-        Preconditions.checkArgument(from.get().isAfter(earliest.getCreatedDateTime().toInstant()),
+        Preconditions.checkArgument(!from.get().isBefore(earliest.getCreatedDateTime().toInstant()),
                 "time from=%s is before than lowest available (non-pruned) block at time %s", from.toString(),
                 earliest.getCreatedDateTime().toString());
-        Preconditions.checkArgument(to.get().isBefore(latest.getCreatedDateTime().toInstant()),
+        Preconditions.checkArgument(!to.get().isAfter(latest.getCreatedDateTime().toInstant()),
                 "time to=%s is after than latest available block at time %s", to.toString(),
                 latest.getCreatedDateTime().toString());
 
         BlockHeader fromBlock = findBlockHeaderAtTime(from.get(), earliest, latest, true);
-        BlockHeader toBlock = findBlockHeaderAtTime(to.get(), fromBlock, latest, false);
+        BlockHeader toBlock = findBlockHeaderAtTime(to.get(),
+                getBlockHeader(authHeader, fromBlock.getPreviousBlockHash().get()), latest, false);
         long numBlocks = toBlock.getHeight() - fromBlock.getHeight() + 1;
 
         return getBlockHeaderSubchain(fromBlock.getHeaderHash(), toBlock.getHeaderHash(), numBlocks);
@@ -129,10 +135,6 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
         return response.getResult().get();
     }
 
-    private BlockHeader getBlockHeaderAtHeight(long height) {
-        return getBlockHeader("dummy header", getBlockHeaderHashAtHeight(height));
-    }
-
     private BlockHeader findBlockHeaderAtTime(DateTime time, BlockHeader lowerBound, BlockHeader upperBound,
             boolean useBlockBefore) {
 
@@ -142,11 +144,15 @@ public class BlockchainResource extends BitflowResource implements BlockchainSer
                 "time %s is above upper bound %s", time.toString(), upperBound.getCreatedDateTime().toString());
 
         long middleHeight = lowerBound.getHeight() + (upperBound.getHeight() - lowerBound.getHeight()) / 2;
-        BlockHeader middle = getBlockHeaderAtHeight(middleHeight);
+        BlockHeader middle = getBlockHeader("dummy header", middleHeight);
 
         if (lowerBound.getHeight() + 1 == upperBound.getHeight()) {
             // base case
-            return useBlockBefore ? lowerBound : upperBound;
+            if (time.equals(lowerBound.getCreatedDateTime())) {
+                return lowerBound;
+            } else {
+                return useBlockBefore ? lowerBound : upperBound;
+            }
         } else if (time.isBefore(middle.getCreatedDateTime().toInstant())) {
             // recurse into first half
             return findBlockHeaderAtTime(time, lowerBound, middle, useBlockBefore);

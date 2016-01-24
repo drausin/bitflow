@@ -15,7 +15,6 @@
 package org.drausin.bitflow.blockchain;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -36,6 +35,7 @@ import org.drausin.bitflow.bitcoin.api.responses.BlockHeaderResponse;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.blockchain.validation.SubchainValidator;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.ISODateTimeFormat;
@@ -88,7 +88,7 @@ public final class BlockchainResourceTest {
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
 
         List<BlockHeader> subchain = blockchainResource.getBlockHeaderHeightSubchain(authHeader, from, to);
-        validateSubchain(subchain, to - from + 1);
+        SubchainValidator.validateSubchain(subchain, to - from + 1);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -126,42 +126,59 @@ public final class BlockchainResourceTest {
 
         long from = 228185;
         long to = 228195;
-        long buffer = 15;
+        long buffer = 6 * 25; // 25 hrs
         BitcoinNodeService bitcoinNodeService = mockBitcoinNodeServceForSubchain(from - buffer, to + buffer);
         BlockchainResource blockchainResource = new BlockchainResource(bitcoinNodeService);
 
-        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC),
-                new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC), 11, blockchainResource);
+        testGetBlockHeaderTimeSubchain(
+                formatDateTime(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC)),
+                formatDateTime(new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC)),
+                blockchainResource);
 
-        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC),
-                new DateTime(to * 10 * 60 * 1000 + 500, DateTimeZone.UTC), 12, blockchainResource);
+        testGetBlockHeaderTimeSubchain(
+                formatDateTime(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC)),
+                formatDateTime(new DateTime(to * 10 * 60 * 1000 + 500, DateTimeZone.UTC)),
+                blockchainResource);
 
-        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 - 500, DateTimeZone.UTC),
-                new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC), 12, blockchainResource);
+        testGetBlockHeaderTimeSubchain(
+                formatDateTime(new DateTime(from * 10 * 60 * 1000 - 500, DateTimeZone.UTC)),
+                formatDateTime(new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC)),
+                blockchainResource);
 
-        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000, DateTimeZone.UTC),
-                new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC), 11, blockchainResource);
+        testGetBlockHeaderTimeSubchain(
+                formatDateTime(new DateTime(from * 10 * 60 * 1000, DateTimeZone.UTC)),
+                formatDateTime(new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC)),
+                blockchainResource);
 
-        testGetBlockHeaderTimeSubchain(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC),
-                new DateTime(to * 10 * 60 * 1000, DateTimeZone.UTC), 12, blockchainResource);
+        testGetBlockHeaderTimeSubchain(
+                formatDateTime(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC)),
+                formatDateTime(new DateTime(to * 10 * 60 * 1000, DateTimeZone.UTC)),
+                blockchainResource);
+
+        testGetBlockHeaderTimeSubchain(
+                formatDateTime(new DateTime(from * 10 * 60 * 1000, DateTimeZone.UTC)),
+                formatDateTime(new DateTime(to * 10 * 60 * 1000, DateTimeZone.UTC)),
+                blockchainResource);
+
+        testGetBlockHeaderTimeSubchain(
+                formatDate(new DateTime(from * 10 * 60 * 1000 + 500, DateTimeZone.UTC)),
+                formatDate(new DateTime(to * 10 * 60 * 1000 - 500, DateTimeZone.UTC)),
+                blockchainResource);
     }
 
-    private void testGetBlockHeaderTimeSubchain(DateTime fromTime, DateTime toTime, long numBlocks,
+    private void testGetBlockHeaderTimeSubchain(DateTimeParam fromTime, DateTimeParam toTime,
             BlockchainResource blockchainResource) {
-        DateTimeParam fromTimeParam = new DateTimeParam(fromTime.toString(ISODateTimeFormat.dateTime()));
-        DateTimeParam toTimeParam = new DateTimeParam(toTime.toString(ISODateTimeFormat.dateTime()));
-        List<BlockHeader> subchain = blockchainResource.getBlockHeaderTimeSubchain(authHeader, fromTimeParam,
-                toTimeParam);
-        validateSubchain(subchain, numBlocks);
-        assertFalse(subchain.get(0).getCreatedDateTime().isAfter(fromTime.toInstant()));
-        assertFalse(subchain.get(subchain.size() - 1).getCreatedDateTime().isBefore(toTime.toInstant()));
+        List<BlockHeader> subchain = blockchainResource.getBlockHeaderTimeSubchain(authHeader, fromTime,
+                toTime);
+        SubchainValidator.validateSubchain(subchain, fromTime.get(), toTime.get());
     }
 
-    private void validateSubchain(List<BlockHeader> subchain, long numBlocks) {
-        assertEquals(numBlocks, subchain.size());
-        for (int c = 1; c < subchain.size(); c++) {
-            assertEquals(subchain.get(c).getHeaderHash(), subchain.get(c - 1).getNextBlockHash().get());
-        }
+    private DateTimeParam formatDateTime(DateTime time) {
+        return new DateTimeParam(time.toString(ISODateTimeFormat.dateTime()));
+    }
+
+    private DateTimeParam formatDate(DateTime time) {
+        return new DateTimeParam(time.toString(ISODateTimeFormat.date()));
     }
 
     private BitcoinNodeService mockBitcoinNodeServceForSubchain(long from, long to) throws Exception {
@@ -186,6 +203,9 @@ public final class BlockchainResourceTest {
 
             BlockHeader blockHeader = mock(BlockHeader.class);
             when(blockHeader.getNextBlockHash()).thenReturn(Optional.of(blockHeightHashes.get(h + 1)));
+            if (h > from) {
+                when(blockHeader.getPreviousBlockHash()).thenReturn(Optional.of(blockHeightHashes.get(h - 1)));
+            }
             when(blockHeader.getHeaderHash()).thenReturn(blockHeightHashes.get(h));
             when(blockHeader.getHeight()).thenReturn(h);
             when(blockHeader.getCreatedTime()).thenReturn(h * 10 * 60); // each block is ~10 mins
