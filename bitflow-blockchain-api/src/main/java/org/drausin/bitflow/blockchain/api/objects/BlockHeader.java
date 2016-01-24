@@ -22,6 +22,8 @@ import java.math.BigInteger;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
 import org.immutables.value.Value;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 /**
  * Information about a block as returned by the Bitcoind <a href="https://bitcoin.org/en/developer-reference#getblock">GetBlock()
@@ -90,11 +92,18 @@ public abstract class BlockHeader {
     public abstract List<Sha256Hash> getTransactionIds();
 
     /**
-     * Get the approximate time when the block was created, store as seconds since the the 1970 epoch.
+     * Get the approximate time when the block was created, stored as seconds since the the 1970 epoch.
      */
     @Value.Parameter
     @JsonProperty("time")
     public abstract long getCreatedTime();
+
+    /**
+     * Get the approximate time when the block was created.
+     */
+    public final DateTime getCreatedDateTime() {
+        return new DateTime(getCreatedTime() * 1000, DateTimeZone.UTC);
+    }
 
     /**
      * Get the nonce which was successful at turning this particular block into one that could be added to the best.
