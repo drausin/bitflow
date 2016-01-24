@@ -14,6 +14,7 @@
 
 package org.drausin.bitflow.blockchain.api.objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -101,6 +102,7 @@ public abstract class BlockHeader {
     /**
      * Get the approximate time when the block was created.
      */
+    @JsonIgnore
     public final DateTime getCreatedDateTime() {
         return new DateTime(getCreatedTime() * 1000, DateTimeZone.UTC);
     }
