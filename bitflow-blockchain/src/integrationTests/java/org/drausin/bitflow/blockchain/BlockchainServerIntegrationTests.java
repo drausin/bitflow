@@ -14,14 +14,16 @@
 
 package org.drausin.bitflow.blockchain;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import io.dropwizard.jersey.params.DateTimeParam;
 import java.util.List;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.blockchain.api.objects.BlockchainInfo;
+import org.drausin.bitflow.blockchain.validation.SubchainValidator;
 import org.drausin.bitflow.integration.AbstractIntegrationTest;
+import org.joda.time.format.ISODateTimeFormat;
 import org.junit.Test;
 
 public final class BlockchainServerIntegrationTests extends AbstractIntegrationTest {
@@ -85,13 +87,25 @@ public final class BlockchainServerIntegrationTests extends AbstractIntegrationT
 
         BlockchainInfo blockchainInfo = getBlockchain().getBlockchainInfo(authHeader);
         long toBlockHeight = blockchainInfo.getNumBlocks();
-        long fromBlockHeight = toBlockHeight - 5;
+        long fromBlockHeight = toBlockHeight - 10;
         List<BlockHeader> subchain = getBlockchain().getBlockHeaderHeightSubchain(authHeader, fromBlockHeight,
                 toBlockHeight);
 
-        assertEquals(toBlockHeight - fromBlockHeight + 1, subchain.size());
-        for (int c = 1; c < subchain.size(); c++) {
-            assertEquals(subchain.get(c - 1).getNextBlockHash().get(), subchain.get(c).getHeaderHash());
-        }
+        SubchainValidator.validateSubchain(subchain, toBlockHeight - fromBlockHeight + 1);
+    }
+
+    @Test
+    public void testGetBlockHeaderTimeSubchain() {
+
+        BlockchainInfo blockchainInfo = getBlockchain().getBlockchainInfo(authHeader);
+        BlockHeader toBlock = getBlockchain().getBlockHeader(authHeader, blockchainInfo.getNumBlocks());
+        BlockHeader fromBlock = getBlockchain().getBlockHeader(authHeader, blockchainInfo.getNumBlocks() - 6 * 30);
+        DateTimeParam toTimeParam = new DateTimeParam(
+                toBlock.getCreatedDateTime().toString(ISODateTimeFormat.dateTime()));
+        DateTimeParam fromTimeParam = new DateTimeParam(
+                fromBlock.getCreatedDateTime().toString(ISODateTimeFormat.dateTime()));
+
+        List<BlockHeader> subchain = getBlockchain().getBlockHeaderTimeSubchain(authHeader, fromTimeParam, toTimeParam);
+        SubchainValidator.validateSubchain(subchain, fromBlock.getCreatedDateTime(), toBlock.getCreatedDateTime());
     }
 }
