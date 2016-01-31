@@ -121,6 +121,10 @@ jacocoTestReport {
     }
 }
 
+coveralls {
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoFullReport/jacocoFullReport.xml"
+}
+
 // Code coverage
 evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
 jacocoFullReport {
