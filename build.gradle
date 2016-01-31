@@ -13,6 +13,7 @@ buildscript {
         classpath "gradle.plugin.org.inferred:gradle-processors:${gradleProcessorsVersion}"
         classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:${gradleGitVersionVersion}"
         classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:${gradleTestSetsVersion}"
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:${coverallsVersion}"
     }
 }
 
@@ -24,6 +25,7 @@ apply plugin: 'com.palantir.baseline-eclipse'
 apply plugin: 'com.palantir.jacoco-coverage'
 apply plugin: 'com.palantir.jacoco-full-report'
 apply plugin: "com.palantir.git-version"
+apply plugin: 'com.github.kt3k.coveralls'
 
 allprojects {
 
