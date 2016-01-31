@@ -1,11 +1,15 @@
 #!/bin/bash
 
+cleanrepo() {
+    echo "The repo isn't clean, please stash or commit your changes and try again." >&2
+    exit 2
+}
+
 git stash -q --keep-index
+[[ -z "$(git status --porcelain)" ]] || cleanrepo
 
 ./scripts/verify
-
 RESULT=$?
 
 git stash pop -q
-
 exit ${RESULT}
