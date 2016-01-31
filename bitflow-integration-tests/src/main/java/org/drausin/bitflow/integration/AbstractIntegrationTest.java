@@ -35,9 +35,8 @@ import org.junit.Before;
 public abstract class AbstractIntegrationTest {
 
     // can get IP via `docker-machine ip boot2docker-vm`
-    private static final String DOCKER_MACHINE_IP = "192.168.99.107";
-    private static final String BITCOIN_NODE_URI = String.format("http://%s:8332", DOCKER_MACHINE_IP);
-    private static final String BLOCKCHAIN_URI = String.format("http://%s:8100/api/", DOCKER_MACHINE_IP);
+    private static final String BITCOIN_NODE_URI = "http://bitcoin-node.bitflow.bfl:8332";
+    private static final String BLOCKCHAIN_URI = "http://blockchain.bitflow.bfl:8100/api/";
 
     private static final BitcoinNodeClientConfig BITCOIN_NODE_CONFIG = BitcoinNodeClientConfig.of(
             BITCOIN_NODE_URI, "someuser", "somepasswordtochange");

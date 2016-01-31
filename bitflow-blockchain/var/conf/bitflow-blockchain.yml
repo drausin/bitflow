@@ -3,7 +3,7 @@ instance: main
 
 # bitcoinNode
 bitcoinNode:
-  uri: http://192.168.99.107:8332
+  uri: http://bitcoin-node.bitflow.bfl:8332
   user: someuser
   password: somepasswordtochange
 
@@ -30,6 +30,6 @@ logging:
     appenders:
         - type: console
         - type: file
-          currentLogFilename: var/log/foundry-metadata.log
+          currentLogFilename: var/log/bitcoin-node.log
           archive: true
-          archivedLogFilenamePattern: var/log/foundry-metadata-%d.log
+          archivedLogFilenamePattern: var/log/bitcoin-node-%d.log

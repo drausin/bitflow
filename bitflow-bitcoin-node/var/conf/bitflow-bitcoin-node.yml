@@ -2,7 +2,7 @@ instance: main
 
 # the local RPC URI, the IP address comes from the DOCKER_HOST IP, i.e., the result of
 # 'docker-machine ip boot2docker-vm'
-rpcUri: http://192.168.99.107:8332
+rpcUri: http://bitcoin-node.bitflow.bfl:8332
 
 # the mode to run the node in [pull|pruned]
 mode: pruned
