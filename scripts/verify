@@ -4,5 +4,5 @@ ROOT_DIR="$(dirname "$0")/.."
 source "${ROOT_DIR}/scripts/constants.sh"
 
 ./gradlew check ${GRADLE_PARALLEL} ${GRADLE_LOG_LEVEL}
-./gradlew integrationTests ${GRADLE_LOG_LEVEL}
-./gradlew dockerComposeDown
+#./gradlew integrationTests ${GRADLE_LOG_LEVEL}
+#./gradlew dockerComposeDown
