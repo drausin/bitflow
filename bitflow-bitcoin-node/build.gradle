@@ -45,7 +45,8 @@ project(':bitflow-bitcoin-node') {
         testCompile "com.github.tomakehurst:wiremock:2.0.6-beta"
 
         // integration tests
-        integrationTestsCompile project(':bitflow-integration-tests')
+        // N.B., currently disabled until can figure out how to get docker-machine IP whitelisted in rpcallowip
+        //integrationTestsCompile project(':bitflow-integration-tests')
     }
 
     docker {

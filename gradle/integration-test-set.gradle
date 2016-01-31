@@ -1,8 +1,11 @@
 apply plugin: 'org.unbroken-dome.test-sets'
+apply from: "${rootDir}/gradle/docker-compose.gradle"
 
 testSets {
     integrationTests { dirName = 'integrationTests' }
 }
+
+tasks.integrationTests.dependsOn dockerComposeUp
 
 idea {
     module {

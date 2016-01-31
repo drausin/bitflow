@@ -1,6 +1,8 @@
 #!/bin/bash -ex
 
-source "$(dirname "$0")/constants.sh"
-if [ -n "${JAVA_1_8_HOME}" ]; then export JAVA_HOME=$JAVA_1_8_HOME; fi
+ROOT_DIR="$(dirname "$0")/.."
+source "${ROOT_DIR}/scripts/constants.sh"
 
-./gradlew test check $GRADLE_PARALLEL $GRADLE_LOG_LEVEL
+./gradlew check ${GRADLE_PARALLEL} ${GRADLE_LOG_LEVEL}
+./gradlew integrationTests ${GRADLE_LOG_LEVEL}
+./gradlew dockerComposeDown

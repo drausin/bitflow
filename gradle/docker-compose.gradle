@@ -1,0 +1,13 @@
+// Docker environment tasks
+
+task dockerComposeUp(type: Exec) {
+    workingDir rootProject.projectDir
+    executable "scripts/docker-env"
+    args "start"
+}
+
+task dockerComposeDown(type: Exec) {
+    workingDir rootProject.projectDir
+    executable "scripts/docker-env"
+    args "stop"
+}
