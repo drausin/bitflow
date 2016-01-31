@@ -114,6 +114,13 @@ jacocoCoverage {
     reportThreshold 0.8
 }
 
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
 // Code coverage
 evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
 jacocoFullReport {
@@ -125,7 +132,6 @@ jacocoFullReport {
             // Exclusion path is project-relative and has a base of compiled classes
             fileTree(dir: it, excludes: [
                     '**/Immutable*.class',  // Immutable* classes are usually generated
-                    '**/*MixIn.class'       // *MixIn classes usually have trivial method implementations
             ])
         })
     }
