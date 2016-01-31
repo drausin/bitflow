@@ -8,8 +8,9 @@ cleanrepo() {
 git stash -q --keep-index
 [[ -z "$(git status --porcelain)" ]] || cleanrepo
 
-ROOT_DIR="$(dirname "$0")/.."
+ROOT_DIR="$(dirname "$0")/../.."
 source "${ROOT_DIR}/scripts/constants.sh"
+./gradlew check ${GRADLE_PARALLEL} ${GRADLE_LOG_LEVEL}
 
 ./gradlew check ${GRADLE_PARALLEL} ${GRADLE_LOG_LEVEL}
 RESULT=$?
