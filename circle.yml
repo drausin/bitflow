@@ -4,7 +4,7 @@ machine:
 
 test:
   override:
-    - gradle check jacocoTestReport
+    - ./gradlew check jacocoTestReport
   post:
     - cp -R build/reports/* $CIRCLE_ARTIFACTS
     - mkdir -p $CIRCLE_TEST_REPORTS/junit/
