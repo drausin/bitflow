@@ -1,3 +1,11 @@
 machine:
   java:
     version: oraclejdk8
+
+test:
+  override:
+    - gradle check jacocoTestReport
+  post:
+    - cp -R build/reports/* $CIRCLE_ARTIFACTS
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -name ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
