@@ -42,6 +42,7 @@ idea {
 
         sourceDirs = [file("src/main/java"), file("src/main/resources"), file("${buildDir}/classes/main")] as Set
         testSourceDirs = [file("src/test/java"), file("src/test/resources"), file("${buildDir}/classes/test")] as Set
+        ext.set('generatedSourceDirs', [])
         generatedSourceDirs += file("${buildDir}/classes/main")
         generatedSourceDirs += file("${buildDir}/classes/test")
 
