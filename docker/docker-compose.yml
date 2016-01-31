@@ -1,6 +1,6 @@
 # Bitflow services
-bitcoin-node:
-  container_name: bitcoin-node.bitflow.dev
+bitflow-bitcoin-node:
+  container_name: bitcoin-node.bitflow.bfl
   image: 'daedalus2718/bitflow-bitcoin-node:latest'
   ports:
     - "8333:8333"
@@ -9,11 +9,12 @@ bitcoin-node:
   environment:
     JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5101
   volumes:
-    - ./bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml:/opt/bitflow/services/bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml
+    - ../bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml:/opt/bitflow/services/bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml
     - /opt/bitflow
     - /data
-blockchain:
-  container_name: blockchain.bitflow.dev
+
+bitflow-blockchain:
+  container_name: blockchain.bitflow.bfl
   image: 'daedalus2718/bitflow-blockchain:latest'
   ports:
     - "8100:8100"
@@ -22,6 +23,6 @@ blockchain:
   environment:
     JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5103
   volumes:
-    - ./bitflow-blockchain/var/conf/bitflow-blockchain.yml:/opt/bitflow/services/bitflow-blockchain/var/conf/bitflow-blockchain.yml
+    - ../bitflow-blockchain/var/conf/bitflow-blockchain.yml:/opt/bitflow/services/bitflow-blockchain/var/conf/bitflow-blockchain.yml
     - /opt/bitflow
     - /data
