@@ -1,4 +1,4 @@
-[![Circle CI](https://circleci.com/gh/drausin/bitflow/tree/develop.svg?style=svg)](https://circleci.com/gh/drausin/bitflow/tree/develop)
+[![Circle CI](https://circleci.com/gh/drausin/bitflow/tree/develop.svg?style=shield)](https://circleci.com/gh/drausin/bitflow/tree/develop)
 [![Coverage Status](https://coveralls.io/repos/github/drausin/bitflow/badge.svg?branch=develop)](https://coveralls.io/github/drausin/bitflow?branch=develop)
 
 # bitcoin-flow
