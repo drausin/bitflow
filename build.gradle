@@ -121,11 +121,6 @@ jacocoTestReport {
     }
 }
 
-coveralls {
-    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoFullReport/jacocoFullReport.xml"
-}
-
-// Code coverage
 evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
 jacocoFullReport {
     dependsOn << allprojects.collect { it.tasks.withType(JacocoReport).findAll { it != jacocoFullReport } }
@@ -139,4 +134,9 @@ jacocoFullReport {
             ])
         })
     }
+}
+
+coveralls {
+    sourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs).files.absolutePath
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoFullReport/jacocoFullReport.xml"
 }
