@@ -1,31 +1,17 @@
+[![Circle CI](https://circleci.com/gh/drausin/bitflow/tree/develop.svg?style=svg)](https://circleci.com/gh/drausin/bitflow/tree/develop)
+[![Coverage Status](https://coveralls.io/repos/github/drausin/bitflow/badge.svg?branch=develop)](https://coveralls.io/github/drausin/bitflow?branch=develop)
+
 # bitcoin-flow
-Bitcoin transactions data pipeline
+Bitcoin transactions data pipeline for working with transactions and aggregates of them. The ultimate goals is to have a 
+streaming pipeline that handles transactions and updates aggregates on a sub-second timeframe.
 
-#### v0 requirements
-- maintain historical record of all transactions that can be easily reprocessed 
-- aggregates materialized in an easily-queryable place (Postgres, Kafka, ??)
-- transaction listener should run contuously and push/stream data through downstream DAG
-- pre-push test coverage and code quality hooks
-- pipeline monitoring dashboard
+### services
+- bitflow-bitcoin-node: a wrapper around the actual `bitcoind` executable, which we interact with via the RPC interface
+- bitflow-blockchain: interface for blockchain data like specfic blocks, transactions for a particular block, 
+block subchains, or general info about the current blockchain state
+ 
+### testing
+In addition to our unit tests, we use Docker to manage containers for each service and run integration tests between 
+them.
 
-#### initial guess of technologies to use
-- BitcoinJ : interacting with Bitcoin world
-- Docker : containerization
-- Kafka : initial processing of transactions
-- Storm : aggregation of transactions
-- Postgres : general metadata/logging
-- jOOQ : interacting w/ DBs
-- Jenkins : build infra
-- (Palantir Java code quality tool)
-- ipython notebook : monitoring "dashboard"
-
-#### other technologies to perhaps use later
-- VoltDB 
-- Vertica
-- Cassandra (+ AtlasDB?)
-- Spark (streaming)
-- Spark jobserver
-- Puppet
-- Nagios
-- tcollector
-- D3
+The `integrationTests` gradle task handles bringing up the Docker containers and running the tests for each service.  
