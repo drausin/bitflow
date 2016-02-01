@@ -13,6 +13,7 @@ buildscript {
         classpath "gradle.plugin.org.inferred:gradle-processors:${gradleProcessorsVersion}"
         classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:${gradleGitVersionVersion}"
         classpath "org.unbroken-dome.gradle-plugins:gradle-testsets-plugin:${gradleTestSetsVersion}"
+        classpath "org.kt3k.gradle.plugin:coveralls-gradle-plugin:${coverallsVersion}"
     }
 }
 
@@ -24,6 +25,7 @@ apply plugin: 'com.palantir.baseline-eclipse'
 apply plugin: 'com.palantir.jacoco-coverage'
 apply plugin: 'com.palantir.jacoco-full-report'
 apply plugin: "com.palantir.git-version"
+apply plugin: 'com.github.kt3k.coveralls'
 
 allprojects {
 
@@ -112,7 +114,13 @@ jacocoCoverage {
     reportThreshold 0.8
 }
 
-// Code coverage
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
 evaluationDependsOnChildren() // needed to collect all Test tasks of subprojects
 jacocoFullReport {
     dependsOn << allprojects.collect { it.tasks.withType(JacocoReport).findAll { it != jacocoFullReport } }
@@ -123,8 +131,12 @@ jacocoFullReport {
             // Exclusion path is project-relative and has a base of compiled classes
             fileTree(dir: it, excludes: [
                     '**/Immutable*.class',  // Immutable* classes are usually generated
-                    '**/*MixIn.class'       // *MixIn classes usually have trivial method implementations
             ])
         })
     }
+}
+
+coveralls {
+    sourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs).files.absolutePath
+    jacocoReportPath = "${buildDir}/reports/jacoco/jacocoFullReport/jacocoFullReport.xml"
 }

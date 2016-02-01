@@ -1,3 +1,12 @@
 machine:
   java:
     version: oraclejdk8
+
+test:
+  override:
+    - ./scripts/verify
+  post:
+    - ./gradlew jacocoTestReport coveralls
+    - cp -R build/reports/* $CIRCLE_ARTIFACTS
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
