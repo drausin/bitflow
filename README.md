@@ -1,7 +1,7 @@
 [![Circle CI](https://circleci.com/gh/drausin/bitflow/tree/develop.svg?style=shield)](https://circleci.com/gh/drausin/bitflow/tree/develop)
 [![Coverage Status](https://coveralls.io/repos/github/drausin/bitflow/badge.svg?branch=develop)](https://coveralls.io/github/drausin/bitflow?branch=develop)
 
-# bitcoin-flow
+# bitflow
 Bitcoin transactions data pipeline for working with transactions and aggregates of them. The ultimate goals is to have a 
 streaming pipeline that handles transactions and updates aggregates on a sub-second timeframe.
 
