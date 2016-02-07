@@ -8,25 +8,33 @@ set -o pipefail
 if [[ $(docker-machine ls -q --filter="name=${DOCKER_MACHINE_NAME}" | wc -l | awk '{print $1}') -eq 0 ]]; then
     echo "creating virtual machine ${DOCKER_MACHINE_NAME}"
     docker-machine create -d=virtualbox --virtualbox-memory 2048 ${DOCKER_MACHINE_NAME}
+    docker-machine stop "${DOCKER_MACHINE_NAME}" | true
+    VBoxManage sharedfolder add "${DOCKER_MACHINE_NAME}" -name Volumes -hostpath /Volumes --readonly
+    docker-machine start "${DOCKER_MACHINE_NAME}"
 fi
 
 echo "creating bootsync for ${DOCKER_MACHINE_NAME} docker-machine..."
 DOCKER_HOST_IP=$(docker-machine ip ${DOCKER_MACHINE_NAME})
 docker-machine ssh ${DOCKER_MACHINE_NAME} "sudo cat > /tmp/bootsync.sh" <<-BOOTSYNC
 #!/bin/sh
-grep '\-\-dns' /var/lib/boot2docker/profile || {
-        echo "EXTRA_ARGS=\"\$EXTRA_ARGS --dns ${DOCKER_HOST_IP} --dns 10.160.11.21 --dns 10.160.11.22 --dns 10.100.11.21 --dns 10.100.11.22\"" | sudo tee -a /var/lib/boot2docker/profile
-}
-echo -e "nameserver 10.160.11.21\nnameserver 10.160.11.22\nnameserver 10.100.11.21\nnameserver 10.100.11.22" | sudo tee /etc/resolv.conf
+sudo mkdir -p /Volumes
+sudo mount -t vboxsf -o uid=1000,gid=50 Volumes /Volumes || true
+
+    grep '\-\-dns' /var/lib/boot2docker/profile || {
+            echo "EXTRA_ARGS=\"\$EXTRA_ARGS --dns ${DOCKER_HOST_IP} --dns 10.160.11.21 --dns 10.160.11.22 --dns 10.100.11.21 --dns 10.100.11.22\"" | sudo tee -a /var/lib/boot2docker/profile
+    }
+    echo -e "nameserver 10.160.11.21\nnameserver 10.160.11.22\nnameserver 10.100.11.21\nnameserver 10.100.11.22" | sudo tee /etc/resolv.conf
 BOOTSYNC
 docker-machine ssh ${DOCKER_MACHINE_NAME} "sudo mv /tmp/bootsync.sh /var/lib/boot2docker/bootsync.sh"
 echo
 
-docker-machine restart ${DOCKER_MACHINE_NAME}
+docker-machine stop ${DOCKER_MACHINE_NAME}
+docker-machine start ${DOCKER_MACHINE_NAME}
 echo
 
-LOCAL_RESOLVER_PATH="$(dirname "$0")/resolver-bfl.conf"
+LOCAL_RESOLVER_PATH=$(readlink -f "$(dirname "$0")/resolver-bfl.conf")
 SYSTEM_RESOLVER_PATH=/etc/resolver/bfl
 echo "Setting up name server ${DOCKER_HOST_IP} in ${SYSTEM_RESOLVER_PATH} (enter sudo password when promoted)"
+if [[ -e "${LOCAL_RESOLVER_PATH}" ]]; then sudo unlink "${LOCAL_RESOLVER_PATH}"; fi
 echo "nameserver ${DOCKER_HOST_IP}" > ${LOCAL_RESOLVER_PATH}
 sudo ln -s ${LOCAL_RESOLVER_PATH} ${SYSTEM_RESOLVER_PATH}
