@@ -25,10 +25,10 @@ bitcoinNode:
   #
   # for docker-compose environments:
   #   1) get the Gateway IP via
-  #     DOCKER_BITFLOW_GATEWAY=$(docker inspect bitcoin-node.bitflow.dev | jq -r '.[0].NetworkSettings.Networks.bitflow.Gateway')
+  #     DOCKER_BITFLOW_GATEWAY=$(docker inspect bitcoin-node.bitflow.bfl | jq -r '.[0].NetworkSettings.Networks.bridge.Gateway')
   #   2) use a CIDR range to cover all containsers
   #     rpcallowip="${BITFLOW_GATEWAY}/24"
-  rpcallowip: 172.18.0.1/24
+  rpcallowip: 172.17.0.1/24
 
   # listen for connections on this port
   port: 8333
