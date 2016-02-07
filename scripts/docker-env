@@ -20,7 +20,7 @@ eval "$(docker-machine env ${DOCKER_MACHINE_NAME})"
 case $1 in
     start)
         docker-compose -f ${ROOT_DIR}/docker/nameserver.yml -p nameserver up -d
-        docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml --x-networking -p bitflow up -d
+        docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml -p bitflow up -d
         ;;
 
     stop)
