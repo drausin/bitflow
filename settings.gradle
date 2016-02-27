@@ -5,6 +5,7 @@ include 'bitflow-bitcoin-node-api'
 include 'bitflow-blockchain'
 include 'bitflow-blockchain-api'
 include 'bitflow-service-utils'
+include 'bitflow-streams-api'
 include 'bitflow-docker-base'
 include 'bitflow-integration-tests'
 

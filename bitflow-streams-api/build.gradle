@@ -1,0 +1,28 @@
+apply from: "${rootDir}/gradle/java.gradle"
+
+project(':bitflow-streams-api') {
+    apply plugin: 'org.inferred.processors'
+
+    dependencies {
+
+        // internal dependencies
+        compile project(':bitflow-service-utils')
+        compile project(':bitflow-blockchain-api')
+
+        // external dependencies
+        compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
+        compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
+        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
+
+        // for tests
+        testCompile "junit:junit:$junitVersion"
+
+        // for checks
+        compile "com.google.code.findbugs:jsr305:${jsr305Version}"
+        compile "com.google.code.findbugs:annotations:${jsr305Version}"
+
+        processor "org.immutables:value:${immutablesVersion}"
+    }
+}
