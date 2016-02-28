@@ -28,10 +28,10 @@ public final class BitflowMapperFactory {
 
     public static SimpleModule createModule() {
         return new SimpleModule("BitflowModule", Version.unknownVersion())
-                .addSerializer(Sha256Hash.class, new Sha256HashSerializer())
-                .addSerializer(BigInteger.class, new BigIntegerSerializer())
-                .addDeserializer(Sha256Hash.class, new Sha256HashDeserializer())
-                .addDeserializer(BigInteger.class, new BigIntegerDeserializer());
+                .addSerializer(Sha256Hash.class, new Sha256HashJsonSerializer())
+                .addSerializer(BigInteger.class, new BigIntegerJsonSerializer())
+                .addDeserializer(Sha256Hash.class, new Sha256HashJsonDeserializer())
+                .addDeserializer(BigInteger.class, new BigIntegerJsonDeserializer());
     }
 
     public static ObjectMapper createMapper() {

@@ -27,27 +27,27 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class Sha256HashSerializerTest {
+public class Sha256HashJsonSerializerTest {
 
-    private Sha256HashSerializer sha256HashSerializer;
+    private Sha256HashJsonSerializer sha256HashJsonSerializer;
 
     @Mock
     private JsonGenerator gen;
 
     @Before
     public final void setUp() throws Exception {
-        sha256HashSerializer = new Sha256HashSerializer();
+        sha256HashJsonSerializer = new Sha256HashJsonSerializer();
     }
 
     @Test
     public final void testSerialize() throws Exception {
         String hexHash = "000000000ebb17fb455e897b8f3e343eea1b07d926476d00bc66e2c0342ed50f";
-        sha256HashSerializer.serialize(Sha256Hash.wrap(hexHash), gen, null);
+        sha256HashJsonSerializer.serialize(Sha256Hash.wrap(hexHash), gen, null);
         verify(gen, times(1)).writeString(hexHash);
     }
 
     @Test
     public final void testHandledType() throws Exception {
-        assertEquals(Sha256Hash.class, sha256HashSerializer.handledType());
+        assertEquals(Sha256Hash.class, sha256HashJsonSerializer.handledType());
     }
 }

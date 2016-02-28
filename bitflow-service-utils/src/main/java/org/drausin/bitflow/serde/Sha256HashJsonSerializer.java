@@ -26,7 +26,7 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public class Sha256HashSerializer extends JsonSerializer<Sha256Hash> {
+public class Sha256HashJsonSerializer extends JsonSerializer<Sha256Hash> {
     @Override
     public final void serialize(Sha256Hash value, JsonGenerator gen, SerializerProvider serializers)
             throws IOException, JsonProcessingException {

@@ -25,7 +25,7 @@ import java.math.BigInteger;
  *
  * @author dwulsin
  */
-public final class BigIntegerDeserializer extends JsonDeserializer<BigInteger> {
+public final class BigIntegerJsonDeserializer extends JsonDeserializer<BigInteger> {
     @Override
     public BigInteger deserialize(JsonParser parser, DeserializationContext ctxt)
             throws IOException {

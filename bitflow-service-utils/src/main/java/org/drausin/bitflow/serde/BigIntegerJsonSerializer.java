@@ -26,7 +26,7 @@ import java.math.BigInteger;
  *
  * @author dwulsin
  */
-public class BigIntegerSerializer extends JsonSerializer<BigInteger> {
+public class BigIntegerJsonSerializer extends JsonSerializer<BigInteger> {
     @Override
     public final void serialize(BigInteger value, JsonGenerator gen, SerializerProvider serializers)
             throws IOException, JsonProcessingException {

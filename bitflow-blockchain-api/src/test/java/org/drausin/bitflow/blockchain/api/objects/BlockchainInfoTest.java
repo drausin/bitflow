@@ -80,9 +80,9 @@ import com.jayway.jsonpath.JsonPath;
 import java.math.BigInteger;
 import org.apache.commons.lang3.StringUtils;
 import org.bitcoinj.core.Sha256Hash;
-import org.drausin.bitflow.serde.BigIntegerDeserializer;
-import org.drausin.bitflow.serde.BigIntegerSerializer;
-import org.drausin.bitflow.serde.Sha256HashSerializer;
+import org.drausin.bitflow.serde.BigIntegerJsonDeserializer;
+import org.drausin.bitflow.serde.BigIntegerJsonSerializer;
+import org.drausin.bitflow.serde.Sha256HashJsonSerializer;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -98,9 +98,9 @@ public class BlockchainInfoTest {
     public final void setUp() throws Exception {
 
         SimpleModule blockchainModule = new SimpleModule("TestModule", Version.unknownVersion());
-        blockchainModule.addSerializer(Sha256Hash.class, new Sha256HashSerializer());
-        blockchainModule.addSerializer(BigInteger.class, new BigIntegerSerializer());
-        blockchainModule.addDeserializer(BigInteger.class, new BigIntegerDeserializer());
+        blockchainModule.addSerializer(Sha256Hash.class, new Sha256HashJsonSerializer());
+        blockchainModule.addSerializer(BigInteger.class, new BigIntegerJsonSerializer());
+        blockchainModule.addDeserializer(BigInteger.class, new BigIntegerJsonDeserializer());
 
         // mapper from RPC json schema
         mapper = new ObjectMapper()
