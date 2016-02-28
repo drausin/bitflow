@@ -12,16 +12,25 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.streams.blocks;
+package org.drausin.bitflow.streams.responses;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.streams.BitflowStream;
 import org.immutables.value.Value;
 
 @Value.Immutable
 @Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
-@JsonSerialize(as = ImmutableBlockHeaderStream.class)
-@JsonDeserialize(as = ImmutableBlockHeaderStream.class)
-public abstract class BlockHeaderStream extends BitflowStream<BlockHeader> {}
+@JsonSerialize(as = ImmutableHydrateBlockHeaderStreamResponse.class)
+@JsonDeserialize(as = ImmutableHydrateBlockHeaderStreamResponse.class)
+public abstract class HydrateBlockHeaderStreamResponse {
+
+    @Value.Parameter
+    public abstract String getStreamName();
+
+    @Value.Parameter
+    public abstract long getNumHydrated();
+
+    public static HydrateBlockHeaderStreamResponse of(String streamName, long numHydrated) {
+        return ImmutableHydrateBlockHeaderStreamResponse.of(streamName, numHydrated);
+    }
+}

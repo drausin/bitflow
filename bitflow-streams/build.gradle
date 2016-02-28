@@ -1,6 +1,6 @@
 apply from: "${rootDir}/gradle/java.gradle"
 
-project(':bitflow-streams-api') {
+project(':bitflow-streams') {
     apply plugin: 'org.inferred.processors'
 
     dependencies {
@@ -14,9 +14,10 @@ project(':bitflow-streams-api') {
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
+        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-avro:$jacksonVersion"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"
-        compile "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
         compile "org.apache.kafka:kafka-clients:${kafkaVersion}"
+        compile "org.apache.zookeeper:zookeeper:${zookeeperVersion}"
 
         // for tests
         testCompile "junit:junit:$junitVersion"

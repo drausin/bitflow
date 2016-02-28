@@ -15,35 +15,34 @@
 package org.drausin.bitflow.streams;
 
 import java.util.List;
+import java.util.Optional;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import org.drausin.bitflow.streams.blocks.BlockHeaderStream;
+import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
+import org.drausin.bitflow.streams.responses.HydrateBlockHeaderStreamResponse;
 
 @Path("/streams")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public interface StreamsService {
+public interface StreamService {
 
     @GET
     @Path("/block-headers/list")
-    List<BlockHeaderStream> listBlockHeaderStreams(@HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader);
+    List<String> listBlockHeaderStreams();
+
+    @GET
+    @Path("/block-headers/get-latest")
+    Optional<BlockHeader> getLatestBlockHeader(@QueryParam("stream") String stream);
 
     @POST
-    @Path("block-headers/create")
-    BlockHeaderStream createBlockHeaderStream(
-            @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
-            @QueryParam("name") String name);
-
-    @POST
-    @Path("block-headers/delete")
-    BlockHeaderStream deleteBlockHeaderStream(
-            @HeaderParam(HttpHeaders.AUTHORIZATION) String authHeader,
-            @QueryParam("name") String name);
+    @Path("/block-headers/hydrate")
+    HydrateBlockHeaderStreamResponse hydrateBlockHeaderStream(
+            @QueryParam("stream") String stream,
+            @QueryParam("from") long from,
+            @QueryParam("to") long to);
 }
