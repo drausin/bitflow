@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.avro.AvroFactory;
 import com.fasterxml.jackson.dataformat.avro.AvroSchema;
 import com.fasterxml.jackson.dataformat.avro.schema.AvroSchemaGenerator;
+import com.google.common.annotations.VisibleForTesting;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -29,13 +30,14 @@ import org.apache.kafka.common.serialization.Serializer;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.serde.BitflowMapperFactory;
 
+@SuppressWarnings("checkstyle:designforextension")
 public class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Serializer<BlockHeader> {
 
     private final ObjectWriter writer;
     private final ObjectReader reader;
 
     public BlockHeaderKafkaSerde() throws JsonMappingException {
-        ObjectMapper mapper = new ObjectMapper(new AvroFactory()).registerModule(BitflowMapperFactory.createModule());
+        ObjectMapper mapper = BitflowMapperFactory.createMapper(new AvroFactory());
         AvroSchemaGenerator gen = new AvroSchemaGenerator();
         mapper.acceptJsonFormatVisitor(BlockHeader.class, gen);
         AvroSchema avroSchema = gen.getGeneratedSchema();
@@ -49,7 +51,7 @@ public class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Seriali
     @Override
     public byte[] serialize(String topic, BlockHeader data) {
         try {
-            return writer.writeValueAsBytes(data);
+            return getWriter().writeValueAsBytes(data);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(e);
         }
@@ -58,10 +60,20 @@ public class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Seriali
     @Override
     public BlockHeader deserialize(String topic, byte[] data) {
         try {
-            return reader.readValue(data);
+            return getReader().readValue(data);
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    @VisibleForTesting
+    ObjectWriter getWriter() {
+        return writer;
+    }
+
+    @VisibleForTesting
+    ObjectReader getReader() {
+        return reader;
     }
 
     @Override

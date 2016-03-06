@@ -87,6 +87,7 @@ allprojects {
             force "org.bitcoinj:bitcoinj-core:${bitcoinjVersion}"
             force "org.objenesis:objenesis:${objenesisVersion}"
             force "org.hamcrest:hamcrest-core:${hamcrestVersion}"
+            force "org.javassist:javassist:${javassistVersion}"
             force "org.slf4j:jcl-over-slf4j:${slf4jVersion}"
             force "org.slf4j:slf4j-api:${slf4jVersion}"
             force "org.xerial.snappy:snappy-java:${snappyVersion}"

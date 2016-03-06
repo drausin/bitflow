@@ -42,7 +42,7 @@ public abstract class BlockHeader {
      * Get the hash of the block header.
      */
     @Value.Parameter
-    @JsonProperty("hash")
+    @JsonProperty(value = "hash", required = true)
     public abstract Sha256Hash getHeaderHash();
 
     /**
@@ -50,21 +50,21 @@ public abstract class BlockHeader {
      * the tip of the best block chain. It will be -1 if the the block is not part of the best block chain.
      */
     @Value.Parameter
-    @JsonProperty("confirmations")
+    @JsonProperty(value = "confirmations", required = true)
     public abstract long getNumConfirmations();
 
     /**
      * Get the number of bytes of this block in serialized block format.
      */
     @Value.Parameter
-    @JsonProperty("size")
+    @JsonProperty(value = "size", required = true)
     public abstract long getSizeBytes();
 
     /**
      * Get the height of this block on its block chain.
      */
     @Value.Parameter
-    @JsonProperty("height")
+    @JsonProperty(value = "height", required = true)
     public abstract long getHeight();
 
     /**
@@ -73,14 +73,14 @@ public abstract class BlockHeader {
      * @see <a href="https://bitcoin.org/en/developer-reference#block-versions">Block Versions</a>
      */
     @Value.Parameter
-    @JsonProperty("version")
+    @JsonProperty(value = "version", required = true)
     public abstract long getVersion();
 
     /**
      * Get the merkle root for this block.
      */
     @Value.Parameter
-    @JsonProperty("merkleroot")
+    @JsonProperty(value = "merkleroot", required = true)
     public abstract Sha256Hash getMerkleRoot();
 
     /**
@@ -89,14 +89,14 @@ public abstract class BlockHeader {
      * reasonably lightweight, so we include it.
      */
     @Value.Parameter
-    @JsonProperty("tx")
+    @JsonProperty(value = "tx", required = true)
     public abstract List<Sha256Hash> getTransactionIds();
 
     /**
      * Get the approximate time when the block was created, stored as seconds since the the 1970 epoch.
      */
     @Value.Parameter
-    @JsonProperty("time")
+    @JsonProperty(value = "time", required = true)
     public abstract long getCreatedTime();
 
     /**
@@ -112,14 +112,14 @@ public abstract class BlockHeader {
      * block chain.
      */
     @Value.Parameter
-    @JsonProperty("nonce")
+    @JsonProperty(value = "nonce", required = true)
     public abstract long getNonce();
 
     /**
      * Get the target threshhold (a.k.a., nBits) the block header had to pass.
      */
     @Value.Parameter
-    @JsonProperty("bits")
+    @JsonProperty(value = "bits", required = true)
     public abstract BigInteger getDifficultyTarget();
 
     /**
@@ -127,28 +127,28 @@ public abstract class BlockHeader {
      * block 0.
      */
     @Value.Parameter
-    @JsonProperty("difficulty")
+    @JsonProperty(value = "difficulty", required = true)
     public abstract double getDifficulty();
 
     /**
      * Get the estimated number of block header hashes miners had to check from the genesis block to this block.
      */
     @Value.Parameter
-    @JsonProperty("chainwork")
+    @JsonProperty(value = "chainwork", required = true)
     public abstract BigInteger getChainwork();
 
     /**
      * Get the header hash of the previous block.
      */
     @Value.Parameter
-    @JsonProperty("previousblockhash")
+    @JsonProperty(value = "previousblockhash", required = true)
     public abstract Optional<Sha256Hash> getPreviousBlockHash();
 
     /**
      * Get the header hash of the next block.
      */
     @Value.Parameter
-    @JsonProperty("nextblockhash")
+    @JsonProperty(value = "nextblockhash", required = true)
     public abstract Optional<Sha256Hash> getNextBlockHash();
 
     public static BlockHeader of(Sha256Hash headerHash, long numConfirmations, long sizeBytes, long height,

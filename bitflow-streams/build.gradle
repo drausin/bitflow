@@ -7,6 +7,7 @@ project(':bitflow-streams') {
 
         // internal dependencies
         compile project(':bitflow-service-utils')
+        compile project(':bitflow-bitcoin-node-api')
         compile project(':bitflow-blockchain-api')
         compile project(':bitflow-streams-api')
 
@@ -21,6 +22,7 @@ project(':bitflow-streams') {
 
         // for tests
         testCompile "junit:junit:$junitVersion"
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
 
         // for checks
         compile "com.google.code.findbugs:jsr305:${jsr305Version}"

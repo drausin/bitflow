@@ -19,38 +19,26 @@ import static org.junit.Assert.assertEquals;
 import org.bitcoinj.core.Sha256Hash;
 import org.junit.Test;
 
-public final class Sha256HashKafkaSerdeTest {
+public final class Sha256HashKafkaSerdeTest extends KafkaSerdeTest<Sha256HashKafkaSerde> {
 
     private static final Sha256Hash value =
             Sha256Hash.wrap("000000000ebb17fb455e897b8f3e343eea1b07d926476d00bc66e2c0342ed50f");
-    private static final byte[] valueBytes = value.getBytes();
 
     @Test
     public void configure() throws Exception {
-        Sha256HashKafkaSerde sha256HashKafkaSerde = new Sha256HashKafkaSerde();
-        int origHash = sha256HashKafkaSerde.hashCode();
-        sha256HashKafkaSerde.configure(null, false);
-        int configuredHash = sha256HashKafkaSerde.hashCode();
-
-        assertEquals("configure() should have no effect on object", origHash, configuredHash);
+        super.configure(new Sha256HashKafkaSerde());
     }
 
     @Test
-    public void serialize() throws Exception {
+    public void serde() {
         Sha256HashKafkaSerde sha256HashKafkaSerde = new Sha256HashKafkaSerde();
+
         assertEquals("serializing and then deserializing should yield the same value", value,
                 sha256HashKafkaSerde.deserialize(null, sha256HashKafkaSerde.serialize(null, value)));
 
         assertEquals("serializing does not depend on topic",
                 sha256HashKafkaSerde.deserialize(null, sha256HashKafkaSerde.serialize("topic-0", value)),
                 sha256HashKafkaSerde.deserialize(null, sha256HashKafkaSerde.serialize("topic-1", value)));
-    }
-
-    @Test
-    public void deserialize() throws Exception {
-        Sha256HashKafkaSerde sha256HashKafkaSerde = new Sha256HashKafkaSerde();
-        assertEquals("deserializing and then serializing should yield the same value", valueBytes,
-                sha256HashKafkaSerde.serialize(null, sha256HashKafkaSerde.deserialize(null, valueBytes)));
 
         assertEquals("deserializing does not depend on topic",
                 sha256HashKafkaSerde.deserialize("topic-0", sha256HashKafkaSerde.serialize(null, value)),
@@ -59,11 +47,7 @@ public final class Sha256HashKafkaSerdeTest {
 
     @Test
     public void close() throws Exception {
-        Sha256HashKafkaSerde sha256HashKafkaSerde = new Sha256HashKafkaSerde();
-        int origHash = sha256HashKafkaSerde.hashCode();
-        sha256HashKafkaSerde.close();
-        int configuredHash = sha256HashKafkaSerde.hashCode();
-
-        assertEquals("close() should have no effect on object", origHash, configuredHash);
+        super.close(new Sha256HashKafkaSerde());
     }
+
 }

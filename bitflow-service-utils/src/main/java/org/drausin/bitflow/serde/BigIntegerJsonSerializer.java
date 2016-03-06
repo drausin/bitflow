@@ -16,8 +16,11 @@ package org.drausin.bitflow.serde;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import java.io.IOException;
 import java.math.BigInteger;
 
@@ -29,8 +32,15 @@ import java.math.BigInteger;
 public class BigIntegerJsonSerializer extends JsonSerializer<BigInteger> {
     @Override
     public final void serialize(BigInteger value, JsonGenerator gen, SerializerProvider serializers)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         gen.writeString(value.toString(16));
+    }
+
+    @Override
+    public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType type)
+            throws JsonMappingException
+    {
+        if (visitor != null) visitor.expectStringFormat(type);
     }
 
     @Override
