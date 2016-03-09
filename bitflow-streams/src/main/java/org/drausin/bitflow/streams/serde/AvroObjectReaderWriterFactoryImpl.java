@@ -29,11 +29,13 @@ public final class AvroObjectReaderWriterFactoryImpl implements AvroObjectReader
 
     public AvroObjectReaderWriterFactoryImpl() {}
 
+    @Override
     public ObjectWriter createWriter(Class<?> type)
             throws JsonMappingException {
         return mapper.writer(generateAvroSchema(type));
     }
 
+    @Override
     public ObjectReader createReader(Class<?> type)
             throws JsonMappingException {
         return mapper.readerFor(type).with(generateAvroSchema(type));

@@ -29,10 +29,10 @@ public final class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, S
     private final ObjectWriter writer;
     private final ObjectReader reader;
 
-    public BlockHeaderKafkaSerde(AvroObjectReaderWriterFactory avroObjectReaderWriterFactory)
+    public BlockHeaderKafkaSerde(ObjectWriter writer, ObjectReader reader)
             throws JsonMappingException {
-        writer = avroObjectReaderWriterFactory.createWriter(BlockHeader.class);
-        reader = avroObjectReaderWriterFactory.createReader(BlockHeader.class);
+        this.writer = writer;
+        this.reader = reader;
     }
 
     @Override

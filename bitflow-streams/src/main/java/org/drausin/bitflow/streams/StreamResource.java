@@ -32,6 +32,7 @@ import org.apache.kafka.common.PartitionInfo;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
+import org.drausin.bitflow.streams.kafka.KafkaConsumerProducerFactory;
 import org.drausin.bitflow.streams.responses.HydrateBlockHeaderStreamResponse;
 import org.drausin.bitflow.streams.serde.AvroObjectReaderWriterFactoryImpl;
 import org.drausin.bitflow.streams.serde.BlockHeaderKafkaSerde;
@@ -48,23 +49,18 @@ public final class StreamResource implements StreamService {
     private final KafkaProducer<Sha256Hash, BlockHeader> blockHeaderProducer;
     private final BlockchainService blockchain;
 
-    public StreamResource(Properties kafkaConsumerProperties, Properties kafkaProducerProperties,
+    public StreamResource(KafkaConsumerProducerFactory kafkaConsumerProducerFactory,
             BlockchainService blockchain) throws JsonMappingException {
 
-        Sha256HashKafkaSerde sha256HashKafkaSerde = new Sha256HashKafkaSerde();
-        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde(new AvroObjectReaderWriterFactoryImpl());
-
-        this.blockHeaderConsumer = new KafkaConsumer<>(kafkaConsumerProperties, sha256HashKafkaSerde,
-                blockHeaderKafkaSerde);
-        this.blockHeaderConsumer.subscribe(BLOCK_HEADERS_STREAM_PATTERN, new NoOpConsumerRebalanceListener());
-        this.blockHeaderProducer = new KafkaProducer<>(kafkaProducerProperties, sha256HashKafkaSerde,
-                blockHeaderKafkaSerde);
         this.blockchain = blockchain;
+        this.blockHeaderProducer = kafkaConsumerProducerFactory.createBlockHeaderProducer();
+        this.blockHeaderConsumer = kafkaConsumerProducerFactory.createBlockHeaderConsumer();
+        this.blockHeaderConsumer.subscribe(BLOCK_HEADERS_STREAM_PATTERN, new NoOpConsumerRebalanceListener());
     }
 
     @Override
     public List<String> listBlockHeaderStreams() {
-        Map<String, List<PartitionInfo>> allTopics = getBlockHeaderConsumer().listTopics();
+        Map<String, List<PartitionInfo>> allTopics = blockHeaderConsumer.listTopics();
         return allTopics.keySet().stream()
                 .filter(key -> key.contains(BLOCK_HEADERS_STREAM_PREFIX))
                 .map(topic -> streamName(BLOCK_HEADERS_STREAM_PREFIX, topic))
@@ -73,7 +69,7 @@ public final class StreamResource implements StreamService {
 
     @Override
     public Optional<BlockHeader> getLatestBlockHeader(String stream) {
-        getBlockHeaderConsumer().seekToEnd();
+        blockHeaderConsumer.seekToEnd();
         Iterator<ConsumerRecord<Sha256Hash, BlockHeader>> latestIter =
                 blockHeaderConsumer.poll(POLL_WAIT_MILLIS).records(stream).iterator();
         BlockHeader latest = null;
@@ -91,7 +87,7 @@ public final class StreamResource implements StreamService {
         String topic = topicName(BLOCK_HEADERS_STREAM_PREFIX, stream);
         List<BlockHeader> blockHeaders = blockchain.getBlockHeaderHeightSubchain(null, from, to);
         for (BlockHeader blockHeader : blockHeaders) {
-            getBlockHeaderProducer().send(new ProducerRecord<>(topic, blockHeader.getHeaderHash(), blockHeader));
+            blockHeaderProducer.send(new ProducerRecord<>(topic, blockHeader.getHeaderHash(), blockHeader));
         }
         return HydrateBlockHeaderStreamResponse.of(stream, blockHeaders.size());
     }
@@ -106,13 +102,5 @@ public final class StreamResource implements StreamService {
 
     private static Pattern streamPattern(String prefix) {
         return Pattern.compile(String.format("%s.+", prefix));
-    }
-
-    KafkaConsumer<Sha256Hash, BlockHeader> getBlockHeaderConsumer() {
-        return blockHeaderConsumer;
-    }
-
-    KafkaProducer<Sha256Hash, BlockHeader> getBlockHeaderProducer() {
-        return blockHeaderProducer;
     }
 }
