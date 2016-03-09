@@ -16,12 +16,11 @@ package org.drausin.bitflow.streams.serde;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import java.io.IOException;
@@ -41,12 +40,12 @@ public final class BlockHeaderKafkaSerdeTest extends KafkaSerdeTest<BlockHeaderK
 
     @Test
     public void configure() throws Exception {
-        super.configure(new BlockHeaderKafkaSerde());
+        super.configure(new BlockHeaderKafkaSerde(new AvroObjectReaderWriterFactoryImpl()));
     }
 
     @Test
     public void serde() throws Exception {
-        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde();
+        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde(new AvroObjectReaderWriterFactoryImpl());
 
         assertEquals("serializing and then deserializing should yield the same value", value,
                 blockHeaderKafkaSerde.deserialize(null, blockHeaderKafkaSerde.serialize(null, value)));
@@ -62,28 +61,29 @@ public final class BlockHeaderKafkaSerdeTest extends KafkaSerdeTest<BlockHeaderK
 
     @Test(expected = IllegalArgumentException.class)
     public void serializeError() throws Exception {
-        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde();
-        BlockHeaderKafkaSerde blockHeaderKafkaSerdeSpy = spy(blockHeaderKafkaSerde);
-        ObjectWriter writerMock = mock(ObjectWriter.class);
-        when(writerMock.writeValueAsBytes(any(Object.class))).thenThrow(new JsonGenerationException("message"));
-        doReturn(writerMock).when(blockHeaderKafkaSerdeSpy).getWriter();
 
-        blockHeaderKafkaSerdeSpy.serialize("topic-0", value);
+        AvroObjectReaderWriterFactory avroObjectReaderWriterFactoryMock = mock(AvroObjectReaderWriterFactory.class);
+        ObjectWriter objectWriterMock = mock(ObjectWriter.class);
+        when(objectWriterMock.writeValueAsBytes(any(BlockHeader.class))).thenThrow(new JsonMappingException("error"));
+        when(avroObjectReaderWriterFactoryMock.createWriter(BlockHeader.class)).thenReturn(objectWriterMock);
+
+        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde(avroObjectReaderWriterFactoryMock);
+        blockHeaderKafkaSerde.serialize("topic-0", value);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void deserializeError() throws Exception {
-        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde();
-        BlockHeaderKafkaSerde blockHeaderKafkaSerdeSpy = spy(blockHeaderKafkaSerde);
-        ObjectReader readerMock = mock(ObjectReader.class);
-        when(readerMock.readValue(any(byte[].class))).thenThrow(new IOException("message"));
-        doReturn(readerMock).when(blockHeaderKafkaSerdeSpy).getReader();
+        AvroObjectReaderWriterFactory avroObjectReaderWriterFactoryMock = mock(AvroObjectReaderWriterFactory.class);
+        ObjectReader objectReaderMock = mock(ObjectReader.class);
+        when(objectReaderMock.readValue(any(byte[].class))).thenThrow(new IOException("error"));
+        when(avroObjectReaderWriterFactoryMock.createReader(BlockHeader.class)).thenReturn(objectReaderMock);
 
-        blockHeaderKafkaSerdeSpy.deserialize("topic-0", new byte[]{});
+        BlockHeaderKafkaSerde blockHeaderKafkaSerde = new BlockHeaderKafkaSerde(avroObjectReaderWriterFactoryMock);
+        blockHeaderKafkaSerde.deserialize("topic-0", new byte[]{});
     }
 
     @Test
     public void close() throws Exception {
-        super.configure(new BlockHeaderKafkaSerde());
+        super.close(new BlockHeaderKafkaSerde(new AvroObjectReaderWriterFactoryImpl()));
     }
 }

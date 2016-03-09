@@ -16,33 +16,23 @@ package org.drausin.bitflow.streams.serde;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.dataformat.avro.AvroFactory;
-import com.fasterxml.jackson.dataformat.avro.AvroSchema;
-import com.fasterxml.jackson.dataformat.avro.schema.AvroSchemaGenerator;
-import com.google.common.annotations.VisibleForTesting;
 import java.io.IOException;
 import java.util.Map;
 import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serializer;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
-import org.drausin.bitflow.serde.BitflowMapperFactory;
 
-@SuppressWarnings("checkstyle:designforextension")
-public class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Serializer<BlockHeader> {
+public final class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Serializer<BlockHeader> {
 
     private final ObjectWriter writer;
     private final ObjectReader reader;
 
-    public BlockHeaderKafkaSerde() throws JsonMappingException {
-        ObjectMapper mapper = BitflowMapperFactory.createMapper(new AvroFactory());
-        AvroSchemaGenerator gen = new AvroSchemaGenerator();
-        mapper.acceptJsonFormatVisitor(BlockHeader.class, gen);
-        AvroSchema avroSchema = gen.getGeneratedSchema();
-        writer = mapper.writer(avroSchema);
-        reader = mapper.readerFor(BlockHeader.class).with(avroSchema);
+    public BlockHeaderKafkaSerde(AvroObjectReaderWriterFactory avroObjectReaderWriterFactory)
+            throws JsonMappingException {
+        writer = avroObjectReaderWriterFactory.createWriter(BlockHeader.class);
+        reader = avroObjectReaderWriterFactory.createReader(BlockHeader.class);
     }
 
     @Override
@@ -51,7 +41,7 @@ public class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Seriali
     @Override
     public byte[] serialize(String topic, BlockHeader data) {
         try {
-            return getWriter().writeValueAsBytes(data);
+            return writer.writeValueAsBytes(data);
         } catch (JsonProcessingException e) {
             throw new IllegalArgumentException(e);
         }
@@ -60,20 +50,10 @@ public class BlockHeaderKafkaSerde implements Deserializer<BlockHeader>, Seriali
     @Override
     public BlockHeader deserialize(String topic, byte[] data) {
         try {
-            return getReader().readValue(data);
+            return reader.readValue(data);
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
-    }
-
-    @VisibleForTesting
-    ObjectWriter getWriter() {
-        return writer;
-    }
-
-    @VisibleForTesting
-    ObjectReader getReader() {
-        return reader;
     }
 
     @Override
