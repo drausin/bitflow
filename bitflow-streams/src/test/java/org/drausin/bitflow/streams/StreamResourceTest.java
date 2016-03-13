@@ -15,11 +15,11 @@
 package org.drausin.bitflow.streams;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -27,7 +27,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -43,7 +42,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class StreamResourceTest {
+public final class StreamResourceTest {
 
     private StreamResource streams;
 
@@ -105,7 +104,7 @@ public class StreamResourceTest {
 
     private static ConsumerRecords<Sha256Hash, BlockHeader> createBlockHeaderConsumerRecords(int numPartitions,
             Map<String, Long> recordsPerStream) {
-        final long FAKE_FIXED_BLOCK_BYTES = 100;
+        final long fakeFixedBlockBytes = 100;
         Map<TopicPartition, List<ConsumerRecord<Sha256Hash, BlockHeader>>> records = Maps.newHashMap();
         for (String streamName : recordsPerStream.keySet()) {
             for (int p = 0; p < numPartitions; p++) {
@@ -113,8 +112,9 @@ public class StreamResourceTest {
                 List<ConsumerRecord<Sha256Hash, BlockHeader>> partitionRecords = Lists.newArrayList();
                 final long numRecords = recordsPerStream.get(StreamResource.blockHeaderStreamName(partition.topic()));
                 for (long r = partition.partition(); r < numRecords; r += numPartitions) {
-                    final long fakeOffset = (r / numPartitions) * FAKE_FIXED_BLOCK_BYTES;
-                    Sha256Hash blockHeaderHash = Sha256Hash.of((partition.topic() + String.valueOf(r)).getBytes());
+                    final long fakeOffset = (r / numPartitions) * fakeFixedBlockBytes;
+                    Sha256Hash blockHeaderHash = Sha256Hash.of((partition.topic() + String.valueOf(r))
+                            .getBytes(Charsets.UTF_8));
                     BlockHeader blockHeader = mock(BlockHeader.class);
                     when(blockHeader.getHeaderHash()).thenReturn(blockHeaderHash);
                     when(blockHeader.getHeight()).thenReturn(r);

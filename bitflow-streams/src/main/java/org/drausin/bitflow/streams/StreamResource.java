@@ -18,9 +18,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.google.common.collect.ImmutableList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -28,15 +26,11 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.internals.NoOpConsumerRebalanceListener;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.PartitionInfo;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.streams.kafka.KafkaConsumerProducerFactory;
 import org.drausin.bitflow.streams.responses.HydrateBlockHeaderStreamResponse;
-import org.drausin.bitflow.streams.serde.AvroObjectReaderWriterFactoryImpl;
-import org.drausin.bitflow.streams.serde.BlockHeaderKafkaSerde;
-import org.drausin.bitflow.streams.serde.Sha256HashKafkaSerde;
 
 public final class StreamResource implements StreamService {
 
