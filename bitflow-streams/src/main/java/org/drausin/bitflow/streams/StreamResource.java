@@ -60,10 +60,8 @@ public final class StreamResource implements StreamService {
 
     @Override
     public List<String> listBlockHeaderStreams() {
-        Map<String, List<PartitionInfo>> allTopics = blockHeaderConsumer.listTopics();
-        return allTopics.keySet().stream()
-                .filter(key -> key.contains(BLOCK_HEADERS_STREAM_PREFIX))
-                .map(topic -> streamName(BLOCK_HEADERS_STREAM_PREFIX, topic))
+        return blockHeaderConsumer.listTopics().keySet().stream()
+                .map(topic -> blockHeaderStreamName(topic))
                 .collect(Collectors.collectingAndThen(Collectors.toList(), ImmutableList::copyOf));
     }
 
@@ -71,7 +69,7 @@ public final class StreamResource implements StreamService {
     public Optional<BlockHeader> getLatestBlockHeader(String stream) {
         blockHeaderConsumer.seekToEnd();
         Iterator<ConsumerRecord<Sha256Hash, BlockHeader>> latestIter =
-                blockHeaderConsumer.poll(POLL_WAIT_MILLIS).records(stream).iterator();
+                blockHeaderConsumer.poll(POLL_WAIT_MILLIS).records(blockHeaderTopicName(stream)).iterator();
         BlockHeader latest = null;
         while (latestIter.hasNext()) {
             BlockHeader next = latestIter.next().value();
@@ -84,12 +82,20 @@ public final class StreamResource implements StreamService {
 
     @Override
     public HydrateBlockHeaderStreamResponse hydrateBlockHeaderStream(String stream, long from, long to) {
-        String topic = topicName(BLOCK_HEADERS_STREAM_PREFIX, stream);
+        String topic = blockHeaderTopicName(stream);
         List<BlockHeader> blockHeaders = blockchain.getBlockHeaderHeightSubchain(null, from, to);
         for (BlockHeader blockHeader : blockHeaders) {
             blockHeaderProducer.send(new ProducerRecord<>(topic, blockHeader.getHeaderHash(), blockHeader));
         }
         return HydrateBlockHeaderStreamResponse.of(stream, blockHeaders.size());
+    }
+
+    public static String blockHeaderStreamName(String topic) {
+        return streamName(BLOCK_HEADERS_STREAM_PREFIX, topic);
+    }
+
+    public static String blockHeaderTopicName(String stream) {
+        return topicName(BLOCK_HEADERS_STREAM_PREFIX, stream);
     }
 
     private static String streamName(String prefix, String topic) {
