@@ -55,7 +55,7 @@ public final class StreamResource implements StreamService {
     @Override
     public List<String> listBlockHeaderStreams() {
         return blockHeaderConsumer.listTopics().keySet().stream()
-                .map(topic -> blockHeaderStreamName(topic))
+                .map(StreamResource::blockHeaderStreamName)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), ImmutableList::copyOf));
     }
 
@@ -77,7 +77,7 @@ public final class StreamResource implements StreamService {
     @Override
     public HydrateBlockHeaderStreamResponse hydrateBlockHeaderStream(String stream, long from, long to) {
         String topic = blockHeaderTopicName(stream);
-        List<BlockHeader> blockHeaders = blockchain.getBlockHeaderHeightSubchain(null, from, to);
+        List<BlockHeader> blockHeaders = blockchain.getBlockHeaderHeightSubchain("dummy auth header", from, to);
         for (BlockHeader blockHeader : blockHeaders) {
             blockHeaderProducer.send(new ProducerRecord<>(topic, blockHeader.getHeaderHash(), blockHeader));
         }

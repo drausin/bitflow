@@ -15,8 +15,11 @@
 package org.drausin.bitflow.streams;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.google.common.base.Charsets;
@@ -31,12 +34,15 @@ import java.util.Set;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.PartitionInfo;
 import org.apache.kafka.common.TopicPartition;
 import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.blockchain.api.BlockchainService;
 import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 import org.drausin.bitflow.streams.kafka.KafkaConsumerProducerFactory;
+import org.drausin.bitflow.streams.responses.HydrateBlockHeaderStreamResponse;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -59,12 +65,16 @@ public final class StreamResourceTest {
     private KafkaConsumer<Sha256Hash, BlockHeader> blockHeaderKafkaConsumer;
 
     @Mock
+    private KafkaProducer<Sha256Hash, BlockHeader> blockHeaderKafkaProducer;
+
+    @Mock
     private Map<String, List<PartitionInfo>> topics;
 
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         when(kafkaConsumerProducerFactory.createBlockHeaderConsumer()).thenReturn(blockHeaderKafkaConsumer);
+        when(kafkaConsumerProducerFactory.createBlockHeaderProducer()).thenReturn(blockHeaderKafkaProducer);
         streams = new StreamResource(kafkaConsumerProducerFactory, blockchain);
     }
 
@@ -78,7 +88,7 @@ public final class StreamResourceTest {
     @Test
     public void getLatestBlockHeader() throws Exception {
         Map<String, Long> recordsPerStream =
-                ImmutableMap.of("stream-1", 97L, "stream-2", 50L, "stream-3", 4L, "stream-4", 0L);
+                ImmutableMap.of("stream-1", 97L, "stream-2", 50L, "stream-3", 4L);
         ConsumerRecords<Sha256Hash, BlockHeader> records = createBlockHeaderConsumerRecords(5, recordsPerStream);
         when(blockHeaderKafkaConsumer.poll(anyLong())).thenReturn(records);
 
@@ -88,18 +98,40 @@ public final class StreamResourceTest {
         assertEquals("should be highest record for a stream with equal number of records across partitions",
                 recordsPerStream.get("stream-2") - 1, streams.getLatestBlockHeader("stream-2").get().getHeight());
 
-        // these two asserts fail because of https://issues.apache.org/jira/browse/KAFKA-3392
+        // this assert fails because of https://issues.apache.org/jira/browse/KAFKA-3392
         //assertEquals("should be highest record for a stream with fewer records than partitions",
         //        recordsPerStream.get("stream-3") - 1, streams.getLatestBlockHeader("stream-3").get().getHeight());
-        //
-        //assertFalse("should be absent for a stream with no records",
-        //        streams.getLatestBlockHeader("stream-4").isPresent());
+
+        assertFalse("should be absent for a stream with no records",
+                streams.getLatestBlockHeader("stream-4").isPresent());
 
     }
 
     @Test
     public void hydrateBlockHeaderStream() throws Exception {
+        int numBlocks = 5;
+        List<BlockHeader> blockHeaders = Lists.newArrayList();
+        for (int c = 0; c < numBlocks; c++) {
+            BlockHeader blockHeader = mock(BlockHeader.class);
+            when(blockHeader.getHeaderHash()).thenReturn(Sha256Hash.of(String.valueOf(c).getBytes(Charsets.UTF_8)));
+            blockHeaders.add(blockHeader);
+        }
+        when(blockchain.getBlockHeaderHeightSubchain(anyString(), anyLong(), anyLong())).thenReturn(blockHeaders);
 
+        String stream = "stream-1";
+        int from = 0;
+        int to = from + numBlocks;
+        HydrateBlockHeaderStreamResponse response = streams.hydrateBlockHeaderStream(stream, from, to);
+
+        assertEquals("response should have correct stream name and number of blocks",
+                response, HydrateBlockHeaderStreamResponse.of(stream, numBlocks));
+
+        // verify that each blockHeader is sent to the producer
+        String topic = StreamResource.blockHeaderTopicName(stream);
+        for (BlockHeader blockHeader : blockHeaders) {
+            verify(blockHeaderKafkaProducer).send(new ProducerRecord<>(topic, blockHeader.getHeaderHash(),
+                    blockHeader));
+        }
     }
 
     private static ConsumerRecords<Sha256Hash, BlockHeader> createBlockHeaderConsumerRecords(int numPartitions,
@@ -114,7 +146,7 @@ public final class StreamResourceTest {
                 for (long r = partition.partition(); r < numRecords; r += numPartitions) {
                     final long fakeOffset = (r / numPartitions) * fakeFixedBlockBytes;
                     Sha256Hash blockHeaderHash = Sha256Hash.of((partition.topic() + String.valueOf(r))
-                            .getBytes(Charsets.UTF_8));
+                                .getBytes(Charsets.UTF_8));
                     BlockHeader blockHeader = mock(BlockHeader.class);
                     when(blockHeader.getHeaderHash()).thenReturn(blockHeaderHash);
                     when(blockHeader.getHeight()).thenReturn(r);
