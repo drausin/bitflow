@@ -19,26 +19,32 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonParser;
-import org.bitcoinj.core.Sha256Hash;
+import java.math.BigInteger;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-public final class Sha256HashDeserializerTest {
+public class BigIntegerJsonDeserializerTest {
 
-    private static Sha256HashDeserializer deserializer = new Sha256HashDeserializer();
+    private BigIntegerJsonDeserializer bigIntegerJsonDeserializer;
 
     @Mock
-    private JsonParser parser = mock(JsonParser.class);
+    private JsonParser parser;
 
-    @Test
-    public void testDeserialize() throws Exception {
-        String hexHash = "000000000ebb17fb455e897b8f3e343eea1b07d926476d00bc66e2c0342ed50f";
-        when(parser.getValueAsString()).thenReturn(hexHash);
-        assertEquals(Sha256Hash.wrap(hexHash), deserializer.deserialize(parser, null));
+    @Before
+    public final void setUp() throws Exception {
+        bigIntegerJsonDeserializer = new BigIntegerJsonDeserializer();
+        parser = mock(JsonParser.class);
     }
 
     @Test
-    public void testHandledType() throws Exception {
-        assertEquals(Sha256Hash.class, deserializer.handledType());
+    public final void testDeserialize() throws Exception {
+        when(parser.getValueAsString()).thenReturn("100");
+        assertEquals(new BigInteger("256", 10), bigIntegerJsonDeserializer.deserialize(parser, null));
+    }
+
+    @Test
+    public final void testHandledType() throws Exception {
+        assertEquals(BigInteger.class, bigIntegerJsonDeserializer.handledType());
     }
 }

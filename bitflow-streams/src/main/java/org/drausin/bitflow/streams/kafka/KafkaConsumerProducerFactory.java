@@ -12,21 +12,16 @@
  * limitations under the License.
  */
 
-package org.drausin.bitflow.streams;
+package org.drausin.bitflow.streams.kafka;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.immutables.value.Value;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.bitcoinj.core.Sha256Hash;
+import org.drausin.bitflow.blockchain.api.objects.BlockHeader;
 
-public abstract class BitflowStream<T> {
+public interface KafkaConsumerProducerFactory {
 
-    /**
-     * Get the stream name.
-     */
-    @Value.Parameter
-    @JsonProperty("name")
-    public abstract String getName();
+    KafkaConsumer<Sha256Hash, BlockHeader> createBlockHeaderConsumer();
 
-    @Value.Parameter
-    @JsonProperty("latest")
-    public abstract T getLatest();
+    KafkaProducer<Sha256Hash, BlockHeader> createBlockHeaderProducer();
 }

@@ -38,35 +38,35 @@ public abstract class BlockchainInfo {
      * Get the name of the blockchain (i.e., one of {'main', 'test', 'regtest'}.
      */
     @Value.Parameter
-    @JsonProperty("chain")
+    @JsonProperty(value = "chain", required = true)
     public abstract String getChain();
 
     /**
      * Get the number of validated blocks in the local best block chain.
      */
     @Value.Parameter
-    @JsonProperty("blocks")
+    @JsonProperty(value = "blocks", required = true)
     public abstract long getNumBlocks();
 
     /**
      * Get the number of validated headers in the local best headers chain.
      */
     @Value.Parameter
-    @JsonProperty("headers")
+    @JsonProperty(value = "headers", required = true)
     public abstract long getNumHeaders();
 
     /**
      * Get the hash of the header of the highest validated block in the best block chain.
      */
     @Value.Parameter
-    @JsonProperty("bestblockhash")
+    @JsonProperty(value = "bestblockhash", required = true)
     public abstract Sha256Hash getBestBlockHash();
 
     /**
      * Get the difficulty of the highest-height block in the best block chain.
      */
     @Value.Parameter
-    @JsonProperty("difficulty")
+    @JsonProperty(value = "difficulty", required = true)
     public abstract double getDifficulty();
 
     /**
@@ -74,28 +74,28 @@ public abstract class BlockchainInfo {
      * and increasing to 1.0 for fully verified.
      */
     @Value.Parameter
-    @JsonProperty("verificationprogress")
+    @JsonProperty(value = "verificationprogress", required = true)
     public abstract double getVerificationProgress();
 
     /**
      * Get the estimated number of block header hashes checked from the genesis block to this block.
      */
     @Value.Parameter
-    @JsonProperty("chainwork")
+    @JsonProperty(value = "chainwork", required = true)
     public abstract BigInteger getChainwork();
 
     /**
      * Get whether the blocks are subject to pruning.
      */
     @Value.Parameter
-    @JsonProperty("pruned")
+    @JsonProperty(value = "pruned", required = true)
     public abstract boolean getPruned();
 
     /**
      * Get the highest pruned block.
      */
     @Value.Parameter
-    @JsonProperty("pruneheight")
+    @JsonProperty(value = "pruneheight", required = true)
     public abstract long getPruneHeight();
 
     /**
@@ -104,7 +104,7 @@ public abstract class BlockchainInfo {
      * @see <a href=https://en.bitcoin.it/wiki/Softfork>Softfork</a>
      */
     @Value.Parameter
-    @JsonProperty("softforks")
+    @JsonProperty(value = "softforks", required = true)
     public abstract List<SoftFork> getSoftForks();
 
     public static BlockchainInfo of(String chain, long numBlocks, long numHeaders, Sha256Hash bestBlockHash,

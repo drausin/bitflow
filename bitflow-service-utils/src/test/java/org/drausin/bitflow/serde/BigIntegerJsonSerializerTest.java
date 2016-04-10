@@ -27,26 +27,26 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BigIntegerSerializerTest {
+public class BigIntegerJsonSerializerTest {
 
-    private BigIntegerSerializer bigIntegerSerializer;
+    private BigIntegerJsonSerializer bigIntegerJsonSerializer;
 
     @Mock
     private JsonGenerator gen;
 
     @Before
     public final void setUp() throws Exception {
-        bigIntegerSerializer = new BigIntegerSerializer();
+        bigIntegerJsonSerializer = new BigIntegerJsonSerializer();
     }
 
     @Test
     public final void testSerialize() throws Exception {
-        bigIntegerSerializer.serialize(new BigInteger("256", 10), gen, null);
+        bigIntegerJsonSerializer.serialize(new BigInteger("256", 10), gen, null);
         verify(gen, times(1)).writeString("100");
     }
 
     @Test
     public final void testHandledType() throws Exception {
-        assertEquals(BigInteger.class, bigIntegerSerializer.handledType());
+        assertEquals(BigInteger.class, bigIntegerJsonSerializer.handledType());
     }
 }

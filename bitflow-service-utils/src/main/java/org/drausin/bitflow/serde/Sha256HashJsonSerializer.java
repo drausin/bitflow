@@ -15,9 +15,11 @@
 package org.drausin.bitflow.serde;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatVisitorWrapper;
 import java.io.IOException;
 import org.bitcoinj.core.Sha256Hash;
 
@@ -26,15 +28,23 @@ import org.bitcoinj.core.Sha256Hash;
  *
  * @author dwulsin
  */
-public class Sha256HashSerializer extends JsonSerializer<Sha256Hash> {
+public final class Sha256HashJsonSerializer extends JsonSerializer<Sha256Hash> {
     @Override
-    public final void serialize(Sha256Hash value, JsonGenerator gen, SerializerProvider serializers)
-            throws IOException, JsonProcessingException {
+    public void serialize(Sha256Hash value, JsonGenerator gen, SerializerProvider serializers)
+            throws IOException {
         gen.writeString(value.toString());
     }
 
     @Override
-    public final Class<Sha256Hash> handledType() {
+    public void acceptJsonFormatVisitor(JsonFormatVisitorWrapper visitor, JavaType type)
+            throws JsonMappingException {
+        if (visitor != null) {
+            visitor.expectStringFormat(type);
+        }
+    }
+
+    @Override
+    public Class<Sha256Hash> handledType() {
         return Sha256Hash.class;
     }
 }
