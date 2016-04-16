@@ -4,7 +4,8 @@ machine:
 
 test:
   override:
-    - ./scripts/verify
+    - ./scripts/verify : 
+        parallel: true
   post:
     - ./gradlew jacocoTestReport coveralls
     - cp -R build/reports/* $CIRCLE_ARTIFACTS
