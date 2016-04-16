@@ -30,7 +30,7 @@ import org.bitcoinj.core.Sha256Hash;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequest;
 import org.drausin.bitflow.bitcoin.api.responses.BlockchainInfoResponse;
-import org.drausin.bitflow.blockchain.config.ServerConfig;
+import org.drausin.bitflow.blockchain.config.BlockchainServerConfig;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -40,7 +40,7 @@ public final class BlockchainServerTest {
     private ObjectMapper mapper;
 
     @ClassRule
-    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BlockchainServer.class,
+    public static final DropwizardAppRule<BlockchainServerConfig> APP = new DropwizardAppRule<>(BlockchainServer.class,
             "src/test/resources/bitflow-blockchain-test.yml");
 
     @Before

@@ -7,9 +7,6 @@ bitcoinNode:
   user: testuser
   password: testpassword
 
-# Set to false to disable showing stack traces in http error responses
-includeStackTraceInErrors: true
-
 server:
   applicationConnectors:
     - type: http

@@ -29,19 +29,19 @@ import org.junit.Test;
 import org.yaml.snakeyaml.Yaml;
 
 @SuppressWarnings("unchecked")
-public class ServerConfigTest {
+public class BlockchainServerConfigTest {
 
     @ClassRule
-    public static final DropwizardAppRule<ServerConfig> APP = new DropwizardAppRule<>(BlockchainServer.class,
+    public static final DropwizardAppRule<BlockchainServerConfig> APP = new DropwizardAppRule<>(BlockchainServer.class,
             "src/test/resources/bitflow-blockchain-test.yml");
 
-    private ServerConfig serverConfig;
+    private BlockchainServerConfig blockchainServerConfig;
     private Map<String, Object> configMap;
 
     @Before
     public final void setUp() throws IOException {
 
-        serverConfig = APP.getConfiguration();
+        blockchainServerConfig = APP.getConfiguration();
 
         InputStream configInputStream = getClass().getResourceAsStream("/bitflow-blockchain-test.yml");
         Yaml yaml = new Yaml();
@@ -51,20 +51,20 @@ public class ServerConfigTest {
 
     @Test
     public final void testGetInstance() throws Exception {
-        assertThat(serverConfig.getInstance(), is(configMap.get("instance")));
+        assertThat(blockchainServerConfig.getInstance(), is(configMap.get("instance")));
     }
 
     @Test
     public final void testGetBitcoinNode() throws Exception {
         Map<String, Object> bitcoinNode = (HashMap<String, Object>) configMap.get("bitcoinNode");
-        assertThat(serverConfig.getBitcoinNode().getUri(), is(bitcoinNode.get("uri")));
-        assertThat(serverConfig.getBitcoinNode().getUser(), is(bitcoinNode.get("user")));
-        assertThat(serverConfig.getBitcoinNode().getPassword(), is(bitcoinNode.get("password")));
+        assertThat(blockchainServerConfig.getBitcoinNode().getUri(), is(bitcoinNode.get("uri")));
+        assertThat(blockchainServerConfig.getBitcoinNode().getUser(), is(bitcoinNode.get("user")));
+        assertThat(blockchainServerConfig.getBitcoinNode().getPassword(), is(bitcoinNode.get("password")));
     }
 
     @Test
     public final void testGetIncludeStackTraceInErrors() throws Exception {
-        assertThat(serverConfig.getIncludeStackTraceInErrors().get(), is(configMap.get("includeStackTraceInErrors")));
+        assertThat(blockchainServerConfig.getIncludeStackTraceInErrors().get(), is(configMap.get("includeStackTraceInErrors")));
     }
 
 }

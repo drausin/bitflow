@@ -21,7 +21,7 @@ import io.dropwizard.setup.Environment;
 import org.drausin.bitflow.bitcoin.api.BitcoinNodeService;
 import org.drausin.bitflow.bitcoin.api.requests.BitcoinNodeRequestFactory;
 import org.drausin.bitflow.bitcoin.api.responses.utils.BitcoinNodeClientFactory;
-import org.drausin.bitflow.blockchain.config.ServerConfig;
+import org.drausin.bitflow.blockchain.config.BlockchainServerConfig;
 import org.drausin.bitflow.serde.BitflowMapperFactory;
 
 
@@ -30,15 +30,15 @@ import org.drausin.bitflow.serde.BitflowMapperFactory;
  *
  * @author dwulsin
  */
-public final class BlockchainServer extends Application<ServerConfig> {
+public final class BlockchainServer extends Application<BlockchainServerConfig> {
 
     @Override
-    public void initialize(Bootstrap<ServerConfig> bootstrap) {
+    public void initialize(Bootstrap<BlockchainServerConfig> bootstrap) {
         bootstrap.setObjectMapper(BitflowMapperFactory.createMapper());
     }
 
     @Override
-    public void run(ServerConfig config, Environment env) throws Exception {
+    public void run(BlockchainServerConfig config, Environment env) throws Exception {
 
         BitcoinNodeService bitcoinNode = (new BitcoinNodeClientFactory()).createClient(config.getBitcoinNode());
 

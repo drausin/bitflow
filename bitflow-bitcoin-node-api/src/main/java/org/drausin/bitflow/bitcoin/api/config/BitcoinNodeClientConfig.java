@@ -26,15 +26,15 @@ import org.immutables.value.Value;
 public abstract class BitcoinNodeClientConfig {
 
     @Value.Parameter
-    @JsonProperty("uri")
+    @JsonProperty
     public abstract String getUri();
 
     @Value.Parameter
-    @JsonProperty("user")
+    @JsonProperty
     public abstract String getUser();
 
     @Value.Parameter
-    @JsonProperty("password")
+    @JsonProperty
     public abstract String getPassword();
 
     public static BitcoinNodeClientConfig of(String uri, String user, String password) {

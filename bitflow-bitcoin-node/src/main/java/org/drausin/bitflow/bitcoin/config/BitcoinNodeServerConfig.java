@@ -46,17 +46,26 @@ import org.immutables.value.Value;
 @JsonDeserialize(as = ImmutableBitcoinNodeServerConfig.class)
 public abstract class BitcoinNodeServerConfig extends Configuration {
 
+    @Value.Parameter
     @JsonProperty
     public abstract String getInstance();
 
+    @Value.Parameter
     @JsonProperty
     public abstract String getRpcUri();
 
+    @Value.Parameter
     @JsonProperty
     public abstract NodeType getMode();
 
+    @Value.Parameter
     @JsonProperty
     public abstract BitcoindExecutableConfig getBitcoinNode();
+
+    public BitcoinNodeServerConfig of(String instance, String rpcUri, NodeType mode,
+            BitcoindExecutableConfig bitcoinNode) {
+        return ImmutableBitcoinNodeServerConfig.of(instance, rpcUri, mode, bitcoinNode);
+    }
 
     @Override
     public final String toString() {

@@ -29,35 +29,29 @@
 package org.drausin.bitflow.blockchain.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.google.common.base.Optional;
 import io.dropwizard.Configuration;
 import javax.validation.constraints.NotNull;
 import org.drausin.bitflow.bitcoin.api.config.BitcoinNodeClientConfig;
+import org.immutables.value.Value;
 
-public class ServerConfig extends Configuration {
+@Value.Immutable
+@Value.Style(visibility = Value.Style.ImplementationVisibility.SAME, strictBuilder = true)
+@JsonSerialize(as = ImmutableBlockchainServerConfig.class)
+@JsonDeserialize(as = ImmutableBlockchainServerConfig.class)
+public abstract class BlockchainServerConfig extends Configuration {
 
-    private final String instance;
-    private final BitcoinNodeClientConfig bitcoinNode;
-    private final Optional<Boolean> includeStackTraceInErrors;
+    @Value.Parameter
+    @JsonProperty
+    public abstract String getInstance();
 
-    public ServerConfig(
-            @JsonProperty("instance") @NotNull String instance,
-            @JsonProperty("bitcoinNode") @NotNull BitcoinNodeClientConfig bitcoinNode,
-            @JsonProperty("includeStackTraceInErrors") @NotNull Optional<Boolean> includeStackTraceInErrors) {
-        this.instance = instance;
-        this.bitcoinNode = bitcoinNode;
-        this.includeStackTraceInErrors = includeStackTraceInErrors;
-    }
+    @Value.Parameter
+    @JsonProperty
+    public abstract BitcoinNodeClientConfig getBitcoinNode();
 
-    public final String getInstance() {
-        return instance;
-    }
-
-    public final BitcoinNodeClientConfig getBitcoinNode() {
-        return bitcoinNode;
-    }
-
-    public final Optional<Boolean> getIncludeStackTraceInErrors() {
-        return includeStackTraceInErrors;
+    public static BlockchainServerConfig of(String instance, BitcoinNodeClientConfig bitcoinNode) {
+        return ImmutableBlockchainServerConfig.of(instance, bitcoinNode);
     }
 }

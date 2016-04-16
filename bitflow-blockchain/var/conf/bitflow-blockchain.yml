@@ -7,9 +7,6 @@ bitcoinNode:
   user: someuser
   password: somepasswordtochange
 
-# Set to false to disable showing stack traces in http error responses
-includeStackTraceInErrors: true
-
 # Dropwizard Server Settings
 server:
   rootPath: /api/*
