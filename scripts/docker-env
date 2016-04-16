@@ -1,10 +1,6 @@
 #!/bin/bash
 
-set -eu
-set -o pipefail
-
-ROOT_DIR="$(dirname "$0")/.."
-source "${ROOT_DIR}/scripts/constants.sh"
+set -euo pipefail
 
 usage() {
     echo "Usage: $0 docker-env [start|stop]" >&2
@@ -14,8 +10,14 @@ usage() {
 
 [[ $# == 1 ]] || usage
 
-DOCKER_HOST_IP=$(docker-machine ip ${DOCKER_MACHINE_NAME})
-eval "$(docker-machine env ${DOCKER_MACHINE_NAME})"
+ROOT_DIR="$(dirname "$0")/.."
+source "${ROOT_DIR}/scripts/constants.sh"
+
+# if we're on a Mac, we need to make sure we're running the correct docker-machine
+if [ "$(uname)" == "Darwin" ]; then
+    DOCKER_HOST_IP=$(docker-machine ip ${DOCKER_MACHINE_NAME})
+    eval "$(docker-machine env ${DOCKER_MACHINE_NAME})"
+fi
 
 case $1 in
     start)
