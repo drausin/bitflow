@@ -4,7 +4,7 @@ set -euo pipefail
 set -x
 
 ROOT_DIR="$(dirname "$0")/.."
-GRADLEW_OPTS="--parallel --stacktrace --profile --console=plain"
+GRADLEW_OPTS="--parallel --max-workers 4 --stacktrace --profile --console=plain"
 
 if [[ -z ${CIRCLE_NODE_INDEX+x} ]]; then    # running locally
     WORKER_INDEX=0
