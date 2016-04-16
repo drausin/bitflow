@@ -1,8 +1,36 @@
-#!/bin/bash -ex
+#!/bin/bash
+
+set -euo pipefail
+set -x
 
 ROOT_DIR="$(dirname "$0")/.."
-source "${ROOT_DIR}/scripts/constants.sh"
+GRADLEW_OPTS="--parallel --stacktrace --profile --console=plain"
 
-./gradlew check ${GRADLE_PARALLEL} ${GRADLE_LOG_LEVEL}
-#./gradlew integrationTests ${GRADLE_LOG_LEVEL}
-#./gradlew dockerComposeDown
+if [[ -z ${CIRCLE_NODE_INDEX+x} ]]; then    # running locally
+    WORKER_INDEX=0
+    TOTAL_WORKERS=1
+else                                        # running in CircleCI
+    WORKER_INDEX=${CIRCLE_NODE_INDEX}
+    TOTAL_WORKERS=${CIRCLE_NODE_TOTAL}
+fi
+
+pushd $(dirname $0)/.. > /dev/null
+if [[ ${WORKER_INDEX} -eq $((0 % ${TOTAL_WORKERS})) ]]; then
+    ./gradlew ${GRADLEW_OPTS} check
+fi
+
+if [[ ${WORKER_INDEX} -eq $((1 % ${TOTAL_WORKERS})) ]]; then
+    ./gradlew ${GRADLEW_OPTS} docker dockerComposeUp
+    docker run -it \
+      -w /workspace \
+      --net=bitflow_default \
+      -v /home/ubuntu/.gradle:/root/.gradle \
+      -v ${CIRCLE_TEST_REPORTS}:/reports \
+      -v $(pwd):/workspace \
+      -e TERM=dumb \
+      -e CIRCLE_TEST_REPORTS=/reports \
+      daedalus2718/bitflow-base:latest \
+      ./gradlew ${GRADLEW_OPTS} integrationTests -x dockerComposeUp
+fi
+
+popd > /dev/null
