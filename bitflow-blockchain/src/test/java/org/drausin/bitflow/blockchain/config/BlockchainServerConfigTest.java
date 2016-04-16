@@ -61,10 +61,4 @@ public class BlockchainServerConfigTest {
         assertThat(blockchainServerConfig.getBitcoinNode().getUser(), is(bitcoinNode.get("user")));
         assertThat(blockchainServerConfig.getBitcoinNode().getPassword(), is(bitcoinNode.get("password")));
     }
-
-    @Test
-    public final void testGetIncludeStackTraceInErrors() throws Exception {
-        assertThat(blockchainServerConfig.getIncludeStackTraceInErrors().get(), is(configMap.get("includeStackTraceInErrors")));
-    }
-
 }
