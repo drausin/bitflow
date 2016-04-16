@@ -9,7 +9,9 @@ services:
       - "8332:8332"
       - "5101:5101"
     environment:
-      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5101
+      JAVA_OPTS: >
+        -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5101
+        -Ddw.bitcoinNode.rpcallowip=$(docker network inspect --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}' bitflow_default)
     volumes:
       - ../bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml:/opt/bitflow/services/bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml
       - /opt/bitflow

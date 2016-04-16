@@ -22,6 +22,7 @@ fi
 case $1 in
     start)
         docker-compose -f ${ROOT_DIR}/docker/nameserver.yml -p nameserver up -d
+        # containers are added to the bitflow_default network
         docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml -p bitflow up -d
         ;;
 
