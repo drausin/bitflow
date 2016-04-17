@@ -21,7 +21,10 @@ if [[ ${WORKER_INDEX} -eq $((0 % ${TOTAL_WORKERS})) ]]; then
 fi
 
 if [[ ${WORKER_INDEX} -eq $((1 % ${TOTAL_WORKERS})) ]]; then
-    ./gradlew ${GRADLEW_OPTS} docker -x bitflow-docker-base:docker dockerComposeUp
+    # TODO (dwulsin) consolidate this
+    ./gradlew bitflow-docker-base:docker
+    ./gradlew ${GRADLEW_OPTS} docker -x bitflow-docker-base:docker
+    ./gradlew dockerComposeUp
     docker run -it \
       -w /workspace \
       --net=${DOCKER_COMPOSE_NETWORK} \
