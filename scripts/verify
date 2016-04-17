@@ -5,6 +5,7 @@ set -x
 
 ROOT_DIR="$(dirname "$0")/.."
 GRADLEW_OPTS="--parallel --max-workers 4 --stacktrace --profile --console=plain"
+source "${ROOT_DIR}/scripts/constants.sh"
 
 if [[ -z ${CIRCLE_NODE_INDEX+x} ]]; then    # running locally
     WORKER_INDEX=0
@@ -21,16 +22,14 @@ fi
 
 if [[ ${WORKER_INDEX} -eq $((1 % ${TOTAL_WORKERS})) ]]; then
     ./gradlew ${GRADLEW_OPTS} docker -x bitflow-docker-base:docker dockerComposeUp
-#    docker run -it \
-#      -w /workspace \
-#      --net=bitflow_default \
-#      -v /home/ubuntu/.gradle:/root/.gradle \
-#      -v ${CIRCLE_TEST_REPORTS}:/reports \
-#      -v $(pwd):/workspace \
-#      -e TERM=dumb \
-#      -e CIRCLE_TEST_REPORTS=/reports \
-#      daedalus2718/bitflow-base:latest \
-#      ./gradlew ${GRADLEW_OPTS} integrationTests -x dockerComposeUp
+    docker run -it \
+      -w /workspace \
+      --net=${DOCKER_COMPOSE_NETWORK} \
+      -v /home/ubuntu/.gradle:/root/.gradle/ \
+      -v $(pwd):/workspace \
+      -e TERM=dumb \
+      daedalus2718/bitflow-base:latest \
+      ./gradlew ${GRADLEW_OPTS} integrationTests -x dockerComposeUp
 fi
 
 popd > /dev/null
