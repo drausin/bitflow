@@ -24,12 +24,22 @@ server:
 # Logging settings
 logging:
     # The default level of all loggers. Can be OFF, ERROR, WARN, INFO, DEBUG, TRACE, or ALL.
-    level: WARN
+    level: INFO
     loggers:
         io.dropwizard: INFO
+        "feign.Logger": DEBUG
     appenders:
         - type: console
+          threshold: DEBUG
         - type: file
-          currentLogFilename: var/log/bitcoin-node.log
+          currentLogFilename: var/log/bitflow-blockchain.log
           archive: true
-          archivedLogFilenamePattern: var/log/bitcoin-node-%d.log
+          archivedLogFilenamePattern: var/log/bitflow-blockchain-%d.log
+          archivedFileCount: 15
+          timeZone: UTC
+        - type: file
+          currentLogFilename: var/log/bitflow-blockchain.error.log
+          archive: true
+          archivedLogFilenamePattern: var/log/bitflow-blockchain.error.-%d.log
+          archivedFileCount: 15
+          timeZone: UTC
