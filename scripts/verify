@@ -20,8 +20,7 @@ if [[ ${WORKER_INDEX} -eq $((0 % ${TOTAL_WORKERS})) ]]; then
 fi
 
 if [[ ${WORKER_INDEX} -eq $((1 % ${TOTAL_WORKERS})) ]]; then
-    ./gradlew ${GRADLEW_OPTS} docker -x bitflow-docker-base:docker
-    docker-compose -f docker/docker-compose.yml -p bitflow up -d
+    ./gradlew ${GRADLEW_OPTS} docker -x bitflow-docker-base:docker dockerComposeUp
 #    docker run -it \
 #      -w /workspace \
 #      --net=bitflow_default \
