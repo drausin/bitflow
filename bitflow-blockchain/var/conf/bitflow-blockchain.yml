@@ -27,19 +27,19 @@ logging:
     level: INFO
     loggers:
         io.dropwizard: INFO
-        "feign.Logger": DEBUG
+        #"feign.Logger": DEBUG
     appenders:
-        - type: console
-          threshold: DEBUG
-        - type: file
-          currentLogFilename: var/log/bitflow-blockchain.log
-          archive: true
-          archivedLogFilenamePattern: var/log/bitflow-blockchain-%d.log
-          archivedFileCount: 15
-          timeZone: UTC
-        - type: file
-          currentLogFilename: var/log/bitflow-blockchain.error.log
-          archive: true
-          archivedLogFilenamePattern: var/log/bitflow-blockchain.error.-%d.log
-          archivedFileCount: 15
-          timeZone: UTC
+      - type: console
+        threshold: DEBUG
+      - type: file
+        currentLogFilename: var/log/bitflow-blockchain.log
+        archive: true
+        archivedLogFilenamePattern: var/log/bitflow-blockchain.%d.log.gz
+        archivedFileCount: 15
+        timeZone: UTC
+      - type: file
+        currentLogFilename: var/log/bitflow-blockchain.error.log
+        archive: true
+        archivedLogFilenamePattern: var/log/bitflow-blockchain.error.%d.log.gz
+        archivedFileCount: 15
+        timeZone: UTC
