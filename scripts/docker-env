@@ -26,9 +26,9 @@ if [[ $(docker network ls -qf "name=${DOCKER_COMPOSE_NETWORK}" | wc -l) -eq 0 ]]
 fi
 
 # export network info do docker-compose can see it
+DOCKER_COMPOSE_NETWORK_GATEWAY=$(docker network inspect --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}' ${DOCKER_COMPOSE_NETWORK})
 export DOCKER_COMPOSE_NETWORK
-export DOCKER_COMPOSE_NETWORK_GATEWAY=\
-    "$(docker network inspect --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}' ${DOCKER_COMPOSE_NETWORK})"
+export DOCKER_COMPOSE_NETWORK_GATEWAY
 
 # bring docker-compose up or down
 case $1 in
