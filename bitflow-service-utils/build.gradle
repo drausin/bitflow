@@ -8,6 +8,7 @@ project(':bitflow-service-utils') {
         compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-guava:$jacksonVersion"
+        compile "com.netflix.feign:feign-slf4j:${feignVersion}"
         compile "com.palantir.remoting:http-clients:${httpRemotingVersion}"
         compile "com.palantir.remoting:error-handling:${httpRemotingVersion}"
         compile "io.dropwizard:dropwizard-core:${dropwizardVersion}"

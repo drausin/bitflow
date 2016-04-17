@@ -21,6 +21,7 @@ import com.palantir.remoting.http.errors.SerializableErrorErrorDecoder;
 import feign.Client;
 import feign.Contract;
 import feign.Feign;
+import feign.Logger;
 import feign.OptionalAwareDecoder;
 import feign.Request;
 import feign.RequestInterceptor;
@@ -31,25 +32,37 @@ import feign.codec.ErrorDecoder;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.jaxrs.JAXRSContract;
+import feign.slf4j.Slf4jLogger;
 import org.drausin.bitflow.serde.BitflowMapperFactory;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractBitflowClientFactory<C> {
 
     public AbstractBitflowClientFactory() {}
 
     public final <T> T createClient(Class<T> type, C config) {
-        return Feign.builder()
+        Feign.Builder builder = Feign.builder()
+                .logger(getLogger())
                 .contract(getContract())
                 .encoder(getEncoder())
                 .decoder(getDecoder())
                 .errorDecoder(getErrorDecoder())
                 .client(getClient())
                 .options(getOptions())
-                .requestInterceptors(getRequestInterceptors(config))
-                .target(type, getUri(config));
+                .requestInterceptors(getRequestInterceptors(config));
+
+        if (LoggerFactory.getLogger(Logger.class).isDebugEnabled()) {
+            builder = builder.logLevel(Logger.Level.FULL);
+        }
+
+        return builder.target(type, getUri(config));
     }
 
     protected abstract String getUri(C config);
+
+    protected static Logger getLogger() {
+        return new Slf4jLogger();
+    }
 
     protected static Contract getContract() {
         return new JAXRSContract();
