@@ -13,21 +13,31 @@ usage() {
 ROOT_DIR="$(dirname "$0")/.."
 source "${ROOT_DIR}/scripts/constants.sh"
 
-# if we're on a Mac, we need to make sure we're running the correct docker-machine
-if [ "$(uname)" == "Darwin" ]; then
+# if we're on a Mac, we need to make sure we're running the correct docker-machine and that the DNS nameserver is up
+if [[ "$(uname)" == "Darwin" ]]; then
     DOCKER_HOST_IP=$(docker-machine ip ${DOCKER_MACHINE_NAME})
     eval "$(docker-machine env ${DOCKER_MACHINE_NAME})"
+    docker-compose -f ${ROOT_DIR}/docker/nameserver.yml up -d
 fi
 
+# create the network if it doesn't exist
+if [[ $(docker network ls -qf "name=${DOCKER_COMPOSE_NETWORK}" | wc -l) -eq 0 ]]; then
+    docker network create ${DOCKER_COMPOSE_NETWORK}
+fi
+
+# export network info do docker-compose can see it
+export DOCKER_COMPOSE_NETWORK=${DOCKER_COMPOSE_NETWORK}
+export DOCKER_COMPOSE_NETWORK_GATEWAY=\
+    $(docker network inspect --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}' ${DOCKER_COMPOSE_NETWORK})
+
+# bring docker-compose up or down
 case $1 in
     start)
-        docker-compose -f ${ROOT_DIR}/docker/nameserver.yml -p nameserver up -d
-        # containers are added to the bitflow_default network
-        docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml -p bitflow up -d
+        docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml up -d --no-recreate
         ;;
 
     stop)
-        docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml -p bitflow stop
+        docker-compose -f ${ROOT_DIR}/docker/docker-compose.yml down
         ;;
 
     *) usage ;;

@@ -11,7 +11,7 @@ services:
     environment:
       JAVA_OPTS: >
         -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5101
-        -Ddw.bitcoinNode.rpcallowip=$(docker network inspect --format='{{range .IPAM.Config}}{{.Gateway}}{{end}}' bitflow_default)
+        -Ddw.bitcoinNode.rpcallowip=$DOCKER_COMPOSE_NETWORK_GATEWAY
     volumes:
       - ../bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml:/opt/bitflow/services/bitflow-bitcoin-node/var/conf/bitflow-bitcoin-node.yml
       - /opt/bitflow
@@ -30,3 +30,7 @@ services:
       - ../bitflow-blockchain/var/conf/bitflow-blockchain.yml:/opt/bitflow/services/bitflow-blockchain/var/conf/bitflow-blockchain.yml
       - /opt/bitflow
       - /data
+networks:
+  default:
+    external:
+      name: ${DOCKER_COMPOSE_NETWORK}
